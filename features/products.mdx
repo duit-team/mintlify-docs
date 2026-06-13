@@ -1,0 +1,42 @@
+---
+title: "Products"
+description: "Add and manage the items sold at your POS and online."
+---
+
+**Products** are the items customers can order. Each product belongs to a category and can have modifiers, a tax rate, and context-specific price overrides.
+
+## Create a Product
+
+<Steps>
+  <Step title="Go to Menu Builder → Products">
+    Select a category in the Menu Builder first to scope where the product appears.
+  </Step>
+  <Step title="Click New Product">
+    Fill in:
+    - **Name** — displayed on the POS and receipts.
+    - **Code / SKU** — optional internal reference.
+    - **Price** — the base selling price (excluding tax unless the price is tax-inclusive).
+    - **Category** — which category this product belongs to.
+    - **Tax** — the tax rate to apply. See [Tax](/features/tax).
+    - **Brand** — optional. See [Brands](/features/brands).
+    - **Active** — toggle off to hide from the POS.
+  </Step>
+  <Step title="Add modifiers (optional)">
+    In the **Modifiers** section, attach modifier groups (e.g. Size, Add-ons). See [Modifiers](/features/modifiers).
+  </Step>
+  <Step title="Save">
+    Click **Create** (or **Save** on the edit page).
+  </Step>
+</Steps>
+
+## Edit a Product
+
+Click the **Edit** icon on any product row. All fields are editable. Price changes take effect on the next order.
+
+## Bulk Price Overrides
+
+To set a different price for a specific context (e.g. delivery), use [Bulk Pricing](/features/bulk-pricing) instead of editing the base price.
+
+## Delete a Product
+
+Click **Delete** on the product row. Products referenced by existing tickets cannot be deleted — deactivate them instead.

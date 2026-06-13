@@ -1,0 +1,43 @@
+---
+title: "QR Code Setup"
+description: "Generate table QR codes for contactless ordering."
+---
+
+QR codes let customers scan and order from their phone. Each QR code maps to a specific table and venue.
+
+## Prerequisites
+
+Before generating QR codes, make sure:
+- You have at least one **Table** set up under Manage → Tables.
+- Stripe is configured in a Payment Type (see [Stripe Setup](/online-ordering/stripe-setup)).
+- Your online menu is published.
+
+## Generate a QR Code
+
+<Steps>
+  <Step title="Go to Online Ordering → QR Codes">
+    Click **QR Codes** in the left sidebar.
+  </Step>
+  <Step title="Select a Table">
+    Choose the table you want to generate a code for.
+  </Step>
+  <Step title="Download or Print">
+    Click **Download QR** to get a PNG, or **Print** to send directly to a printer.
+  </Step>
+</Steps>
+
+## Test the Flow
+
+1. Scan your QR code with a phone camera.
+2. Browse the menu and add items to the cart.
+3. Proceed to checkout — a Stripe payment page opens.
+4. Complete the test payment using a [Stripe test card](https://stripe.com/docs/testing#cards).
+5. Confirm the order appears in your dashboard.
+
+<Tip>
+  Use `4242 4242 4242 4242` with any future expiry and any CVC as a Stripe test card number.
+</Tip>
+
+## Customise the Landing Page
+
+Go to **Online Ordering → Settings** to upload your logo, set a welcome message, and configure operating hours.

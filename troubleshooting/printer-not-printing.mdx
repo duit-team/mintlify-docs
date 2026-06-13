@@ -1,0 +1,31 @@
+---
+title: "Printer Not Printing"
+description: "Diagnose and fix printer connectivity problems."
+---
+
+## Checklist
+
+<Steps>
+  <Step title="Check power and network">
+    Make sure the printer is on and connected to the same local network as your POS device.
+  </Step>
+  <Step title="Verify the IP address">
+    Print a self-test page from the printer (usually hold the feed button at startup). Confirm the IP matches what is saved in **Manage → Printers**.
+  </Step>
+  <Step title="Send a test print">
+    In **Manage → Printers**, click **Test Print** next to the printer. Watch for any error message.
+  </Step>
+  <Step title="Check port 9100">
+    Most receipt printers use port `9100`. Confirm this matches the **Port** field in the printer settings.
+  </Step>
+  <Step title="Check routing rules">
+    Go to the **Routing Rules** tab. Confirm a rule exists that targets this printer for the relevant category or product.
+  </Step>
+</Steps>
+
+## Printer Prints But Wrong Items
+
+The routing rules may be too broad or conflicting. Check:
+- The rule **condition** matches only the intended categories.
+- No higher-priority rule is redirecting the job to another printer.
+- The **Priority** field — lower numbers run first.

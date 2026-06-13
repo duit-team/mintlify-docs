@@ -1,0 +1,33 @@
+---
+title: "Payment Issues"
+description: "Troubleshoot failed or missing payments."
+---
+
+## Online Payment Not Completing
+
+**Symptom:** Customer paid but no order appears in the dashboard.
+
+<Steps>
+  <Step title="Check the Stripe Dashboard">
+    Go to [dashboard.stripe.com](https://dashboard.stripe.com) → **Payments**. Find the payment and check its status.
+  </Step>
+  <Step title="Verify the webhook is set up">
+    Go to **Developers → Webhooks** and confirm the endpoint is active with no recent failures. See [Stripe Setup](/online-ordering/stripe-setup) to re-configure.
+  </Step>
+  <Step title="Check the Webhook Secret">
+    Go to **Manage → Payment Types → Edit** and confirm the Webhook Secret matches the one in Stripe Dashboard → Webhooks → your endpoint → Signing secret.
+  </Step>
+</Steps>
+
+## Payment Type Not Appearing on POS
+
+**Symptom:** A payment type is missing from the POS checkout screen.
+
+- Go to **Manage → Payment Types** and confirm the type is set to **Active**.
+- Reload the POS app after making changes.
+
+## Stripe Showing "Invalid API Key"
+
+- Confirm you copied the full key (starts with `sk_live_` or `sk_test_`).
+- Make sure you are not mixing test and live keys.
+- Re-enter the key in **Manage → Payment Types → Edit → Processors**.

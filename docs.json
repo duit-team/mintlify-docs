@@ -1,80 +1,16 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "almond",
-  "name": "Product Guide",
-  "description": "Step-by-step guides for every product—platform setup, analytics, and integrations in one place.",
+  "name": "DuitPOS Help Center",
+  "description": "Setup guides and feature documentation for DuitPOS.",
   "colors": {
-    "primary": "#166E3F",
-    "light": "#26BD6C",
-    "dark": "#166E3F"
+    "primary": "#0D9373",
+    "light": "#07C983",
+    "dark": "#0D9373"
   },
   "favicon": "/favicon.ico",
   "icons": {
     "library": "lucide"
-  },
-  "styling": {
-    "eyebrows": "breadcrumbs"
-  },
-  "contextual": {
-    "options": ["copy", "view", "assistant", "mcp", "add-mcp"]
-  },
-  "navigation": {
-    "global": {
-      "anchors": [
-        {
-          "anchor": "Home",
-          "icon": "house",
-          "href": "/"
-        },
-        {
-          "anchor": "Changelog",
-          "icon": "scroll-text",
-          "href": "https://www.mintlify.com/docs/changelog"
-        },
-        {
-          "anchor": "Help",
-          "icon": "life-buoy",
-          "href": "https://www.mintlify.com/docs/contact-support"
-        }
-      ]
-    },
-    "directory": "card",
-    "groups": [
-      {
-        "group": "Platform",
-        "icon": "layers",
-        "expanded": true,
-        "pages": [
-          "platform/quickstart",
-          "platform/key-concepts",
-          "platform/configuration/settings",
-          "platform/configuration/user-management",
-          "platform/administration/roles-permissions"
-        ]
-      },
-      {
-        "group": "Analytics",
-        "icon": "chart-bar",
-        "expanded": true,
-        "pages": [
-          "analytics/quickstart",
-          "analytics/connect-data",
-          "analytics/dashboards/create-dashboard",
-          "analytics/reports/scheduled-reports"
-        ]
-      },
-      {
-        "group": "Integrations",
-        "icon": "plug",
-        "expanded": true,
-        "pages": [
-          "integrations/quickstart",
-          "integrations/authentication",
-          "integrations/connectors/crm",
-          "integrations/webhooks/configure"
-        ]
-      }
-    ]
   },
   "logo": {
     "light": "/logo/light.svg",
@@ -85,13 +21,107 @@
     "primary": {
       "type": "button",
       "label": "Dashboard",
-      "href": "https://dashboard.mintlify.com"
+      "href": "https://app.duitpos.com"
     }
   },
+  "navigation": {
+    "groups": [
+      {
+        "group": "Getting Started",
+        "icon": "rocket",
+        "pages": [
+          "introduction",
+          "getting-started/first-login",
+          "getting-started/dashboard-overview"
+        ]
+      },
+      {
+        "group": "Account Setup",
+        "icon": "shield-check",
+        "pages": [
+          "setup/users-and-roles",
+          "setup/permissions"
+        ]
+      },
+      {
+        "group": "Manage",
+        "icon": "settings",
+        "pages": [
+          "features/payment-types",
+          "features/tax",
+          "features/order-modes",
+          "features/printers",
+          "features/print-templates",
+          "features/transaction-types",
+          "features/modifiers",
+          "features/setup",
+          "features/settings",
+          "features/locations"
+        ]
+      },
+      {
+        "group": "Menu",
+        "icon": "utensils",
+        "pages": [
+          "features/menu-builder",
+          "features/categories",
+          "features/products",
+          "features/brands",
+          "features/bulk-pricing"
+        ]
+      },
+      {
+        "group": "Staff",
+        "icon": "users",
+        "pages": [
+          "features/employees"
+        ]
+      },
+      {
+        "group": "Reports",
+        "icon": "chart-bar",
+        "pages": [
+          "reports/overview",
+          "reports/workday",
+          "reports/import-history"
+        ]
+      },
+      {
+        "group": "Online Ordering",
+        "icon": "qr-code",
+        "pages": [
+          "online-ordering/qr-setup",
+          "online-ordering/stripe-setup"
+        ]
+      },
+      {
+        "group": "E-Invoicing",
+        "icon": "file-text",
+        "pages": [
+          "features/e-invoicing"
+        ]
+      },
+      {
+        "group": "Platform Admin",
+        "icon": "server",
+        "pages": [
+          "features/tenants",
+          "features/db-servers",
+          "features/root-users"
+        ]
+      },
+      {
+        "group": "Troubleshooting",
+        "icon": "life-buoy",
+        "pages": [
+          "troubleshooting/payment-issues",
+          "troubleshooting/printer-not-printing",
+          "troubleshooting/login-problems"
+        ]
+      }
+    ]
+  },
   "footer": {
-    "socials": {
-      "x": "https://x.com/yourcompany",
-      "linkedin": "https://linkedin.com/company/yourcompany"
-    }
+    "socials": {}
   }
 }

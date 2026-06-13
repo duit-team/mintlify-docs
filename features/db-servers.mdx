@@ -1,0 +1,35 @@
+---
+title: "Database Servers"
+description: "Manage the PostgreSQL servers used to host tenant databases."
+---
+
+<Warning>
+  This section is for **root administrators** only.
+</Warning>
+
+**Database Servers** are the PostgreSQL instances where tenant databases are provisioned. You can have multiple servers to distribute tenants across regions or tiers.
+
+## Add a Database Server
+
+<Steps>
+  <Step title="Go to Database Servers">
+    Click **Database Servers** in the root admin sidebar.
+  </Step>
+  <Step title="Click New Server">
+    Fill in:
+    - **Name** — a label, e.g. `Primary` or `EU Region`.
+    - **Host** — the PostgreSQL hostname or IP.
+    - **Port** — default `5432`.
+    - **Username / Password** — credentials with permission to create databases.
+  </Step>
+  <Step title="Test Connection">
+    Click **Test** to verify connectivity before saving.
+  </Step>
+  <Step title="Save">
+    Click **Create**. New tenants can now be assigned to this server.
+  </Step>
+</Steps>
+
+## Assign to Tenants
+
+When creating a tenant, select which database server to provision it on.

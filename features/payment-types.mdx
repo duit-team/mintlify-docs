@@ -1,0 +1,59 @@
+---
+title: "Payment Types"
+description: "Set up the payment methods available at your POS and online ordering."
+---
+
+A **Payment Type** represents one payment method (e.g. Cash, Credit Card, Stripe). Each type can have one or more **processors** attached for online/card payments.
+
+## Create a Payment Type
+
+<Steps>
+  <Step title="Go to Manage → Payment Types">
+    Click **Payment Types** in the left sidebar under Manage.
+  </Step>
+  <Step title="Click New Payment Type">
+    Fill in:
+    - **Code** — a short internal identifier, e.g. `CASH` or `CARD`. Must be unique.
+    - **Name** — the display name shown in the POS, e.g. `Cash` or `Credit Card`.
+    - **Active** — toggle off to hide it from the POS without deleting it.
+  </Step>
+  <Step title="Save">
+    Click **Create**. The payment type appears in the list immediately.
+  </Step>
+</Steps>
+
+## Attach a Processor (for online/card payments)
+
+<Steps>
+  <Step title="Open the edit page">
+    Click the **Edit** (pencil) icon next to the payment type.
+  </Step>
+  <Step title="Add a Processor">
+    In the **Processors** section, select a processor from the dropdown (e.g. *Stripe*) and click **Add**.
+  </Step>
+  <Step title="Enter credentials">
+    Fill in the required fields. For Stripe, enter your **Secret Key** and **Webhook Secret**. These are encrypted before saving.
+  </Step>
+  <Step title="Save">
+    Click **Save Processors**. The processor is now active for that payment type.
+  </Step>
+</Steps>
+
+<Warning>
+  Never share your Stripe Secret Key. It is masked (`••••••`) after saving. To update it, enter a new value — leaving it blank keeps the existing one.
+</Warning>
+
+## Deactivate vs Delete
+
+| Action | Effect |
+|--------|--------|
+| **Deactivate** (toggle Active off) | Hides from POS and online checkout, preserves history |
+| **Delete** | Permanently removes — only possible if no transactions reference it |
+
+## Common Questions
+
+**What is a "Code"?** An internal short identifier used in reports and exports. It does not appear to customers.
+
+**Can I have multiple card processors?** Yes. Add multiple processors to the same payment type if needed.
+
+**Where do I get my Stripe keys?** Log in to [dashboard.stripe.com](https://dashboard.stripe.com), go to **Developers → API keys**.

@@ -1,0 +1,36 @@
+---
+title: "Transaction Types"
+description: "Define the types of transactions recorded on a ticket."
+---
+
+**Transaction Types** are the line-item categories on a ticket — e.g. *Sale*, *Discount*, *Tax*, *Void*, *Refund*. They appear in reports and on receipts.
+
+## Default Types
+
+Most setups include these out of the box:
+
+| Code | Name | Purpose |
+|------|------|---------|
+| `SALE` | Sale | Standard product sale line |
+| `TAX` | Tax | Tax amount line |
+| `DISC` | Discount | Manual or promo discount |
+| `VOID` | Void | Cancelled line item |
+| `REFUND` | Refund | Post-sale refund |
+
+## Create a Custom Type
+
+<Steps>
+  <Step title="Go to Manage → Transaction Types">
+    Click **Transaction Types** under Manage.
+  </Step>
+  <Step title="Click New">
+    Enter a **Code** and **Name**.
+  </Step>
+  <Step title="Save">
+    Click **Create**.
+  </Step>
+</Steps>
+
+<Warning>
+  Transaction types are referenced in historical tickets. Renaming a type changes how it appears in all reports retroactively.
+</Warning>

@@ -1,0 +1,28 @@
+---
+title: "Import History"
+description: "Review the results of past CSV bulk imports."
+---
+
+**Import History** shows a log of all bulk CSV imports performed on your account — products, categories, pricing, and more.
+
+## What It Shows
+
+Each row represents one import job:
+
+| Column | Description |
+|--------|-------------|
+| **Date** | When the import was run |
+| **Type** | What was imported (Products, Categories, Bulk Pricing, etc.) |
+| **Rows** | Total rows in the uploaded file |
+| **Imported** | Rows successfully created or updated |
+| **Skipped** | Rows that were skipped (duplicates or no change) |
+| **Failed** | Rows that failed validation |
+| **Status** | Overall result: Completed, Completed with errors, Failed |
+
+## View Errors
+
+Click any import row to expand the details. Failed rows show the specific validation error (e.g. *"Product code not found"*, *"Price must be a number"*). Download the error report to correct and re-import.
+
+## Re-importing
+
+Fix the errors in your CSV file and upload again via the bulk import button on the relevant page (e.g. **Products → Import**). Only the corrected rows need to be included.

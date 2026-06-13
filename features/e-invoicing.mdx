@@ -1,0 +1,46 @@
+---
+title: "E-Invoicing (LHDN MyInvois)"
+description: "Submit and manage e-invoices through Malaysia's MyInvois platform."
+---
+
+The **E-Invoicing** module integrates with **LHDN MyInvois** to generate, submit, and track e-invoices as required under Malaysia's e-invoice mandate.
+
+## Prerequisites
+
+- Your business TIN (Tax Identification Number) from LHDN.
+- MyInvois API credentials (Client ID and Client Secret).
+- Location details completed (TIN, BRN, MSIC code, address) — set under **Manage → Locations → Edit**.
+
+## E-Invoice Documents
+
+The **Documents** page shows all e-invoices submitted or pending submission. For each invoice you can:
+
+- **View details** — see line items, tax breakdown, and submission status.
+- **View QR** — display or print the QR code for the e-invoice.
+- **View on MyInvois** — open the document directly in the LHDN portal.
+
+### Statuses
+
+| Status | Meaning |
+|--------|---------|
+| **Pending** | Not yet submitted to MyInvois |
+| **Submitted** | Submitted and awaiting validation |
+| **Valid** | Accepted by LHDN |
+| **Invalid** | Rejected — see the error details for the reason |
+| **Cancelled** | Cancelled after submission |
+
+## E-Invoice Settings
+
+Go to **E-Invoicing → Settings** to configure:
+
+- **Environment** — Sandbox (for testing) or Production.
+- **Client ID / Client Secret** — from your MyInvois developer account.
+- **Supplier TIN** — your company's TIN registered with LHDN.
+
+<Warning>
+  Switch from Sandbox to Production only when your integration has been fully tested. Production submissions are legally binding.
+</Warning>
+
+## Submitting an Invoice
+
+E-invoices are generated automatically when a ticket is completed. If a submission fails, it will be retried automatically. You can also trigger a manual resubmit from the Documents page.

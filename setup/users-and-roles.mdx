@@ -1,0 +1,58 @@
+---
+title: "Users & Roles"
+description: "Invite staff and control what each person can do."
+---
+
+## Roles
+
+A **role** is a named set of permissions (e.g. *Cashier*, *Manager*, *Supervisor*). Every user must be assigned at least one role.
+
+### Create a Role
+
+<Steps>
+  <Step title="Go to Users → Roles">
+    Click **Roles** in the left sidebar under the Users section.
+  </Step>
+  <Step title="Click New Role">
+    Enter a name (e.g. `Cashier`) and optionally a description.
+  </Step>
+  <Step title="Select Permissions">
+    Toggle the permissions this role should have. See [Permissions](/setup/permissions) for a full list.
+  </Step>
+  <Step title="Save">
+    Click **Create**. The role is now available to assign to users.
+  </Step>
+</Steps>
+
+## Users
+
+### Invite a New User
+
+<Steps>
+  <Step title="Go to Users → Users">
+    Click **Users** in the left sidebar.
+  </Step>
+  <Step title="Click New User">
+    Fill in the user's name, email, and a temporary password.
+  </Step>
+  <Step title="Assign a Role">
+    Select one or more roles from the dropdown.
+  </Step>
+  <Step title="Save">
+    Click **Create**. The user can now log in with the credentials you set.
+  </Step>
+</Steps>
+
+<Warning>
+  Share the temporary password securely. Ask the user to change it on first login.
+</Warning>
+
+### Edit or Deactivate a User
+
+Click the **Edit** (pencil) icon next to any user. Toggle **Active** off to prevent login without deleting the account.
+
+## Common Questions
+
+**Can a user have multiple roles?** Yes. Permissions are additive — the user gets the union of all assigned roles' permissions.
+
+**Can I delete a role that is in use?** No. You must reassign all users first, then delete the role.

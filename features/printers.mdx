@@ -1,0 +1,53 @@
+---
+title: "Printers"
+description: "Set up receipt and kitchen printers and configure routing rules."
+---
+
+The printer system has two parts:
+- **Printer Devices** — the physical printers (IP address, type, paper size).
+- **Routing Rules** — which items/categories print to which device.
+
+## Add a Printer Device
+
+<Steps>
+  <Step title="Go to Manage → Printers">
+    Click **Printers** in the left sidebar.
+  </Step>
+  <Step title="Click New Printer">
+    Fill in:
+    - **Name** — e.g. `Kitchen Bar`, `Receipt Printer`.
+    - **IP Address** — the printer's IP on your local network.
+    - **Port** — default is `9100` for most network printers.
+    - **Paper Width** — `58mm` or `80mm`.
+    - **Type** — `Receipt` (customer copy) or `Kitchen` (kitchen order).
+  </Step>
+  <Step title="Test">
+    Click **Test Print** to send a test page. Confirm the printer receives it.
+  </Step>
+  <Step title="Save">
+    Click **Create**.
+  </Step>
+</Steps>
+
+## Add a Routing Rule
+
+Routing rules decide which items trigger a print on which printer.
+
+<Steps>
+  <Step title="Click Routing Rules">
+    On the Printers page, click the **Routing Rules** tab.
+  </Step>
+  <Step title="Click New Rule">
+    Select:
+    - **Printer** — the target device.
+    - **Condition** — match by category, product, or order mode.
+    - **Priority** — higher priority rules take precedence when multiple rules match.
+  </Step>
+  <Step title="Save">
+    Click **Create**. Rules take effect immediately on the next order.
+  </Step>
+</Steps>
+
+## Troubleshooting
+
+See [Printer Not Printing](/troubleshooting/printer-not-printing) if a printer is not responding.

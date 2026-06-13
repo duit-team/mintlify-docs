@@ -1,0 +1,36 @@
+---
+title: "Tax"
+description: "Configure tax rates and apply them to products."
+---
+
+**Tax rates** define the percentage charged on sales. You can create multiple rates (e.g. SST 6%, Service Charge 10%) and assign them per product or globally.
+
+## Create a Tax Rate
+
+<Steps>
+  <Step title="Go to Manage → Tax">
+    Click **Tax** in the left sidebar under Manage.
+  </Step>
+  <Step title="Click New Tax">
+    Fill in:
+    - **Code** — short identifier, e.g. `SST` or `SVC`.
+    - **Name** — display name, e.g. `Sales & Service Tax` or `Service Charge`.
+    - **Rate (%)** — the percentage as a number, e.g. `6` for 6%.
+    - **Active** — inactive taxes are excluded from all calculations.
+  </Step>
+  <Step title="Save">
+    Click **Create**.
+  </Step>
+</Steps>
+
+## Edit or Delete
+
+Click the **Edit** icon to change any field. Click **Delete** to remove a tax rate.
+
+<Warning>
+  Deleting a tax rate that has been applied to past transactions will **not** remove it from historical records, but it will stop appearing on new transactions.
+</Warning>
+
+## Applying Tax to Products
+
+After creating a tax rate, go to **Menu Builder → Products** and assign the desired tax rate to each product. Tax is calculated per line item on the ticket.

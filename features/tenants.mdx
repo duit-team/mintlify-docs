@@ -1,0 +1,35 @@
+---
+title: "Tenants"
+description: "Manage the businesses (tenants) registered on the platform."
+---
+
+<Warning>
+  This section is for **root administrators** only. Tenant users do not have access to this page.
+</Warning>
+
+A **Tenant** is a separate business account with its own isolated database, users, and settings.
+
+## Create a Tenant
+
+<Steps>
+  <Step title="Go to Tenants">
+    Click **Tenants** in the root admin sidebar.
+  </Step>
+  <Step title="Click New Tenant">
+    Fill in:
+    - **Name** — the business name.
+    - **Domain Name** — the unique slug used in all API and UI URLs (e.g. `my-restaurant`).
+    - **Database Server** — which database server to provision the tenant database on.
+  </Step>
+  <Step title="Save">
+    Click **Create**. The tenant database is provisioned automatically and migrations run on startup.
+  </Step>
+</Steps>
+
+## Manage a Tenant
+
+Click **Edit** on any tenant to update its name or settings. The domain name cannot be changed after creation.
+
+## Tenant Isolation
+
+Each tenant's data is completely isolated in its own database. One tenant cannot access another's data.

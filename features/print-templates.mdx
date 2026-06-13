@@ -1,0 +1,42 @@
+---
+title: "Print Templates"
+description: "Customise what appears on receipts and kitchen dockets."
+---
+
+**Print Templates** define the layout and content of printed documents — customer receipts, kitchen order dockets, and other outputs.
+
+## Template Types
+
+| Type | Purpose |
+|------|---------|
+| **Receipt** | Customer-facing receipt printed after payment |
+| **Kitchen** | Order docket sent to the kitchen printer |
+| **Label** | Product label (if label printers are configured) |
+
+## Create a Template
+
+<Steps>
+  <Step title="Go to Manage → Print Templates">
+    Click **Print Templates** in the left sidebar.
+  </Step>
+  <Step title="Click New Template">
+    Select the template **Type** and give it a **Name**.
+  </Step>
+  <Step title="Design the layout">
+    Use the template editor to add header, line items, footer, and any custom fields. Available variables are listed in the editor sidebar.
+  </Step>
+  <Step title="Set as default (optional)">
+    Toggle **Default** to make this template the fallback for its type when no routing rule specifies one.
+  </Step>
+  <Step title="Save">
+    Click **Create**.
+  </Step>
+</Steps>
+
+## Assign to Printers
+
+Go to **Manage → Printers → Routing Rules** and assign a template to a routing rule to control which template prints on which printer.
+
+## Test Print
+
+On the template list, click the **Test Print** icon to send a sample output to your default printer.
