@@ -3,19 +3,42 @@ title: "Payment Issues"
 description: "Troubleshoot failed or missing payments."
 ---
 
+Use this guide to diagnose and fix the most common payment problems in DuitPOS — from missing online orders to Stripe configuration errors.
+
+<Frame>
+  <img src="/images/payment-issues.png" alt="Troubleshooting payment issues checklist" />
+</Frame>
+
+## Common Issues and Fixes
+
+| Symptom | Most Likely Cause | Fix |
+|---------|-------------------|-----|
+| Customer paid online but no order in dashboard | Webhook not configured or webhook secret mismatch | Verify webhook endpoint and signing secret in Stripe Dashboard → Developers → Webhooks |
+| Payment type not showing on POS | Payment type is inactive | Go to Manage → Payment Types and toggle Active on |
+| Stripe shows "Invalid API Key" | Wrong key type or incomplete key | Re-enter the full key starting with `sk_live_` or `sk_test_` — do not mix test and live keys |
+| Payment goes through but order is duplicate | Both webhook and redirect paths fired | This is expected — DuitPOS deduplicates automatically. Only one order is created |
+| Online checkout page not loading | Stripe not connected or no active online payment type | Ensure a Stripe processor is added and saved under an Active payment type |
+| Card declined | Insufficient funds, wrong CVC, or expired card | Customer must retry with a different card. Check Stripe Dashboard → Payments for the exact decline reason |
+| Webhook deliveries failing (Stripe shows 4xx errors) | Endpoint URL is wrong or server is unreachable | Verify the endpoint URL in Stripe matches your tenant domain exactly |
+| Refund not appearing in dashboard | Refund processed in Stripe but not recorded in DuitPOS | Process refunds from within DuitPOS (ticket detail → Refund) to keep records in sync |
+
+<Tip>
+  When diagnosing online payment issues, always start with the **Stripe Dashboard → Payments** view. The failure reason is almost always visible there, and it saves time versus guessing on the DuitPOS side.
+</Tip>
+
 ## Online Payment Not Completing
 
 **Symptom:** Customer paid but no order appears in the dashboard.
 
 <Steps>
   <Step title="Check the Stripe Dashboard">
-    Go to [dashboard.stripe.com](https://dashboard.stripe.com) → **Payments**. Find the payment and check its status.
+    Go to [dashboard.stripe.com](https://dashboard.stripe.com) → **Payments**. Find the payment and check its status. If it shows as Succeeded there but not in DuitPOS, the issue is in the webhook or redirect path.
   </Step>
   <Step title="Verify the webhook is set up">
-    Go to **Developers → Webhooks** and confirm the endpoint is active with no recent failures. See [Stripe Setup](/online-ordering/stripe-setup) to re-configure.
+    Go to **Developers → Webhooks** in Stripe and confirm the endpoint is active. Check **Recent Deliveries** for failed attempts and the HTTP response codes.
   </Step>
   <Step title="Check the Webhook Secret">
-    Go to **Manage → Payment Types → Edit** and confirm the Webhook Secret matches the one in Stripe Dashboard → Webhooks → your endpoint → Signing secret.
+    Go to **Manage → Payment Types → Edit** and confirm the Webhook Secret matches the one shown in Stripe Dashboard → Webhooks → your endpoint → Signing secret. They must match exactly — copying the secret again from Stripe is the safest approach.
   </Step>
 </Steps>
 
@@ -24,10 +47,33 @@ description: "Troubleshoot failed or missing payments."
 **Symptom:** A payment type is missing from the POS checkout screen.
 
 - Go to **Manage → Payment Types** and confirm the type is set to **Active**.
-- Reload the POS app after making changes.
+- Reload the POS app after making changes — the POS caches the payment type list.
 
 ## Stripe Showing "Invalid API Key"
 
 - Confirm you copied the full key (starts with `sk_live_` or `sk_test_`).
-- Make sure you are not mixing test and live keys.
+- Make sure you are not mixing test and live keys — they must both match (test keys for test mode, live keys for production).
 - Re-enter the key in **Manage → Payment Types → Edit → Processors**.
+
+## Frequently Asked Questions
+
+<AccordionGroup>
+  <Accordion title="How do I issue a refund?">
+    Open the ticket in the DuitPOS dashboard, click the **Refund** button, and enter the amount to refund. DuitPOS will process the refund via Stripe (for card/online payments) and record it in the transaction history. Always process refunds from within DuitPOS rather than directly in Stripe to keep your records in sync.
+  </Accordion>
+  <Accordion title="A customer says they were charged but I cannot find the order — what do I do?">
+    Search in Stripe Dashboard → Payments by the customer's email or card last four digits. If the payment is there but not in DuitPOS, the webhook may have failed. Manually create the order in DuitPOS and note the Stripe Payment Intent ID for reconciliation. Then fix the webhook configuration to prevent this from recurring.
+  </Accordion>
+  <Accordion title="Why does the POS show a payment error when processing a card in-store?">
+    In-store card errors depend on your physical card terminal setup, not Stripe (Stripe is for online QR ordering only). Check your EFTPOS terminal's connection and contact your terminal provider for in-store card errors.
+  </Accordion>
+</AccordionGroup>
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Stripe Setup" icon="credit-card" href="/online-ordering/stripe-setup">Configure Stripe credentials and webhooks</Card>
+  <Card title="Payment Types" icon="wallet" href="/features/payment-types">Manage payment methods</Card>
+  <Card title="QR Code Setup" icon="qr-code" href="/online-ordering/qr-setup">Set up QR ordering for customers</Card>
+  <Card title="Reports" icon="chart-bar" href="/reports/overview">View payment breakdowns in reports</Card>
+</CardGroup>

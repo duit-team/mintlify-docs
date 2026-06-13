@@ -3,17 +3,35 @@ title: "Device Setup"
 description: "Configure physical device profiles for POS terminals, KDS, Queue displays, and more."
 ---
 
-A **Setup** is a named configuration profile for one physical device. Each device type (POS, KDS, Queue, Go, Cliq) has its own set of configurable settings.
+A **Setup** is a named configuration profile for one physical device. Each device in your business (POS terminal, kitchen display screen, queue display, etc.) gets its own profile. The device loads its settings by entering the **Setup Code** shown on the profile.
+
+<Frame>
+  <img src="/images/setup.png" alt="Device Setup list showing POS and KDS profiles with their setup codes" />
+</Frame>
 
 ## Device Types
 
 | Type | Purpose |
 |------|---------|
-| **POS** | Main point-of-sale terminal |
-| **KDS** | Kitchen display screen |
-| **Queue** | Customer-facing queue / order-ready display |
-| **Go** | Mobile order-taking device |
-| **Cliq** | Self-service kiosk |
+| **POS** | Main point-of-sale terminal used by staff to take orders and process payments |
+| **KDS** | Kitchen Display Screen — shows incoming orders to kitchen staff without printing |
+| **Queue** | Customer-facing queue or order-ready display shown in the waiting area |
+| **Go** | Mobile order-taking device used by staff on the floor |
+| **Cliq** | Self-service kiosk where customers place their own orders |
+
+## Setup Profile Fields
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| **Device Type** | Yes | The type of device this profile is for (POS, KDS, Queue, Go, Cliq) |
+| **Name** | Yes | A descriptive label, e.g. `Main Counter POS`, `Bar KDS`, `Lobby Queue Display` |
+| **Receipt Printer** | No (POS) | Which printer device to use for customer receipts on this terminal |
+| **Order Mode Default** | No (POS) | The default order mode pre-selected when a new ticket is opened |
+| **Display Options** | No | Screen layout and behaviour settings specific to the device type |
+
+<Tip>
+  Give each setup a name that clearly identifies its physical location — for example `Counter 1 POS` or `Kitchen Bar KDS`. This makes it easy to find the right profile when a device needs reconfiguring.
+</Tip>
 
 ## Create a Setup Profile
 
@@ -22,20 +40,46 @@ A **Setup** is a named configuration profile for one physical device. Each devic
     Click **Setup** in the left sidebar under Manage.
   </Step>
   <Step title="Click New Setup">
-    Select the **Device Type**, then give it a **Name** (e.g. `Main Counter POS`, `Bar KDS`).
+    Select the **Device Type**, then give it a **Name**.
   </Step>
   <Step title="Configure settings">
-    Each device type has its own settings panel — receipt printer, display options, order mode defaults, etc. Fill in the relevant fields.
+    Each device type has its own settings panel — receipt printer, display options, order mode defaults, etc. Fill in the relevant fields for your use case.
   </Step>
   <Step title="Save">
-    Click **Create**.
+    Click **Create**. A **Setup Code** is generated automatically.
   </Step>
 </Steps>
 
 ## Apply to a Device
 
-On the physical device, open the app settings and enter the **Setup Code** shown on the profile. The device will load the configuration automatically.
+On the physical device, open the DuitPOS app settings and enter the **Setup Code** shown on the profile. The device will download its configuration automatically and restart with the new settings.
 
 ## Edit a Setup
 
-Click **Edit** on any setup row. Changes apply to the device the next time it syncs or restarts.
+Click **Edit** on any setup row. Changes apply to the device the next time it syncs or restarts. To force an immediate update, restart the app on the device.
+
+## Frequently Asked Questions
+
+<AccordionGroup>
+  <Accordion title="What happens if two devices use the same Setup Code?">
+    Each Setup Code is intended for one device. If two devices load the same profile, they will share the same configuration, which can cause conflicts (e.g. both printing to the same receipt printer). Create a separate profile for each physical device.
+  </Accordion>
+  <Accordion title="Can I change which printer a POS terminal uses?">
+    Yes. Edit the Setup profile for that terminal and update the **Receipt Printer** field. The change takes effect on the terminal's next sync or app restart.
+  </Accordion>
+  <Accordion title="What is a KDS and do I need one?">
+    A Kitchen Display Screen (KDS) shows incoming orders to kitchen staff as they are placed, without printing a paper docket. It is optional — most small restaurants use kitchen printers instead. KDS systems are better suited for high-volume kitchens where paper management is a challenge.
+  </Accordion>
+  <Accordion title="I entered the Setup Code but the device is not loading the configuration — what do I do?">
+    Check that the device is connected to the internet and can reach the DuitPOS server. Verify that the Setup Code you entered matches exactly what is shown in the dashboard (codes are case-sensitive). If the problem persists, try re-entering the code after force-closing and reopening the app.
+  </Accordion>
+</AccordionGroup>
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Printers" icon="printer" href="/features/printers">Set up printer devices for POS terminals</Card>
+  <Card title="Settings" icon="gear" href="/features/settings">Configure global account preferences</Card>
+  <Card title="Locations" icon="map-pin" href="/features/locations">Manage physical branches</Card>
+  <Card title="Employees" icon="users" href="/features/employees">Set up staff accounts for POS login</Card>
+</CardGroup>

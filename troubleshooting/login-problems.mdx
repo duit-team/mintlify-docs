@@ -3,25 +3,102 @@ title: "Login Problems"
 description: "Can't sign in? Here's what to check."
 ---
 
+If you cannot log in to DuitPOS, follow this guide to identify and fix the problem. Most login issues fall into one of five categories: wrong credentials, inactive account, wrong URL, too many failed attempts, or a browser issue.
+
+<Frame>
+  <img src="/images/login-problems.png" alt="Login troubleshooting page showing common error messages and their solutions" />
+</Frame>
+
+## Step-by-Step Diagnosis
+
+<Steps>
+  <Step title="Check which error message you see">
+    Read the error message on the login page carefully — it tells you exactly what is wrong. See the table below for what each message means.
+  </Step>
+  <Step title="Confirm you are on the correct URL">
+    Each business has its own login URL that includes the tenant domain name, for example `https://app.duitpos.com/my-restaurant/login`. Make sure you are not on a generic or wrong tenant URL.
+  </Step>
+  <Step title="Double-check your email and password">
+    Passwords are case-sensitive. Make sure Caps Lock is off. Try copying and pasting the password if you are unsure.
+  </Step>
+  <Step title="Reset your password if needed">
+    Click **Forgot password?** on the login page. Enter your email address and check your inbox for a reset link. Check your spam or junk folder if it does not arrive within a few minutes. The link expires after 1 hour.
+  </Step>
+  <Step title="Contact your administrator">
+    If you still cannot log in, contact your system administrator with your email address and the exact error message shown. They can check your account status and reset your password from the Users page.
+  </Step>
+</Steps>
+
+## Error Messages Reference
+
+| Error Message | Cause | Fix |
+|--------------|-------|-----|
+| "Invalid email or password" | Wrong email address or wrong password | Check for typos; use Forgot Password to reset |
+| "Your account is inactive" | Account has been deactivated | Contact your administrator to reactivate the account |
+| "Too many login attempts — try again in X minutes" | Account temporarily locked after repeated failures | Wait the specified time, then try again |
+| "Account not found for this domain" | Wrong tenant URL | Confirm the URL includes the correct business domain name |
+| "Your session has expired" | You were logged in but the session timed out | Log in again — your work was not lost |
+| "Access denied" | You are logged in but do not have permission for that page | Ask your administrator to update your role permissions |
+
 ## Forgot Password
 
-Click **Forgot password?** on the login page. Enter your email address and check your inbox for a reset link. Check your spam folder if it does not arrive within a minute.
+Click **Forgot password?** on the login page. Enter your email address and check your inbox for a reset link. Check your spam folder if it does not arrive within a minute. The reset link expires after 1 hour — request a new one if it expires.
 
 ## Account Is Inactive
 
-If you see *"Your account is inactive"*, contact your administrator. They can reactivate your account under **Users → Users → Edit → Active**.
+If you see "Your account is inactive", contact your administrator. They can reactivate your account under **Users → Users → Edit → Active**. Inactive accounts are used to suspend access without deleting the account.
 
 ## Wrong Tenant
 
-The login page URL includes your tenant domain (e.g. `app.yourdomain.com/my-business/login`). Make sure you are on the correct URL for your organisation.
+The login page URL includes your tenant domain (e.g. `app.duitpos.com/my-business/login`). Make sure you are on the correct URL for your organisation. If you are unsure of your URL, ask your administrator.
 
 ## Locked Out After Too Many Attempts
 
-Wait 15 minutes and try again. If the problem persists, ask your administrator to reset your password manually from the Users page.
+Wait the specified time shown in the error message (typically 15 minutes) and try again. If the problem persists after the lockout period, ask your administrator to reset your password from the Users page — this also clears any lockout.
+
+<Tip>
+  If you use a password manager, make sure it has saved the correct password for the correct URL. Password managers sometimes save multiple entries for the same site and auto-fill the wrong one.
+</Tip>
+
+## Browser Issues
+
+If none of the above apply, try these steps:
+
+1. Clear your browser cache and cookies for the DuitPOS domain.
+2. Try an incognito or private browsing window.
+3. Try a different browser (Chrome, Edge, Firefox, Safari).
+4. Disable browser extensions, especially ad-blockers or privacy extensions that may block login scripts.
 
 ## Still Can't Log In?
 
 Contact your system administrator with:
 - Your email address.
-- The exact error message shown.
+- The exact error message shown on screen.
 - The URL you are trying to access.
+- The browser and device you are using.
+
+## Frequently Asked Questions
+
+<AccordionGroup>
+  <Accordion title="I reset my password but the reset email is not arriving — what do I do?">
+    Check your spam or junk folder first. If it is not there after 5 minutes, ask your administrator to trigger a password reset from the Users page on your behalf. Also check that you entered the correct email address when requesting the reset.
+  </Accordion>
+  <Accordion title="I changed my role and now I cannot access a page I could before — what happened?">
+    Permission changes take effect immediately. If your role was changed and a permission was removed, you will lose access to that page. Contact your administrator to restore the permission or assign a different role.
+  </Accordion>
+  <Accordion title="Can I log in on multiple devices at the same time?">
+    Yes. DuitPOS supports concurrent sessions — you can be logged in on your laptop and your phone at the same time. Each session is independent.
+  </Accordion>
+  <Accordion title="I am a POS employee with a PIN — can I log in to the dashboard with my PIN?">
+    No. POS PIN login is only for the POS terminal app. Dashboard access requires an email and password from a User account. Ask your administrator to create a User account for you if you need dashboard access.
+  </Accordion>
+</AccordionGroup>
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Users & Roles" icon="users" href="/setup/users-and-roles">Manage login accounts and roles</Card>
+  <Card title="Permissions" icon="shield-check" href="/setup/permissions">Understand what each role can access</Card>
+  <Card title="Employees" icon="user-check" href="/features/employees">Manage POS PIN login for staff</Card>
+  <Card title="First Login" icon="key" href="/getting-started/first-login">Get started with your account</Card>
+</CardGroup>

@@ -3,26 +3,73 @@ title: "Settings"
 description: "Configure tenant-wide preferences for your account."
 ---
 
-**Settings** contains global configuration that applies across your entire account.
+**Settings** contains global configuration that applies across your entire account. Changes here affect all locations, all users, and all POS terminals under your tenant.
+
+<Frame>
+  <img src="/images/settings.png" alt="Settings page showing General, Notification, and Currency sections" />
+</Frame>
+
+## Settings Sections
+
+| Section | What it controls |
+|---------|-----------------|
+| **General** | Business name, logo, currency, timezone, and receipt footer text |
+| **Notifications** | Email and in-app alerts for key business events |
+| **Receipt** | Default receipt footer, paper size defaults, and header format |
+| **Online Ordering** | Welcome message, operating hours, and logo for the customer-facing QR ordering page |
+| **E-Invoicing** | MyInvois environment (Sandbox/Production), Client ID, Client Secret, and Supplier TIN |
 
 ## General Settings
 
 | Setting | Description |
 |---------|-------------|
 | **Business Name** | Appears on receipts, e-invoices, and the customer-facing online menu |
-| **Logo** | Displayed on receipts and the online ordering page |
-| **Currency** | The currency used for all prices and reports |
-| **Timezone** | Controls report date grouping and scheduled jobs |
-| **Receipt Footer** | Custom text printed at the bottom of every receipt |
+| **Logo** | Displayed on receipts (if your printer supports image printing) and the online ordering page |
+| **Currency** | The currency used for all prices, reports, and receipts |
+| **Timezone** | Controls report date grouping, scheduled jobs, and timestamp display |
+| **Receipt Footer** | Custom text printed at the bottom of every receipt (e.g. "Thank you for dining with us!") |
 
 ## Notification Settings
 
-Configure email or in-app alerts for key events — low stock, daily summary, failed payments, etc.
+Configure email or in-app alerts for key events:
+- **Daily Sales Summary** — receive a summary of the day's revenue at a set time.
+- **Failed Payments** — get an alert whenever a payment fails online.
+- **Import Completion** — be notified when a bulk import finishes (with a success or error count).
 
 ## Saving Changes
 
-All settings are saved per-field. Changes take effect immediately — no restart required.
+All settings are saved per-field as you update them. Changes take effect immediately — no restart required.
 
 <Warning>
-  Changing the **Currency** does not convert existing prices. Update your product prices manually after a currency change.
+  Changing the **Currency** does not convert existing prices. Product prices are stored as raw numbers — changing the currency symbol from MYR to USD will display the same numbers in USD without converting them. Update all your product prices manually after a currency change. This also affects any in-progress online orders.
 </Warning>
+
+<Tip>
+  Set your **Timezone** correctly before going live. Reports group sales by calendar day in the configured timezone — if the timezone is wrong, midnight cutoffs for your reports will be off, making daily summaries inaccurate.
+</Tip>
+
+## Frequently Asked Questions
+
+<AccordionGroup>
+  <Accordion title="Where do I upload my business logo?">
+    Go to Settings → General and click the **Logo** upload button. Supported formats are PNG and JPG. The logo will appear on the online ordering page immediately and on printed receipts if your printer supports image printing (most modern thermal printers do).
+  </Accordion>
+  <Accordion title="Will changing the receipt footer update receipts that have already been printed?">
+    No. The footer change only applies to receipts printed after you save the new setting. Past receipts are not affected.
+  </Accordion>
+  <Accordion title="Can I have different settings for different locations?">
+    The Settings page applies to the entire account (tenant). Location-specific details like address, phone, and TIN are configured per location under Manage → Locations → Edit.
+  </Accordion>
+  <Accordion title="How do I configure E-Invoicing settings?">
+    Go to Settings → E-Invoicing and enter your MyInvois Client ID, Client Secret, and Supplier TIN. Make sure the environment is set to Sandbox for testing and Production for live submissions. See [E-Invoicing](/features/e-invoicing) for the full setup guide.
+  </Accordion>
+</AccordionGroup>
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Locations" icon="map-pin" href="/features/locations">Configure per-location details like address and TIN</Card>
+  <Card title="Print Templates" icon="file-text" href="/features/print-templates">Customise receipt layout and content</Card>
+  <Card title="E-Invoicing" icon="file-text" href="/features/e-invoicing">Set up LHDN MyInvois integration</Card>
+  <Card title="Online Ordering QR Setup" icon="qr-code" href="/online-ordering/qr-setup">Configure your customer-facing online menu</Card>
+</CardGroup>

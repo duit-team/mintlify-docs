@@ -3,26 +3,76 @@ title: "Employees"
 description: "Manage staff records separate from system login accounts."
 ---
 
-**Employees** are staff records used for scheduling, time tracking, and sales attribution. They are separate from **Users** (system login accounts) — an employee may or may not have a login.
+**Employees** are staff records used for POS login (via PIN), sales attribution, and time tracking. They are separate from **Users** (dashboard login accounts) — an employee may or may not have a dashboard login. Most frontline staff only need an employee record with a PIN, not a full user account.
+
+<Frame>
+  <img src="/images/employees.png" alt="Employees list showing staff names, roles, PIN status, and active toggles" />
+</Frame>
+
+## Employee Fields
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| **Name** | Yes | The employee's full name, shown on the POS login screen and in sales reports |
+| **Role** | Yes | The POS role that determines what this employee can do on the POS terminal (e.g. Cashier, Supervisor) |
+| **PIN** | Yes | A 4–6 digit number the employee uses to log in to the POS. Must be unique across all employees |
+| **Colour** | No | A highlight colour shown next to the employee's name on the POS login screen for quick identification |
+| **Location** | No | The primary location (branch) this employee works at. Used for location-based report filtering |
+| **User Account** | No | Link to a dashboard user account if this employee also needs dashboard access |
+| **Active** | No | Toggle off to prevent this employee from logging in to the POS |
+
+<Tip>
+  Use a PIN that is easy for the employee to remember but not obvious (avoid `1234` or `0000`). For higher-security environments, use 6-digit PINs and rotate them periodically.
+</Tip>
 
 ## Create an Employee
 
 <Steps>
-  <Step title="Go to Manage → Employees">
-    Click **Employees** in the left sidebar.
+  <Step title="Go to Staff → Employees">
+    Click **Employees** in the left sidebar under Staff.
   </Step>
   <Step title="Click New Employee">
-    Fill in the employee's name, contact details, and any other required fields.
+    Fill in the employee's name, role, and PIN. Optionally add a colour and location.
   </Step>
   <Step title="Save">
-    Click **Create**.
+    Click **Create**. The employee can immediately log in to the POS using their PIN.
   </Step>
 </Steps>
 
 ## Link to a User Account
 
-If this employee also has a system login, open their record and link it to the corresponding **User** account. This enables sales and shift reports to be attributed to them by name.
+If this employee also needs dashboard access, open their record and link it to the corresponding **User** account under **Users → Users**. This enables sales and shift reports to be attributed to them by name.
 
 ## Deactivate
 
-Toggle **Active** off to mark an employee as inactive (e.g. when they leave). Their historical records are preserved.
+Toggle **Active** off to mark an employee as inactive (e.g. when they leave or are on extended leave). Their historical records — sales, shifts, and reports — are fully preserved.
+
+<Warning>
+  Deactivating an employee immediately prevents them from logging in to the POS. If they are mid-shift, they will be logged out on their next PIN attempt. Make sure the shift is handed over before deactivating.
+</Warning>
+
+## Frequently Asked Questions
+
+<AccordionGroup>
+  <Accordion title="An employee forgot their PIN — how do I reset it?">
+    Go to Staff → Employees, click **Edit** on the employee's record, and enter a new PIN in the PIN field. Save the change. The new PIN takes effect immediately on the POS.
+  </Accordion>
+  <Accordion title="An employee says they cannot clock in — what do I check?">
+    Check that the employee's record is set to **Active**. Also verify their PIN — ask them to re-enter it carefully (PINs are case-independent but must match the number exactly). If the POS still rejects the PIN, reset it in the employee record.
+  </Accordion>
+  <Accordion title="What is the difference between a POS role and a dashboard user role?">
+    A **POS role** controls what an employee can do on the POS terminal (e.g. apply discounts, void items, open the cash drawer). A **dashboard user role** controls what a user can see and do in the web dashboard (e.g. run reports, manage products). These are separate systems — an employee can have both.
+  </Accordion>
+  <Accordion title="Can two employees share the same PIN?">
+    No. PINs must be unique across all employees at the same location. The system will reject a PIN that is already in use when you try to save.
+  </Accordion>
+</AccordionGroup>
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Users & Roles" icon="users" href="/setup/users-and-roles">Manage dashboard login accounts</Card>
+  <Card title="Permissions" icon="shield-check" href="/setup/permissions">Control what each role can access</Card>
+  <Card title="Locations" icon="map-pin" href="/features/locations">Assign employees to branches</Card>
+  <Card title="Reports" icon="chart-bar" href="/reports/overview">View sales attributed to each employee</Card>
+</CardGroup>

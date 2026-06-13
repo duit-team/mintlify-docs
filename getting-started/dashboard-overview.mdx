@@ -3,26 +3,71 @@ title: "Dashboard Overview"
 description: "A quick tour of the main sections of your dashboard."
 ---
 
+After signing in, you land on the DuitPOS dashboard — the control centre for your entire business. This page explains every section so you can find what you need quickly.
+
+<Frame>
+  <img src="/images/dashboard-overview.png" alt="DuitPOS main dashboard layout" />
+</Frame>
+
 ## Top Navigation
 
-- **Search** — Find any record quickly across the system.
-- **Notifications** — Alerts for important events (e.g. low stock, failed payments).
-- **Account menu** — Change your password or sign out.
+- **Search** — Find any record quickly across the system. Type a product name, employee, or ticket number.
+- **Notifications** — Alerts for important events such as failed payments or import errors.
+- **Account menu** — Change your password, switch language, or sign out.
+- **Help (?)** — Every page has a **?** icon in the top-right of the page header. Clicking it opens the relevant help article for that page directly.
 
-## Sidebar Sections
+## Dashboard Sections
 
-### Manage
-Configuration for your business: tax rates, payment types, order modes, printers, and more. Changes here take effect immediately.
+| Section | What it does |
+|---------|-------------|
+| **Manage** | Core configuration: tax rates, payment types, order modes, printers, print templates, transaction types, modifiers, device setups, and global settings |
+| **Menu Builder** | Build your menu with categories, products, modifier groups, brands, and bulk pricing overrides |
+| **Staff / Employees** | Create employee records with POS PINs, link to user accounts, and track attribution |
+| **Reports** | Daily, weekly, and monthly summaries of sales, payments, voids, and tax collected |
+| **Workday Reports** | Shift-level breakdowns for cash drawer reconciliation |
+| **Online Ordering** | Generate and manage QR codes for table ordering and configure payment processors |
+| **E-Invoicing** | Submit and track LHDN MyInvois e-invoices for Malaysian compliance |
+| **Users & Roles** | Manage dashboard login accounts and role-based permissions |
 
-### Users & Roles
-Create staff accounts, assign roles, and control permissions per role.
+## Sidebar Navigation
 
-### Reports
-Daily, weekly, and monthly summaries of sales, payments, and voids.
+The sidebar on the left contains all sections grouped by category. Click any section header to expand it. The active page is highlighted.
 
-### Online Ordering
-Generate and manage QR codes for table ordering. Requires Stripe to be configured under Payment Types.
+<Tip>
+  Pin your most-used sections by clicking the star icon next to them. Pinned sections float to the top of the sidebar for faster access.
+</Tip>
 
-## Help Links
+## Key Metrics Widget
 
-Every page has a **?** icon in the top-right of the page header. Clicking it opens the relevant help article for that page directly.
+The top of the dashboard shows today's key numbers at a glance:
+
+- **Total Sales** — gross revenue since midnight.
+- **Order Count** — total tickets created today.
+- **Average Order Value** — total sales divided by order count.
+- **Active Terminals** — how many POS devices are currently logged in.
+
+## Frequently Asked Questions
+
+<AccordionGroup>
+  <Accordion title="How do I get back to the dashboard from a deep page?">
+    Click the **DuitPOS logo** in the top-left corner at any time to return to the main dashboard.
+  </Accordion>
+  <Accordion title="I do not see a section that was described — why?">
+    Some sections are hidden based on your role permissions. If you need access to a section you cannot see, ask your administrator to update your role under **Users → Roles**.
+  </Accordion>
+  <Accordion title="Can I customise the dashboard layout?">
+    The main widget area can be reordered by dragging cards. The sidebar order is fixed by section grouping.
+  </Accordion>
+  <Accordion title="What does the notification bell show?">
+    Notifications include failed payment alerts, import completion results, and any system messages from your administrator. Click the bell to see all unread notifications.
+  </Accordion>
+</AccordionGroup>
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="First Login" icon="key" href="/getting-started/first-login">Sign in and get oriented</Card>
+  <Card title="Setup Checklist" icon="check-circle" href="/getting-started/setup-checklist">Complete your initial configuration</Card>
+  <Card title="Reports Overview" icon="chart-bar" href="/reports/overview">Understand your sales data</Card>
+  <Card title="Users & Roles" icon="users" href="/setup/users-and-roles">Control who can see what</Card>
+</CardGroup>

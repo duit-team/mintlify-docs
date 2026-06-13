@@ -3,26 +3,72 @@ title: "Reports"
 description: "View sales, payment, and transaction analytics."
 ---
 
-The **Reports** section gives you a summary of your business performance — revenue, order counts, tax collected, and payment breakdowns.
+The **Reports** section gives you a comprehensive view of your business performance — revenue, order counts, tax collected, and payment breakdowns. Use reports to understand trends, identify best-sellers, and prepare for end-of-period reconciliation.
+
+<Frame>
+  <img src="/images/reports-overview.png" alt="Reports dashboard showing Sales Summary, Payment Breakdown, and Product Sales charts" />
+</Frame>
 
 ## Available Reports
 
 | Report | What it shows |
 |--------|--------------|
-| **Sales Summary** | Total revenue, order count, average order value by day/week/month |
-| **Payment Breakdown** | Revenue split by payment type (Cash, Card, Online) |
-| **Tax Report** | Tax collected per rate |
-| **Product Sales** | Best and worst selling products |
-| **Category Sales** | Revenue per menu category |
+| **Sales Summary** | Total revenue, order count, and average order value — filterable by day, week, or month |
+| **Payment Breakdown** | Revenue split by payment type (Cash, Card, Online, etc.) to see how customers pay |
+| **Tax Report** | Tax collected per rate (e.g. SST 6%, Service Charge 10%) for compliance reporting |
+| **Product Sales** | Best and worst selling products ranked by quantity and revenue |
+| **Category Sales** | Revenue and order count per menu category — shows which sections drive the most income |
+| **Employee Sales** | Sales attributed to each employee, useful for commission or performance tracking |
+| **Void & Refund Report** | All voids and refunds in the period, with reason codes and employee attribution |
 
 ## Date Range
 
-Use the **Date** picker at the top to filter any report by a custom date range, or use the quick shortcuts: Today, This Week, This Month.
+Use the **Date** picker at the top to filter any report by a custom date range, or use the quick shortcuts:
+
+- **Today** — current calendar day from midnight to now.
+- **This Week** — Monday to today.
+- **This Month** — 1st of the month to today.
+- **Custom** — pick any start and end date.
+
+<Tip>
+  For shift-by-shift breakdowns and cash drawer reconciliation, use [Workday Reports](/reports/workday) instead of the date-range reports. Workday Reports group data by business session, which more accurately reflects your trading day if you trade past midnight.
+</Tip>
 
 ## Export
 
-Click **Export CSV** on any report to download the data for use in Excel or another tool.
+Click **Export CSV** on any report to download the data for use in Excel, Google Sheets, or accounting software. Exports include all rows for the selected date range, not just what is visible on screen.
 
-<Tip>
-  For shift-by-shift breakdowns, see [Workday Reports](/reports/workday).
-</Tip>
+## Filtering
+
+Most reports support additional filters beyond the date range:
+
+- **Location** — filter to one branch or view all locations combined.
+- **Order Mode** — see sales by Dine In, Takeaway, or Delivery separately.
+- **Payment Type** — isolate sales by Cash, Card, or specific payment methods.
+- **Employee** — filter to one staff member's transactions.
+
+## Frequently Asked Questions
+
+<AccordionGroup>
+  <Accordion title="Why do my report totals not match my bank statement?">
+    Reports show total sales (gross revenue including tax). Your bank statement shows net deposits (after payment processor fees). Card and online payments may also be batched differently. For reconciliation, use the Payment Breakdown report filtered to Card and Online types, then compare with your processor's settlement statement.
+  </Accordion>
+  <Accordion title="Can I schedule reports to be emailed automatically?">
+    Daily sales summary emails can be configured under **Manage → Settings → Notifications**. For custom scheduled exports, contact your account manager.
+  </Accordion>
+  <Accordion title="How far back can I view historical data?">
+    All historical transaction data is retained for as long as your account is active. There is no expiry on historical reports.
+  </Accordion>
+  <Accordion title="Why is a sale from yesterday not appearing in today's report?">
+    Reports use your account's configured **Timezone** (set under Manage → Settings). If your timezone is set incorrectly, transactions near midnight may appear in the wrong day. Check your timezone setting if you see this pattern consistently.
+  </Accordion>
+</AccordionGroup>
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Workday Reports" icon="clock" href="/reports/workday">Shift-level reconciliation and cash drawer reports</Card>
+  <Card title="Import History" icon="upload" href="/reports/import-history">Review past bulk import results</Card>
+  <Card title="Tax" icon="percent" href="/features/tax">Configure the tax rates shown in the Tax Report</Card>
+  <Card title="Employees" icon="users" href="/features/employees">Set up staff records for Employee Sales reports</Card>
+</CardGroup>

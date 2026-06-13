@@ -3,15 +3,25 @@ title: "First Login"
 description: "How to sign in and navigate the dashboard."
 ---
 
+The first time you log in to DuitPOS, you will land on the dashboard and gain access to all the tools you need to configure and run your business. This guide walks you through signing in and understanding what you see.
+
+<Frame>
+  <img src="/images/first-login.png" alt="DuitPOS login screen" />
+</Frame>
+
 ## Sign In
 
-1. Open your dashboard URL in a browser.
+1. Open your dashboard URL in a browser (e.g. `https://app.duitpos.com/your-business/login`).
 2. Enter your email and password provided by your administrator.
 3. Click **Sign In**.
 
 <Tip>
-  If you forgot your password, click **Forgot password?** on the login page to receive a reset link by email.
+  Bookmark your dashboard URL after logging in so you can get back quickly. The URL includes your business domain — make sure it matches your organisation before entering your password.
 </Tip>
+
+<Warning>
+  Never share your password with anyone, including support staff. DuitPOS support will never ask for your password. If you suspect your account has been compromised, change your password immediately under **Account → Change Password**.
+</Warning>
 
 ## What You See After Login
 
@@ -19,11 +29,43 @@ After signing in you land on the **Dashboard**. The left sidebar contains all ma
 
 | Section | What it does |
 |---------|-------------|
-| **Manage** | Configure tax, payment types, printers, and other settings |
-| **Users** | Manage staff accounts and roles |
+| **Manage** | Configure tax, payment types, printers, order modes, and other settings |
+| **Menu Builder** | Build and manage categories, products, and modifiers |
+| **Staff** | Manage employee records and POS PINs |
 | **Reports** | View sales and transaction summaries |
 | **Online Ordering** | Manage QR codes and online menu |
+| **E-Invoicing** | Submit and track LHDN MyInvois e-invoices |
 
 ## Switching Tenants
 
-If your account has access to more than one location, a location selector appears at the top of the sidebar. Click it to switch.
+If your account has access to more than one location, a location selector appears at the top of the sidebar. Click it to switch between locations. Each location has its own data and settings.
+
+## First Steps After Login
+
+If this is your first time, head to the [Setup Checklist](/getting-started/setup-checklist) to complete your initial configuration in the right order.
+
+## Frequently Asked Questions
+
+<AccordionGroup>
+  <Accordion title="I forgot my password — how do I reset it?">
+    Click **Forgot password?** on the login page. Enter your email address and check your inbox for a reset link. If it does not arrive within a few minutes, check your spam or junk folder. The link expires after 1 hour.
+  </Accordion>
+  <Accordion title="I am on the wrong tenant — how do I get to the right one?">
+    Each business has its own login URL that includes the tenant domain name. Check with your administrator for the correct URL. It looks like `https://app.duitpos.com/your-business/login`.
+  </Accordion>
+  <Accordion title="Does DuitPOS support two-factor authentication (2FA)?">
+    Two-factor authentication settings are managed under your account profile. Contact your administrator to check whether 2FA has been enabled for your organisation.
+  </Accordion>
+  <Accordion title="My account says it is inactive — what do I do?">
+    Contact your administrator. They can reactivate your account under **Users → Users → Edit → Active**.
+  </Accordion>
+</AccordionGroup>
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Dashboard Overview" icon="layout-dashboard" href="/getting-started/dashboard-overview">Learn what each section of the dashboard does</Card>
+  <Card title="Setup Checklist" icon="check-circle" href="/getting-started/setup-checklist">Complete your account setup in order</Card>
+  <Card title="Users & Roles" icon="users" href="/setup/users-and-roles">Manage staff login accounts</Card>
+  <Card title="Login Problems" icon="life-buoy" href="/troubleshooting/login-problems">Troubleshoot sign-in issues</Card>
+</CardGroup>

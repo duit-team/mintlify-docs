@@ -7,7 +7,22 @@ description: "Manage the PostgreSQL servers used to host tenant databases."
   This section is for **root administrators** only.
 </Warning>
 
-**Database Servers** are the PostgreSQL instances where tenant databases are provisioned. You can have multiple servers to distribute tenants across regions or tiers.
+**Database Servers** are the PostgreSQL instances where tenant databases are provisioned. You can have multiple servers to distribute tenants across regions, performance tiers, or for compliance with data residency requirements.
+
+<Frame>
+  <img src="/images/db-servers.png" alt="Database Servers list showing server names, hosts, and connection status" />
+</Frame>
+
+## Database Server Fields
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| **Name** | Yes | A descriptive label for this server, e.g. `Primary`, `EU Region`, `High-Performance Tier` |
+| **Host** | Yes | The PostgreSQL hostname or IP address |
+| **Port** | Yes | The PostgreSQL port — default is `5432` |
+| **Username** | Yes | A PostgreSQL user with permission to create new databases and run migrations |
+| **Password** | Yes | The password for the PostgreSQL user. Stored encrypted |
+| **Default** | No | Toggle on to make this the default server selected when creating a new tenant |
 
 ## Add a Database Server
 
@@ -16,20 +31,48 @@ description: "Manage the PostgreSQL servers used to host tenant databases."
     Click **Database Servers** in the root admin sidebar.
   </Step>
   <Step title="Click New Server">
-    Fill in:
-    - **Name** — a label, e.g. `Primary` or `EU Region`.
-    - **Host** — the PostgreSQL hostname or IP.
-    - **Port** — default `5432`.
-    - **Username / Password** — credentials with permission to create databases.
+    Fill in the Name, Host, Port, Username, and Password.
   </Step>
   <Step title="Test Connection">
-    Click **Test** to verify connectivity before saving.
+    Click **Test** to verify connectivity before saving. This checks that the host is reachable and the credentials are valid.
   </Step>
   <Step title="Save">
     Click **Create**. New tenants can now be assigned to this server.
   </Step>
 </Steps>
 
+<Tip>
+  Set one server as the **Default** so it is pre-selected when creating new tenants. This saves time when provisioning multiple tenants on the same server.
+</Tip>
+
+<Warning>
+  The database user provided must have the `CREATEDB` privilege in PostgreSQL. Without it, tenant database creation will fail silently. Test the connection and check server logs if tenant creation does not provision a database.
+</Warning>
+
 ## Assign to Tenants
 
-When creating a tenant, select which database server to provision it on.
+When creating a tenant, select which database server to provision it on. Existing tenants cannot be moved between servers through the UI.
+
+## Frequently Asked Questions
+
+<AccordionGroup>
+  <Accordion title="How many tenants can one database server handle?">
+    This depends on the server's hardware (RAM, CPU, storage) and the size of each tenant's data. As a rough guideline, a standard server with 8GB RAM can comfortably handle 50–100 active tenants with moderate transaction volumes. Monitor server load and add additional servers when you approach capacity.
+  </Accordion>
+  <Accordion title="Can I have database servers in different regions?">
+    Yes. Add multiple servers in different regions and assign tenants based on their geographic location. This reduces latency for tenants and helps with data residency compliance.
+  </Accordion>
+  <Accordion title="What PostgreSQL version is required?">
+    DuitPOS requires PostgreSQL 13 or later. PostgreSQL 15 or 16 is recommended for best performance and security.
+  </Accordion>
+  <Accordion title="How do I rotate the database password?">
+    Update the password in PostgreSQL first, then edit the server record in the dashboard and enter the new password. Click **Test** to confirm connectivity before saving.
+  </Accordion>
+</AccordionGroup>
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Tenants" icon="building" href="/features/tenants">Manage business accounts on this platform</Card>
+  <Card title="Root Users" icon="shield" href="/features/root-users">Manage platform administrator accounts</Card>
+</CardGroup>

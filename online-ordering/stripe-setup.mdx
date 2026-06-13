@@ -3,71 +3,110 @@ title: "Stripe Setup"
 description: "Connect Stripe to accept online payments through QR ordering."
 ---
 
-Stripe processes all online card payments. You need a Stripe account and your API keys.
+Stripe processes all online card payments for DuitPOS QR ordering. You need a Stripe account (free to create) and your API keys. Once configured, customers can pay securely from their phone and orders are automatically created in your dashboard.
 
-## Get Your Stripe Keys
+<Frame>
+  <img src="/images/stripe-setup.png" alt="Stripe credentials entry form showing Secret Key and Webhook Secret fields" />
+</Frame>
+
+<Tip>
+  Use **test mode** keys (starting with `sk_test_`) while setting up and testing. Switch to **live mode** keys (starting with `sk_live_`) only when you are ready to accept real payments. Test mode charges are free and never settle to a bank account.
+</Tip>
+
+## Step 1: Get Your Stripe Keys
 
 <Steps>
   <Step title="Log in to Stripe">
-    Go to [dashboard.stripe.com](https://dashboard.stripe.com) and sign in.
+    Go to [dashboard.stripe.com](https://dashboard.stripe.com) and sign in or create a free account.
   </Step>
   <Step title="Go to Developers → API Keys">
-    In the top-right, click **Developers**, then **API keys**.
+    In the top-right corner, click **Developers**, then select **API keys** from the left menu.
   </Step>
   <Step title="Copy your Secret Key">
-    Click **Reveal live secret key** and copy it. Keep this private — never share it.
+    Click **Reveal live secret key** (or use the test key for testing). Copy the full key starting with `sk_live_` or `sk_test_`. Keep this private — never share it or commit it to version control.
   </Step>
 </Steps>
 
-## Configure Stripe in the Dashboard
+## Step 2: Configure Stripe in the Dashboard
 
 <Steps>
   <Step title="Go to Manage → Payment Types">
-    Open the Payment Types page.
+    Open the Payment Types page in your DuitPOS dashboard.
   </Step>
   <Step title="Edit or create a payment type for Stripe">
-    Click **Edit** on an existing card payment type, or create a new one (e.g. Code: `STRIPE`, Name: `Online Payment`).
+    Click **Edit** on an existing online payment type, or create a new one (e.g. Code: `STRIPE`, Name: `Online Payment`).
   </Step>
   <Step title="Add the Stripe processor">
-    In the **Processors** section, select **Stripe** from the dropdown and click **Add**.
+    In the **Processors** section at the bottom of the edit form, select **Stripe** from the dropdown and click **Add**.
   </Step>
   <Step title="Enter your credentials">
-    - **Secret Key** — paste your Stripe secret key.
-    - **Webhook Secret** — see below for how to get this.
+    - **Secret Key** — paste your Stripe secret key here.
+    - **Webhook Secret** — leave this for now and complete Step 3 below.
   </Step>
   <Step title="Save">
-    Click **Save Processors**. Your keys are encrypted before storage.
+    Click **Save Processors**. Your keys are encrypted with AES-256 before storage — they are never saved in plain text.
   </Step>
 </Steps>
 
-## Set Up the Stripe Webhook
+## Step 3: Set Up the Stripe Webhook
 
-The webhook ensures orders are confirmed even if a customer closes their browser before the redirect completes.
+The webhook ensures orders are confirmed even if a customer closes their browser before the confirmation redirect completes. Without the webhook, a small percentage of successful payments may not create an order in your dashboard.
 
 <Steps>
   <Step title="Go to Stripe → Developers → Webhooks">
-    Click **Add endpoint**.
+    In the Stripe Dashboard, click **Developers** → **Webhooks** → **Add endpoint**.
   </Step>
   <Step title="Enter your endpoint URL">
     ```
     https://yourdomain.com/api/YOUR_TENANT/qr/payment/webhook
     ```
-    Replace `YOUR_TENANT` with your tenant domain name.
+    Replace `YOUR_TENANT` with your tenant domain name (the slug in your dashboard URL).
   </Step>
   <Step title="Select events">
     Add these two events:
     - `checkout.session.completed`
     - `checkout.session.expired`
   </Step>
-  <Step title="Copy the Webhook Secret">
-    After saving, click **Reveal** next to the signing secret (starts with `whsec_`). Paste it into the **Webhook Secret** field in the dashboard.
+  <Step title="Save and copy the Webhook Secret">
+    After saving, click **Reveal** next to the signing secret (it starts with `whsec_`). Copy it and paste it into the **Webhook Secret** field in your DuitPOS Payment Types → Stripe processor settings. Save again.
   </Step>
 </Steps>
 
 <Warning>
-  Use **live mode** keys for production. Use **test mode** keys while testing — they look the same but are labelled `sk_test_` vs `sk_live_`.
+  Use **live mode** keys for production. Use **test mode** keys while testing — they look the same but are labelled differently (`sk_test_` vs `sk_live_`). Mixing test and live keys will cause all payments to fail. If you set up the webhook in Stripe's test mode, the signing secret only works for test-mode events.
 </Warning>
 
-## Test the Integration
+## Step 4: Test the Integration
 
-Use Stripe's test card `4242 4242 4242 4242` with any future expiry date. A successful payment should appear in your dashboard and create a ticket automatically.
+1. Generate a QR code for a table (see [QR Setup](/online-ordering/qr-setup)).
+2. Scan it with your phone.
+3. Add an item and proceed to checkout.
+4. Use Stripe's test card: `4242 4242 4242 4242`, any future expiry (e.g. `12/26`), any 3-digit CVC.
+5. Confirm the payment succeeds in Stripe Dashboard → Payments.
+6. Confirm the order appears in your DuitPOS dashboard.
+
+## Frequently Asked Questions
+
+<AccordionGroup>
+  <Accordion title="A customer's payment failed — what do I check?">
+    Go to your Stripe Dashboard → Payments and find the payment attempt. The failure reason is shown there (e.g. card declined, insufficient funds, incorrect CVC). Share the decline reason with the customer and ask them to retry with a different card or payment method. See also [Payment Issues](/troubleshooting/payment-issues).
+  </Accordion>
+  <Accordion title="The webhook is not firing — what do I check?">
+    In Stripe Dashboard → Developers → Webhooks, click on your endpoint and check the **Recent Deliveries** tab. Failed deliveries show the HTTP response code and error. Common issues: (1) The endpoint URL is incorrect or your server is not publicly reachable. (2) The webhook secret does not match. (3) The wrong events are selected — confirm both `checkout.session.completed` and `checkout.session.expired` are added.
+  </Accordion>
+  <Accordion title="Do I need a separate Stripe account for each location?">
+    No. One Stripe account covers all locations under your DuitPOS tenant. Payments from all locations settle to the same bank account.
+  </Accordion>
+  <Accordion title="What happens if a customer pays but the webhook fails to arrive?">
+    DuitPOS has a fallback confirmation path — when the customer is redirected back after payment, the system verifies the payment with Stripe directly. The webhook is a safety net for cases where the customer closes their browser before the redirect. Both paths are idempotent — only one order is ever created per payment, even if both paths fire.
+  </Accordion>
+</AccordionGroup>
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="QR Code Setup" icon="qr-code" href="/online-ordering/qr-setup">Generate and place QR codes for your tables</Card>
+  <Card title="Payment Types" icon="credit-card" href="/features/payment-types">Manage all payment methods</Card>
+  <Card title="Payment Issues" icon="life-buoy" href="/troubleshooting/payment-issues">Troubleshoot failed payments</Card>
+  <Card title="Reports" icon="chart-bar" href="/reports/overview">View online payment revenue in reports</Card>
+</CardGroup>

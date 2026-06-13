@@ -3,7 +3,23 @@ title: "Order Modes"
 description: "Define how orders are placed — dine-in, takeaway, delivery, and more."
 ---
 
-**Order Modes** describe the type of service for a transaction (e.g. *Dine In*, *Takeaway*, *Delivery*). They appear as a selection step when opening a new ticket on the POS.
+**Order Modes** describe the type of service for a transaction (e.g. *Dine In*, *Takeaway*, *Delivery*). They appear as a selection step when opening a new ticket on the POS, and can also be used in printer routing rules to direct kitchen orders to different printers based on the service type.
+
+<Frame>
+  <img src="/images/order-modes.png" alt="Order Modes list screen showing Dine In, Takeaway, and Delivery" />
+</Frame>
+
+## Order Mode Fields
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| **Code** | Yes | A short internal identifier, e.g. `DINE_IN`, `TAKEAWAY`, `DELIVERY`. Used in reports and routing rules |
+| **Name** | Yes | The display label shown to staff on the POS when selecting the order type |
+| **Active** | No | Toggle off to hide this mode from the POS. The mode still appears in historical reports |
+
+<Tip>
+  Add only the modes your business actually uses. Too many options on the POS selection screen can slow down order entry. Start with Dine In and Takeaway, and add Delivery only when you are ready to handle it operationally.
+</Tip>
 
 ## Create an Order Mode
 
@@ -12,16 +28,47 @@ description: "Define how orders are placed — dine-in, takeaway, delivery, and 
     Click **Order Modes** in the left sidebar under Manage.
   </Step>
   <Step title="Click New Order Mode">
-    Fill in:
-    - **Code** — e.g. `DINE_IN`, `TAKEAWAY`.
-    - **Name** — display label on the POS, e.g. `Dine In`.
-    - **Active** — toggle off to hide from the POS.
+    Fill in the Code, Name, and Active fields.
   </Step>
   <Step title="Save">
-    Click **Create**.
+    Click **Create**. The mode is immediately available on the POS.
   </Step>
 </Steps>
 
 ## Reorder
 
-Drag rows using the sort handle to change the order they appear in the POS selection screen. The topmost active mode is the default.
+Drag rows using the sort handle to change the order they appear in the POS selection screen. The topmost active mode is the default when a new ticket is opened.
+
+<Warning>
+  Changing the default order mode (the first active item in the list) will affect all POS terminals immediately. Staff accustomed to the existing order may select the wrong mode by habit. Communicate any reorder changes to your team before making them.
+</Warning>
+
+## Using Order Modes in Printer Routing
+
+Printer routing rules can filter by order mode — for example, you can send Delivery orders to a separate docket printer. See [Printers](/features/printers) for how to configure routing rules.
+
+## Frequently Asked Questions
+
+<AccordionGroup>
+  <Accordion title="Can I add a Delivery order mode and use it for third-party delivery apps?">
+    Yes. Create a Delivery order mode and use it when entering orders received from delivery platforms. You can also configure a separate printer routing rule for Delivery orders to print a distinct kitchen docket format.
+  </Accordion>
+  <Accordion title="What is the difference between Dine In and Takeaway for reporting?">
+    Order modes appear as a filter dimension in Sales Reports, so you can compare revenue by service type. Dine In and Takeaway are tracked separately, letting you see which generates more revenue or which has a higher average order value.
+  </Accordion>
+  <Accordion title="Can I rename an order mode after it has been used in transactions?">
+    Yes, you can edit the Name at any time. Historical tickets keep a snapshot of the mode name at the time of the transaction, so renaming only affects future orders.
+  </Accordion>
+  <Accordion title="The POS is not showing a mode I just created — what do I do?">
+    Make sure the mode is set to **Active**. If it is active and still not showing, reload the POS app to pick up the latest configuration.
+  </Accordion>
+</AccordionGroup>
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Printers" icon="printer" href="/features/printers">Route print jobs by order mode</Card>
+  <Card title="Transaction Types" icon="list" href="/features/transaction-types">Understand how transactions are categorised</Card>
+  <Card title="Setup Checklist" icon="check-circle" href="/getting-started/setup-checklist">Configure order modes as part of initial setup</Card>
+  <Card title="Reports" icon="chart-bar" href="/reports/overview">Filter sales reports by order mode</Card>
+</CardGroup>

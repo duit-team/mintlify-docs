@@ -3,22 +3,67 @@ title: "Brands"
 description: "Manage product brands used in your menu."
 ---
 
-**Brands** let you group products under a named brand (e.g. *Coca-Cola*, *House Label*). They appear as filters in the menu builder and on reports.
+**Brands** let you group products under a named brand (e.g. *Coca-Cola*, *House Label*, *Imported*). They appear as filters in the Menu Builder and on product reports, making it easier to analyse sales by brand.
+
+<Frame>
+  <img src="/images/brands.png" alt="Brands list screen showing brand names and active status" />
+</Frame>
+
+## Brand Fields
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| **Name** | Yes | The brand name displayed in the Menu Builder filter and on reports, e.g. `Coca-Cola` or `House Label` |
+| **Active** | No | Toggle off to hide this brand from the filter dropdown. Products assigned to an inactive brand are not affected |
+
+<Tip>
+  Brands are useful for multi-brand outlets (e.g. a food court stall selling both branded beverages and house-made items) or for franchise setups where you want to track performance per supplier brand. For simple single-brand businesses, brands may not be necessary.
+</Tip>
 
 ## Create a Brand
 
 <Steps>
-  <Step title="Go to Manage → Brands">
-    Click **Brands** in the left sidebar.
+  <Step title="Go to Menu Builder → Brands">
+    Click **Brands** in the left sidebar under the Menu section.
   </Step>
   <Step title="Click New Brand">
-    Enter a **Name** and toggle **Active** as needed.
+    Enter the **Name** and toggle **Active** as needed.
   </Step>
   <Step title="Save">
-    Click **Create**.
+    Click **Create**. The brand is immediately available in the product brand dropdown.
   </Step>
 </Steps>
 
 ## Assign to Products
 
-Go to **Menu Builder → Products**, open a product, and select a brand from the **Brand** dropdown.
+Go to **Menu Builder → Products**, open a product, and select a brand from the **Brand** dropdown. A product can only belong to one brand at a time.
+
+<Warning>
+  Renaming a brand updates it everywhere — all products assigned to that brand and all historical report filters. If you need to track a renamed brand separately, create a new brand and reassign products rather than editing the existing one.
+</Warning>
+
+## Frequently Asked Questions
+
+<AccordionGroup>
+  <Accordion title="Why is a brand not showing in the product dropdown?">
+    Make sure the brand is set to **Active**. Inactive brands are hidden from the product creation and edit form, though products already assigned to that brand continue to display correctly.
+  </Accordion>
+  <Accordion title="Can I rename a brand?">
+    Yes. Edit the brand and change the Name field. The new name will appear immediately in all places the brand is referenced, including existing products and reports.
+  </Accordion>
+  <Accordion title="Do brands affect what customers see on the POS or online menu?">
+    No. Brand is an internal classification for reporting and filtering. It does not appear to customers on the POS screen or online ordering page.
+  </Accordion>
+  <Accordion title="Can I filter sales reports by brand?">
+    Yes. The Product Sales report in the Reports section can be grouped or filtered by brand. This lets you compare revenue across brands without manually sorting through products.
+  </Accordion>
+</AccordionGroup>
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Products" icon="box" href="/features/products">Assign brands to menu items</Card>
+  <Card title="Menu Builder" icon="utensils" href="/features/menu-builder">Manage your full menu</Card>
+  <Card title="Categories" icon="folder" href="/features/categories">Organise products into menu sections</Card>
+  <Card title="Reports" icon="chart-bar" href="/reports/overview">Filter sales reports by brand</Card>
+</CardGroup>

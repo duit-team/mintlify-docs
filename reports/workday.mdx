@@ -3,37 +3,83 @@ title: "Workday Reports"
 description: "Shift and workday-level analytics for reconciliation."
 ---
 
-**Workday Reports** show sales and payments broken down by shift or business day — useful for end-of-day cash reconciliation and shift handovers.
+**Workday Reports** show sales and payments broken down by shift or business session — useful for end-of-day cash reconciliation and shift handovers. Unlike date-range reports, workday reports group data by when the shift was opened and closed, not by clock time.
 
-## What's in a Workday Report
+<Frame>
+  <img src="/images/workday.png" alt="Workday Reports list showing shifts with open/close times, staff names, and cash totals" />
+</Frame>
+
+## What Is a Workday?
+
+A **workday** (also called a shift) starts when a staff member opens the POS with an opening float and ends when they close it and count the cash drawer. A single calendar day may contain multiple workdays (e.g. morning and evening shifts) or one workday may span midnight.
+
+## What Is in a Workday Report
 
 Each workday entry shows:
 
-- **Open / Close time** — when the shift started and ended.
-- **Opened by / Closed by** — which staff member managed the shift.
-- **Total Sales** — gross revenue for the shift.
-- **Payment Breakdown** — how much was collected per payment type.
-- **Void / Refund Total** — cancellations and refunds within the shift.
-- **Expected Cash** — calculated cash in drawer (opening float + cash sales − refunds).
+| Field | Description |
+|-------|-------------|
+| **Open / Close Time** | When the shift started and ended |
+| **Opened by / Closed by** | Which staff member managed the shift |
+| **Total Sales** | Gross revenue (including tax) for the shift |
+| **Payment Breakdown** | How much was collected per payment type (Cash, Card, Online) |
+| **Void / Refund Total** | Total value of cancellations and refunds within the shift |
+| **Opening Float** | Cash placed in the drawer at the start of the shift |
+| **Expected Cash** | Calculated cash in drawer: Opening Float + Cash Sales − Cash Refunds |
+| **Actual Cash** | Cash counted by staff at close |
+| **Over / Short** | Difference between Expected and Actual cash |
 
 ## View a Workday
 
-Click any row to expand the full breakdown for that shift.
+Click any row in the workday list to expand the full breakdown for that shift, including an itemised list of transactions.
 
 ## Print the Report
 
-Click **Print** on an open workday row to print the shift summary for the physical cash drawer record.
+Click **Print** on an open workday row to print the shift summary for the physical cash drawer record or manager sign-off.
+
+<Tip>
+  Print and archive workday summaries daily. They provide a clear paper trail for audits and make it easy to reconcile discrepancies between the POS records and the actual cash in the drawer.
+</Tip>
 
 ## Reconciliation Workflow
 
 <Steps>
   <Step title="Count the cash drawer">
-    At end of shift, count the actual cash in the drawer.
+    At end of shift, count the actual cash in the drawer (including the opening float).
   </Step>
   <Step title="Compare to Expected Cash">
-    Open the workday report and check the **Expected Cash** figure. Any difference is the over/short for the shift.
+    Open the workday report and check the **Expected Cash** figure. Any difference between Expected and Actual is the over/short for the shift.
   </Step>
   <Step title="Close the workday">
-    Click **Close Workday** and enter the actual cash counted. The difference is recorded.
+    Click **Close Workday** and enter the actual cash counted. The over/short is recorded automatically.
+  </Step>
+  <Step title="Investigate discrepancies">
+    If the over/short is significant, review the individual transactions for that shift to identify any missed payments or errors.
   </Step>
 </Steps>
+
+## Frequently Asked Questions
+
+<AccordionGroup>
+  <Accordion title="What happens if a shift is not closed properly?">
+    If a shift is left open overnight, it will continue to accumulate new transactions until it is closed. The workday report will show a very long shift with inflated totals. To prevent this, close shifts at the end of each trading day as a policy.
+  </Accordion>
+  <Accordion title="Can I see workday reports for a specific employee?">
+    Yes. Filter the workday list by the **Opened by** or **Closed by** employee name. This shows only the shifts that employee managed, useful for performance reviews or investigating discrepancies.
+  </Accordion>
+  <Accordion title="Why does the Expected Cash not match the physical cash even when no errors were made?">
+    Common causes include: (1) Petty cash used from the drawer without being recorded. (2) Cash given back as change being miscounted. (3) Rounding on cash transactions. Track any petty cash withdrawals in a separate log and record them in the POS if your system supports it.
+  </Accordion>
+  <Accordion title="Can I reopen a closed workday to make corrections?">
+    Closed workdays are locked to preserve data integrity. If you find an error in a closed shift, contact your administrator — corrections require a manual adjustment and are logged in the audit trail.
+  </Accordion>
+</AccordionGroup>
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Reports Overview" icon="chart-bar" href="/reports/overview">Sales summaries by date range</Card>
+  <Card title="Employees" icon="users" href="/features/employees">Assign staff to shifts</Card>
+  <Card title="Payment Types" icon="credit-card" href="/features/payment-types">Understand how payments appear in the breakdown</Card>
+  <Card title="Import History" icon="upload" href="/reports/import-history">Review past data imports</Card>
+</CardGroup>

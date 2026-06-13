@@ -3,15 +3,34 @@ title: "Print Templates"
 description: "Customise what appears on receipts and kitchen dockets."
 ---
 
-**Print Templates** define the layout and content of printed documents — customer receipts, kitchen order dockets, and other outputs.
+**Print Templates** define the layout and content of printed documents — customer receipts, kitchen order dockets, and other outputs. You can create multiple templates and assign them to different printers or routing rules.
+
+<Frame>
+  <img src="/images/print-templates.png" alt="Print Templates editor showing a receipt layout with header, line items, and footer sections" />
+</Frame>
 
 ## Template Types
 
 | Type | Purpose |
 |------|---------|
-| **Receipt** | Customer-facing receipt printed after payment |
-| **Kitchen** | Order docket sent to the kitchen printer |
-| **Label** | Product label (if label printers are configured) |
+| **Receipt** | Customer-facing receipt printed after payment is completed |
+| **Kitchen** | Order docket sent to the kitchen or bar printer when an order is placed |
+| **Label** | Product label for label printers, if configured |
+
+## Template Fields
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| **Name** | Yes | An internal label to identify this template, e.g. `Standard Receipt` or `Bar Docket` |
+| **Type** | Yes | Receipt, Kitchen, or Label — determines which routing rules can use this template |
+| **Header** | No | Text printed at the top (e.g. business name, address, tagline) |
+| **Line Items** | Auto | Product name, quantity, and price — automatically populated from the ticket |
+| **Footer** | No | Text printed at the bottom (e.g. "Thank you for your visit", WiFi password, return policy) |
+| **Default** | No | If toggled on, this template is used as the fallback for its type when no routing rule specifies a different one |
+
+<Tip>
+  Use **template variables** in your header and footer text to automatically insert dynamic values. Common variables include `{{business_name}}`, `{{location_address}}`, `{{ticket_number}}`, `{{date}}`, and `{{cashier_name}}`. The full list of available variables is shown in the editor sidebar.
+</Tip>
 
 ## Create a Template
 
@@ -23,7 +42,7 @@ description: "Customise what appears on receipts and kitchen dockets."
     Select the template **Type** and give it a **Name**.
   </Step>
   <Step title="Design the layout">
-    Use the template editor to add header, line items, footer, and any custom fields. Available variables are listed in the editor sidebar.
+    Use the template editor to add header text, configure line item display, and write a footer. Use variables from the sidebar to insert dynamic content.
   </Step>
   <Step title="Set as default (optional)">
     Toggle **Default** to make this template the fallback for its type when no routing rule specifies one.
@@ -35,8 +54,38 @@ description: "Customise what appears on receipts and kitchen dockets."
 
 ## Assign to Printers
 
-Go to **Manage → Printers → Routing Rules** and assign a template to a routing rule to control which template prints on which printer.
+Go to **Manage → Printers → Routing Rules** and assign a template to a routing rule to control which template prints on which printer. For example, you can use a compact template on the kitchen printer and a full-detail template on the customer receipt printer.
+
+<Warning>
+  If you delete a template that is currently assigned to a routing rule, that routing rule will fall back to the default template for that type. Check your routing rules after deleting any template to make sure the output is still correct.
+</Warning>
 
 ## Test Print
 
-On the template list, click the **Test Print** icon to send a sample output to your default printer.
+On the template list, click the **Test Print** icon to send a sample output to your default printer. This lets you check the layout before it goes live.
+
+## Frequently Asked Questions
+
+<AccordionGroup>
+  <Accordion title="How do I add my business logo to the receipt?">
+    Upload your logo under **Manage → Settings → Logo**. Once uploaded, use the `{{logo}}` variable in the template header section to include it on printed receipts. Logo printing requires a printer that supports image printing (most modern thermal printers do).
+  </Accordion>
+  <Accordion title="Can I have a different receipt format for online orders vs dine-in?">
+    Yes. Create two receipt templates (e.g. `Online Receipt` and `Dine-In Receipt`) and set up separate routing rules — one targeting the online order mode and one targeting dine-in. Assign the appropriate template to each rule.
+  </Accordion>
+  <Accordion title="What variables can I use in templates?">
+    Available variables include: `{{business_name}}`, `{{location_name}}`, `{{location_address}}`, `{{ticket_number}}`, `{{date}}`, `{{time}}`, `{{cashier_name}}`, `{{order_mode}}`, `{{table_number}}`, and `{{tax_breakdown}}`. The complete list is shown in the variable picker in the template editor sidebar.
+  </Accordion>
+  <Accordion title="My template looks fine in the editor but prints incorrectly — why?">
+    The editor preview uses your screen's font rendering, which differs from a thermal printer's character set. Test print to the actual device and adjust line widths or font sizes as needed. For 58mm paper, use shorter lines (typically 32 characters per line). For 80mm paper, you can fit approximately 48 characters per line.
+  </Accordion>
+</AccordionGroup>
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Printers" icon="printer" href="/features/printers">Set up printer devices and routing rules</Card>
+  <Card title="Settings" icon="gear" href="/features/settings">Upload your business logo</Card>
+  <Card title="Locations" icon="map-pin" href="/features/locations">Configure address details that appear on receipts</Card>
+  <Card title="Printer Not Printing" icon="life-buoy" href="/troubleshooting/printer-not-printing">Diagnose printer issues</Card>
+</CardGroup>

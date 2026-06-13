@@ -3,29 +3,72 @@ title: "Categories"
 description: "Organise your products into categories for the POS and online menu."
 ---
 
-**Categories** group products on the POS screen and the online ordering menu. Customers browse by category; kitchen routing rules can also filter by category.
+**Categories** group products on the POS screen and the online ordering menu. Customers browse by category; kitchen routing rules can also filter by category to direct prints to different printers.
+
+<Frame>
+  <img src="/images/categories.png" alt="Categories list showing menu sections like Burgers, Drinks, and Desserts with sort order handles" />
+</Frame>
+
+## Category Fields
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| **Name** | Yes | The label displayed on the POS category tabs and the online menu, e.g. `Burgers` or `Cold Drinks` |
+| **Colour** | No | An optional highlight colour for the category button on the POS screen. Helps staff find categories faster |
+| **Image** | No | A photo shown on the online ordering page to represent the category |
+| **Active** | No | Toggle off to hide this category (and all products within it) from the POS and online menu |
+| **Sort Order** | Auto | Drag to reorder — controls the position of this category tab on the POS |
+
+<Tip>
+  Set the **Sort Order** so your most popular categories appear first. On a POS touchscreen, staff will tap the first category by default, so place your highest-volume section (e.g. Main Menu or Beverages) at the top of the list.
+</Tip>
 
 ## Create a Category
 
 <Steps>
   <Step title="Go to Menu Builder → Categories">
-    Categories can also be managed from the **Menu Builder** page.
+    Categories can be managed directly from the **Menu Builder** page or via the Categories shortcut in the left sidebar.
   </Step>
   <Step title="Click New Category">
-    Fill in:
-    - **Name** — displayed on the POS and online menu.
-    - **Colour** — optional, used to highlight the category button on the POS.
-    - **Active** — toggle off to hide from the POS without deleting.
+    Fill in the Name field. Optionally pick a Colour and upload an Image.
   </Step>
   <Step title="Save">
-    Click **Create**.
+    Click **Create**. The category appears immediately in the Menu Builder and on the POS.
   </Step>
 </Steps>
 
 ## Reorder Categories
 
-Drag rows by the sort handle to change the order on the POS. The first active category is selected by default.
+Drag rows by the sort handle (the six-dot icon) to change the order on the POS. The first active category is selected by default when the POS loads.
 
 ## Add Products to a Category
 
-Go to **Menu Builder → Products**, open a product, and select a category in the **Category** field.
+After creating a category, go to **Menu Builder → Products** and either:
+- Click **New Product** while the category is selected in the Menu Builder.
+- Edit an existing product and change its **Category** field.
+
+## Frequently Asked Questions
+
+<AccordionGroup>
+  <Accordion title="Why are a category's products not showing on the POS?">
+    Both the category and the individual products must be set to **Active**. If the category is active but a product is not, that product will be hidden. If the category itself is inactive, all products within it are hidden regardless of their own Active status.
+  </Accordion>
+  <Accordion title="Can I have products in multiple categories?">
+    Each product belongs to one category at a time. If you need to show the same item in multiple sections, create a separate product entry for each category. You can use the same name and price for both.
+  </Accordion>
+  <Accordion title="Does the sort order in the Menu Builder affect the online ordering menu too?">
+    Yes. The category order set in the Menu Builder applies to both the POS screen and the customer-facing online ordering page.
+  </Accordion>
+  <Accordion title="Can I use categories in printer routing rules?">
+    Yes. Routing rules can match by category — for example, you can send all products in the `Hot Food` category to the kitchen printer and all products in the `Beverages` category to the bar printer. See [Printers](/features/printers) for details.
+  </Accordion>
+</AccordionGroup>
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Products" icon="box" href="/features/products">Add items within your categories</Card>
+  <Card title="Menu Builder" icon="utensils" href="/features/menu-builder">Manage your full menu in one place</Card>
+  <Card title="Printers" icon="printer" href="/features/printers">Route kitchen prints by category</Card>
+  <Card title="Modifiers" icon="list" href="/features/modifiers">Add options to products in your categories</Card>
+</CardGroup>

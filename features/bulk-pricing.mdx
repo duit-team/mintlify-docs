@@ -3,28 +3,41 @@ title: "Bulk Pricing"
 description: "Override product prices, names, and availability for a specific context."
 ---
 
-**Bulk Pricing** lets you set a different price, display name, or availability for products in a specific sales context (e.g. a happy-hour menu or a delivery platform with different prices).
+**Bulk Pricing** lets you set a different price, display name, or availability for products in a specific sales context. Common use cases include delivery platform pricing, happy-hour menus, or location-specific price adjustments.
+
+<Frame>
+  <img src="/images/bulk-pricing.png" alt="Bulk Pricing grid showing products with override price and availability fields per context" />
+</Frame>
 
 ## How It Works
+
+A **context** is a named scenario where prices or availability differ from the standard menu. For example:
+- **Delivery** — a higher price to account for delivery platform commission.
+- **Happy Hour** — a lower price on selected drinks from 5pm to 7pm.
+- **Outlet B** — a different price point for a second location.
 
 Each row in the bulk pricing grid represents one product. You can override:
 
 | Field | What it changes |
 |-------|----------------|
-| **Price** | The price charged in this context only |
-| **Name** | The display name shown to the customer (e.g. "Large Meal Deal") |
-| **Active** | Whether the product is available in this context |
+| **Price** | The price charged in this context only. Leave blank to use the base product price |
+| **Name** | The display name shown to the customer (e.g. `Large Meal Deal`). Leave blank to use the base product name |
+| **Active** | Whether the product is available in this context. Toggle off to hide it without affecting the base menu |
 
 Changes here do **not** affect the base product — only the selected context.
+
+<Tip>
+  Leave a field blank to inherit the default value from the base product. You only need to fill in the fields that differ from the standard menu for this context.
+</Tip>
 
 ## Apply Overrides
 
 <Steps>
-  <Step title="Go to Manage → Bulk Pricing">
-    Select the context (e.g. *Delivery*, *Happy Hour*) from the dropdown at the top.
+  <Step title="Go to Menu Builder → Bulk Pricing">
+    Select the context (e.g. *Delivery*, *Happy Hour*) from the dropdown at the top of the page.
   </Step>
   <Step title="Find the product">
-    Use the search or scroll to find the product row.
+    Use the search bar or scroll to find the product row you want to override.
   </Step>
   <Step title="Enter overrides">
     Click into the price or name cell and type the override value. Toggle the active switch to hide a product in this context.
@@ -34,6 +47,36 @@ Changes here do **not** affect the base product — only the selected context.
   </Step>
 </Steps>
 
-<Tip>
-  Leave a field blank to inherit the default value from the base product.
-</Tip>
+<Warning>
+  Clicking **Save** saves all pending changes on the page at once. If you make changes across multiple rows and navigate away without saving, all unsaved changes are lost. Save frequently when making bulk edits.
+</Warning>
+
+## Viewing Overrides in the Menu Builder
+
+Use the **Context** dropdown at the top of the Menu Builder to preview how the menu looks with a specific context applied. This lets you verify your pricing overrides without going live.
+
+## Frequently Asked Questions
+
+<AccordionGroup>
+  <Accordion title="How do I create a new context?">
+    Contexts are created separately in the system configuration. Contact your administrator or look for a Contexts or Price Contexts option in the Manage section to add a new one.
+  </Accordion>
+  <Accordion title="If I change the base product price, do bulk pricing overrides update automatically?">
+    No. Override prices are stored independently. If you lower a product's base price but a bulk pricing context has an override, the context will continue to use the override price. You must manually update the override if you want it to reflect the new base price.
+  </Accordion>
+  <Accordion title="Can I hide an entire category from a specific context?">
+    Currently, bulk pricing works at the product level. To hide a full category in a context, toggle the Active switch off for every product in that category within the context grid.
+  </Accordion>
+  <Accordion title="Does bulk pricing affect the tax calculation?">
+    Tax is calculated on the effective price (the override price, if set). If you set a delivery price of RM 15.00 (vs base RM 12.00), tax is calculated on RM 15.00 for delivery orders.
+  </Accordion>
+</AccordionGroup>
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Products" icon="box" href="/features/products">Manage base product prices</Card>
+  <Card title="Menu Builder" icon="utensils" href="/features/menu-builder">Preview how contexts affect your menu</Card>
+  <Card title="Categories" icon="folder" href="/features/categories">Organise the products you are pricing</Card>
+  <Card title="Order Modes" icon="layers" href="/features/order-modes">Use order modes alongside pricing contexts</Card>
+</CardGroup>

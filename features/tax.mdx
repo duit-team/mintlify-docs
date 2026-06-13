@@ -3,7 +3,24 @@ title: "Tax"
 description: "Configure tax rates and apply them to products."
 ---
 
-**Tax rates** define the percentage charged on sales. You can create multiple rates (e.g. SST 6%, Service Charge 10%) and assign them per product or globally.
+**Tax rates** define the percentage charged on sales. You can create multiple rates (e.g. SST 6%, Service Charge 10%) and assign them per product or globally. Tax amounts are calculated per line item on the ticket and summarised in the Tax Report.
+
+<Frame>
+  <img src="/images/tax.png" alt="Tax rates list screen showing SST and Service Charge entries" />
+</Frame>
+
+## Tax Rate Fields
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| **Code** | Yes | A short internal identifier, e.g. `SST` or `SVC`. Used in reports and exports |
+| **Name** | Yes | The display name shown on receipts and reports, e.g. `Sales & Service Tax` |
+| **Rate (%)** | Yes | The percentage as a number without the % symbol, e.g. `6` for 6% or `10` for 10% |
+| **Active** | No | Inactive tax rates are excluded from all future calculations. Historical data is unchanged |
+
+<Tip>
+  In Malaysia, the standard Sales & Service Tax (SST) rate is **6%**. If your business also charges a Service Charge, add it as a separate rate (e.g. 10%) so they appear as distinct line items on receipts and in the Tax Report. This makes LHDN e-invoice submissions cleaner.
+</Tip>
 
 ## Create a Tax Rate
 
@@ -12,14 +29,10 @@ description: "Configure tax rates and apply them to products."
     Click **Tax** in the left sidebar under Manage.
   </Step>
   <Step title="Click New Tax">
-    Fill in:
-    - **Code** — short identifier, e.g. `SST` or `SVC`.
-    - **Name** — display name, e.g. `Sales & Service Tax` or `Service Charge`.
-    - **Rate (%)** — the percentage as a number, e.g. `6` for 6%.
-    - **Active** — inactive taxes are excluded from all calculations.
+    Fill in the Code, Name, Rate, and Active fields.
   </Step>
   <Step title="Save">
-    Click **Create**.
+    Click **Create**. The tax rate is immediately available to assign to products.
   </Step>
 </Steps>
 
@@ -28,9 +41,35 @@ description: "Configure tax rates and apply them to products."
 Click the **Edit** icon to change any field. Click **Delete** to remove a tax rate.
 
 <Warning>
-  Deleting a tax rate that has been applied to past transactions will **not** remove it from historical records, but it will stop appearing on new transactions.
+  Changing a tax rate mid-operation (e.g. from 6% to 8%) will affect all new transactions immediately. Existing completed tickets keep the rate that was applied when they were created. Make rate changes at the start of the day to avoid confusion on end-of-day reports. If you are required to change rates for compliance, consider creating a new tax rate and retiring the old one rather than editing the existing rate.
 </Warning>
 
 ## Applying Tax to Products
 
-After creating a tax rate, go to **Menu Builder → Products** and assign the desired tax rate to each product. Tax is calculated per line item on the ticket.
+After creating a tax rate, go to **Menu Builder → Products** and assign the desired tax rate to each product. Tax is calculated per line item on the ticket and shown as a separate line on the receipt.
+
+## Frequently Asked Questions
+
+<AccordionGroup>
+  <Accordion title="Why is tax not being applied to a sale?">
+    Check two things: (1) The tax rate is set to **Active** under Manage → Tax. (2) The specific product has the tax rate assigned — go to Menu Builder → Products → Edit the product → Tax field. Tax must be assigned per product; it is not applied globally to all products automatically.
+  </Accordion>
+  <Accordion title="Can I apply multiple tax rates to one product?">
+    Each product is assigned one primary tax rate. If you need to charge both SST and a Service Charge, create a combined tax rate (e.g. 16% covering both) or contact your account manager about compound tax configurations.
+  </Accordion>
+  <Accordion title="Can I make some products tax-exempt?">
+    Yes. Simply do not assign any tax rate to the product, or set the rate to 0%. The product will appear as tax-free on the receipt and in the Tax Report.
+  </Accordion>
+  <Accordion title="What happens if I delete a tax rate that was used in old transactions?">
+    Deleting a tax rate removes it from new transactions but does not alter historical records. Old receipts and reports continue to show the original tax amount. The rate will no longer appear in the Tax Report filter for new date ranges.
+  </Accordion>
+</AccordionGroup>
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Products" icon="box" href="/features/products">Assign tax rates to menu items</Card>
+  <Card title="E-Invoicing" icon="file-text" href="/features/e-invoicing">Understand how tax appears in LHDN submissions</Card>
+  <Card title="Transaction Types" icon="list" href="/features/transaction-types">Configure how tax lines appear on tickets</Card>
+  <Card title="Reports" icon="chart-bar" href="/reports/overview">View tax collected in the Tax Report</Card>
+</CardGroup>

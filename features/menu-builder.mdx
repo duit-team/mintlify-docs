@@ -3,36 +3,80 @@ title: "Menu Builder"
 description: "Manage categories, products, and modifiers in one place."
 ---
 
-The **Menu Builder** is the central place to build and maintain your menu. It combines categories, products, and modifier groups in a single view.
+The **Menu Builder** is the central place to build and maintain your menu. It provides a unified view of categories, products, and modifier groups so you can make changes quickly without switching between multiple pages.
+
+<Frame>
+  <img src="/images/menu-builder.png" alt="Menu Builder showing categories panel on the left and products panel on the right" />
+</Frame>
+
+## How It Works
+
+Your menu is structured in three layers:
+
+1. **Categories** — the top-level groupings shown as tabs on the POS (e.g. Burgers, Drinks, Desserts).
+2. **Products** — the items within each category that customers can order.
+3. **Modifiers** — optional customisations attached to products (e.g. Size, Add-ons, Cooking Level).
+
+Build from top to bottom: create your categories first, then add products to each category, then attach modifier groups to products that need them.
 
 ## Layout
 
 The Menu Builder has two main panels:
 
-- **Left — Categories**: Your category list. Click a category to view its products on the right.
-- **Right — Products**: Products in the selected category. Expand a product to see its modifier groups.
+- **Left — Categories**: Your full category list. Click a category to view its products in the right panel.
+- **Right — Products**: Products in the selected category. Expand a product row to see its attached modifier groups.
 
 ## Adding Items
 
 <CardGroup cols={2}>
   <Card title="New Category" icon="folder-plus" href="/features/categories">
-    Click **New Category** at the top of the category panel.
+    Click **New Category** at the top of the category panel to add a menu section.
   </Card>
   <Card title="New Product" icon="plus" href="/features/products">
     Select a category first, then click **New Product** in the product panel.
   </Card>
   <Card title="Modifier Groups" icon="list" href="/features/modifiers">
-    Expand a product and click **Add Modifier Group** to attach options.
+    Expand a product and click **Add Modifier Group** to attach customisation options.
   </Card>
   <Card title="Bulk Pricing" icon="tag" href="/features/bulk-pricing">
-    Use Bulk Pricing to override prices for a specific context.
+    Use Bulk Pricing to override prices for a specific sales context like delivery.
   </Card>
 </CardGroup>
 
 ## Reordering
 
-Drag any category or product row by its handle to change the display order on the POS.
+Drag any category or product row by its handle (the six-dot icon on the left) to change the display order on the POS. The order here is exactly what staff and customers see.
+
+<Tip>
+  Put your best-selling categories and products at the top of the list — they will appear first on the POS screen, making order entry faster for your staff.
+</Tip>
 
 ## Context View
 
-Use the **Context** dropdown at the top to preview how the menu looks with overrides applied (e.g. delivery pricing, happy-hour names).
+Use the **Context** dropdown at the top of the Menu Builder to preview how the menu looks with context-specific overrides applied — for example, how prices appear under your delivery pricing or happy-hour context. This lets you verify overrides without going to the Bulk Pricing page.
+
+## Frequently Asked Questions
+
+<AccordionGroup>
+  <Accordion title="What is the correct order to build a menu from scratch?">
+    Always create categories first, then products within each category, then modifier groups for products that need customisation. If you create products before categories, you will need to go back and assign them later.
+  </Accordion>
+  <Accordion title="Can I move a product from one category to another?">
+    Yes. Edit the product and change its **Category** field. The product will immediately move to the new category in the Menu Builder.
+  </Accordion>
+  <Accordion title="How many categories and products can I have?">
+    There is no hard limit. However, for the best experience on the POS, keep the number of top-level categories manageable (under 15) and use the search function for large menus.
+  </Accordion>
+  <Accordion title="Why are some products not showing on the POS?">
+    Check that both the **product** and its **category** are set to Active. A product in an inactive category will not appear on the POS even if the product itself is active.
+  </Accordion>
+</AccordionGroup>
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Categories" icon="folder" href="/features/categories">Create and manage menu sections</Card>
+  <Card title="Products" icon="box" href="/features/products">Add items to your menu</Card>
+  <Card title="Modifiers" icon="list" href="/features/modifiers">Add customisation options to products</Card>
+  <Card title="Bulk Pricing" icon="tag" href="/features/bulk-pricing">Set different prices per context</Card>
+</CardGroup>

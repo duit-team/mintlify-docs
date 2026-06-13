@@ -3,7 +3,54 @@ title: "Welcome"
 description: "Everything you need to configure and run your business."
 ---
 
-Use the sidebar to find help for any feature. Each section matches a page in your dashboard — click the **?** icon on any page to jump directly here.
+Welcome to the **DuitPOS Help Center** — your complete guide to setting up and running your point-of-sale system. Whether you are configuring your first location or fine-tuning your menu, you will find step-by-step instructions for every feature right here.
+
+<Frame>
+  <img src="/images/introduction.png" alt="DuitPOS dashboard welcome screen" />
+</Frame>
+
+<Tip>
+  New here? Start with the [Setup Checklist](/getting-started/setup-checklist) — it walks you through everything from first login to taking your first order in about 30 minutes.
+</Tip>
+
+## What You Can Do
+
+<CardGroup cols={2}>
+  <Card title="Setup Your Account" icon="gear" href="/getting-started/setup-checklist">
+    Configure locations, payment types, tax rates, and order modes before going live.
+  </Card>
+  <Card title="Build Your Menu" icon="utensils" href="/features/menu-builder">
+    Add categories, products, modifiers, and pricing overrides for your POS and online store.
+  </Card>
+  <Card title="Manage Your Staff" icon="users" href="/features/employees">
+    Create employee accounts, assign PINs, and set roles with the right permissions.
+  </Card>
+  <Card title="View Reports" icon="chart-bar" href="/reports/overview">
+    Analyse daily sales, payment breakdowns, tax collected, and shift reconciliation.
+  </Card>
+</CardGroup>
+
+## How It Works
+
+<Steps>
+  <Step title="Configure your account">
+    Set up locations, payment types, tax rates, order modes, and printers under the **Manage** section.
+  </Step>
+  <Step title="Build your menu">
+    Create categories and products in the **Menu Builder**. Attach modifiers for customisable items.
+  </Step>
+  <Step title="Add staff">
+    Create employee records under **Staff → Employees**. Assign roles and PINs for POS login.
+  </Step>
+  <Step title="Go live">
+    Open the POS app on your terminal, log in with an employee PIN, and start taking orders.
+  </Step>
+  <Step title="Review performance">
+    Check **Reports** daily for sales summaries, and use **Workday Reports** for end-of-shift reconciliation.
+  </Step>
+</Steps>
+
+## Browse by Topic
 
 <CardGroup cols={2}>
   <Card title="First Login" icon="key" href="/getting-started/first-login">
@@ -15,7 +62,37 @@ Use the sidebar to find help for any feature. Each section matches a page in you
   <Card title="Payment Types" icon="credit-card" href="/features/payment-types">
     Set up cash, card, and online payment methods.
   </Card>
-  <Card title="Online Ordering" icon="qrcode" href="/online-ordering/qr-setup">
+  <Card title="Online Ordering" icon="qr-code" href="/online-ordering/qr-setup">
     Generate QR codes and accept Stripe payments online.
   </Card>
+  <Card title="E-Invoicing" icon="file-text" href="/features/e-invoicing">
+    Submit LHDN MyInvois e-invoices for Malaysian compliance.
+  </Card>
+  <Card title="Troubleshooting" icon="life-buoy" href="/troubleshooting/login-problems">
+    Quick fixes for common issues with payments, printers, and login.
+  </Card>
+</CardGroup>
+
+## Frequently Asked Questions
+
+<AccordionGroup>
+  <Accordion title="Where do I start if I am brand new to DuitPOS?">
+    Follow the [Setup Checklist](/getting-started/setup-checklist). It takes about 30 minutes and covers everything you need before taking your first order — locations, payment types, tax, order modes, printers, menu items, and staff.
+  </Accordion>
+  <Accordion title="What is the difference between Users and Employees?">
+    **Users** are dashboard login accounts (email + password). **Employees** are staff records used for the POS PIN login, scheduling, and sales attribution. A person can be both — link them in the employee record.
+  </Accordion>
+  <Accordion title="Can I have multiple locations under one account?">
+    Yes. Each location has its own menu, settings, and reports. Create additional locations under **Manage → Locations**.
+  </Accordion>
+  <Accordion title="How do I get support?">
+    Use the **?** icon on any page in your dashboard to jump directly to the relevant help article. For issues not covered here, contact your account manager.
+  </Accordion>
+</AccordionGroup>
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Setup Checklist" icon="check-circle" href="/getting-started/setup-checklist">Go live in 30 minutes</Card>
+  <Card title="Dashboard Overview" icon="layout-dashboard" href="/getting-started/dashboard-overview">Learn the layout of your dashboard</Card>
 </CardGroup>

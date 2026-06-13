@@ -3,7 +3,23 @@ title: "Payment Types"
 description: "Set up the payment methods available at your POS and online ordering."
 ---
 
-A **Payment Type** represents one payment method (e.g. Cash, Credit Card, Stripe). Each type can have one or more **processors** attached for online/card payments.
+A **Payment Type** represents one payment method (e.g. Cash, Credit Card, Stripe). Each type can have one or more **processors** attached for online or card payments. Payment types appear at checkout on both the POS terminal and the online ordering page.
+
+<Frame>
+  <img src="/images/payment-types.png" alt="Payment Types list screen showing Cash, Card, and Online payment methods" />
+</Frame>
+
+## Payment Type Fields
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| **Code** | Yes | A short internal identifier, e.g. `CASH` or `CARD`. Must be unique. Shown in reports and exports but not to customers |
+| **Name** | Yes | The display name shown on the POS checkout screen and receipts, e.g. `Cash` or `Credit Card` |
+| **Active** | No | Toggle off to hide this payment type from the POS without deleting it. Historical data is preserved |
+
+<Tip>
+  Use clear, consistent codes that match your reporting needs. For example, use `CASH`, `CARD`, `EWALLET`, `ONLINE` rather than numbers or abbreviations that may confuse staff reading reports later.
+</Tip>
 
 ## Create a Payment Type
 
@@ -12,17 +28,16 @@ A **Payment Type** represents one payment method (e.g. Cash, Credit Card, Stripe
     Click **Payment Types** in the left sidebar under Manage.
   </Step>
   <Step title="Click New Payment Type">
-    Fill in:
-    - **Code** — a short internal identifier, e.g. `CASH` or `CARD`. Must be unique.
-    - **Name** — the display name shown in the POS, e.g. `Cash` or `Credit Card`.
-    - **Active** — toggle off to hide it from the POS without deleting it.
+    Fill in the Code, Name, and Active fields.
   </Step>
   <Step title="Save">
-    Click **Create**. The payment type appears in the list immediately.
+    Click **Create**. The payment type appears in the list immediately and is available on the POS.
   </Step>
 </Steps>
 
-## Attach a Processor (for online/card payments)
+## Attach a Processor (for online or card payments)
+
+Processors handle the actual transaction for non-cash payment types. Currently supported: **Stripe**.
 
 <Steps>
   <Step title="Open the edit page">
@@ -32,7 +47,7 @@ A **Payment Type** represents one payment method (e.g. Cash, Credit Card, Stripe
     In the **Processors** section, select a processor from the dropdown (e.g. *Stripe*) and click **Add**.
   </Step>
   <Step title="Enter credentials">
-    Fill in the required fields. For Stripe, enter your **Secret Key** and **Webhook Secret**. These are encrypted before saving.
+    Fill in the required fields. For Stripe, enter your **Secret Key** and **Webhook Secret**. These are encrypted with AES-256 before saving — they are never stored in plain text.
   </Step>
   <Step title="Save">
     Click **Save Processors**. The processor is now active for that payment type.
@@ -40,20 +55,42 @@ A **Payment Type** represents one payment method (e.g. Cash, Credit Card, Stripe
 </Steps>
 
 <Warning>
-  Never share your Stripe Secret Key. It is masked (`••••••`) after saving. To update it, enter a new value — leaving it blank keeps the existing one.
+  Never share your Stripe Secret Key. It is masked (`••••••`) after saving. To update it, enter a new value — leaving it blank keeps the existing one. If you believe your key has been compromised, rotate it immediately in your Stripe Dashboard and update it here.
 </Warning>
 
 ## Deactivate vs Delete
 
 | Action | Effect |
 |--------|--------|
-| **Deactivate** (toggle Active off) | Hides from POS and online checkout, preserves history |
-| **Delete** | Permanently removes — only possible if no transactions reference it |
+| **Deactivate** (toggle Active off) | Hides from POS and online checkout, preserves all historical data |
+| **Delete** | Permanently removes — only possible if no transactions reference this payment type |
 
-## Common Questions
+<Warning>
+  Deleting a payment type that has been used in past transactions is not allowed. Deactivate it instead to keep your historical records intact.
+</Warning>
 
-**What is a "Code"?** An internal short identifier used in reports and exports. It does not appear to customers.
+## Frequently Asked Questions
 
-**Can I have multiple card processors?** Yes. Add multiple processors to the same payment type if needed.
+<AccordionGroup>
+  <Accordion title="Why is Stripe not processing payments?">
+    Check these three things in order: (1) Your Secret Key starts with `sk_live_` for production or `sk_test_` for testing — make sure you are not mixing them. (2) The Webhook Secret starts with `whsec_` and matches exactly what is shown in Stripe Dashboard → Developers → Webhooks → your endpoint → Signing secret. (3) Your payment type is set to Active. See [Payment Issues](/troubleshooting/payment-issues) for more help.
+  </Accordion>
+  <Accordion title="How do I add a new processor like GrabPay or Touch 'n Go?">
+    Additional payment processors are added through platform updates. Contact your account manager to request a new processor integration. Once available, it will appear in the processor dropdown on the edit page.
+  </Accordion>
+  <Accordion title="What is the difference between Cash and Card in the POS?">
+    Cash types do not require a processor — the cashier records the amount received and the system calculates change. Card/online types typically have a processor that handles the transaction electronically. You can create as many types as you need (e.g. separate types for Visa and Amex if you want to track them separately).
+  </Accordion>
+  <Accordion title="Where do I get my Stripe API keys?">
+    Log in to [dashboard.stripe.com](https://dashboard.stripe.com), go to **Developers → API keys**. Use the **Secret Key** (not the Publishable Key). See [Stripe Setup](/online-ordering/stripe-setup) for a step-by-step guide.
+  </Accordion>
+</AccordionGroup>
 
-**Where do I get my Stripe keys?** Log in to [dashboard.stripe.com](https://dashboard.stripe.com), go to **Developers → API keys**.
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Stripe Setup" icon="credit-card" href="/online-ordering/stripe-setup">Connect Stripe for online payments</Card>
+  <Card title="QR Code Setup" icon="qr-code" href="/online-ordering/qr-setup">Set up QR ordering</Card>
+  <Card title="Transaction Types" icon="list" href="/features/transaction-types">Define sale, void, and refund categories</Card>
+  <Card title="Payment Issues" icon="life-buoy" href="/troubleshooting/payment-issues">Troubleshoot payment problems</Card>
+</CardGroup>

@@ -3,44 +3,96 @@ title: "E-Invoicing (LHDN MyInvois)"
 description: "Submit and manage e-invoices through Malaysia's MyInvois platform."
 ---
 
-The **E-Invoicing** module integrates with **LHDN MyInvois** to generate, submit, and track e-invoices as required under Malaysia's e-invoice mandate.
+The **E-Invoicing** module integrates with **LHDN MyInvois** to generate, submit, and track e-invoices as required under Malaysia's e-invoice mandate. Businesses above the revenue threshold are legally required to submit e-invoices for all transactions via the MyInvois platform.
+
+<Frame>
+  <img src="/images/e-invoicing.png" alt="E-Invoicing documents list showing invoice statuses including Valid, Pending, and Invalid" />
+</Frame>
 
 ## Prerequisites
 
-- Your business TIN (Tax Identification Number) from LHDN.
-- MyInvois API credentials (Client ID and Client Secret).
-- Location details completed (TIN, BRN, MSIC code, address) — set under **Manage → Locations → Edit**.
+Before activating e-invoicing, complete the following:
+
+- Your business **TIN** (Tax Identification Number) from LHDN.
+- **MyInvois API credentials** — Client ID and Client Secret from the MyInvois developer portal.
+- Location details completed — **TIN, BRN, MSIC code, and full address** — set under **Manage → Locations → Edit** for each location.
+- At least one tax rate configured under **Manage → Tax**.
+
+<Warning>
+  Switch from Sandbox to Production only when your integration has been fully tested. Production submissions are legally binding and cannot be reversed without the formal cancellation process. Always test in Sandbox mode first.
+</Warning>
+
+## E-Invoicing Setup
+
+<Steps>
+  <Step title="Go to E-Invoicing → Settings">
+    Click **Settings** under the E-Invoicing section in the left sidebar.
+  </Step>
+  <Step title="Select the Environment">
+    Choose **Sandbox** for testing or **Production** for live submissions.
+  </Step>
+  <Step title="Enter your credentials">
+    Fill in:
+    - **Client ID** — from your MyInvois developer account.
+    - **Client Secret** — from your MyInvois developer account.
+    - **Supplier TIN** — your company's TIN registered with LHDN.
+  </Step>
+  <Step title="Save">
+    Click **Save Settings**. The system will test the connection and confirm if the credentials are valid.
+  </Step>
+  <Step title="Update your location details">
+    Go to **Manage → Locations → Edit** for each location and fill in the TIN, BRN, MSIC code, and complete address. These are required for every e-invoice submission.
+  </Step>
+</Steps>
 
 ## E-Invoice Documents
 
 The **Documents** page shows all e-invoices submitted or pending submission. For each invoice you can:
 
 - **View details** — see line items, tax breakdown, and submission status.
-- **View QR** — display or print the QR code for the e-invoice.
-- **View on MyInvois** — open the document directly in the LHDN portal.
+- **View QR** — display or print the QR code for the e-invoice (required to be shown to customers).
+- **View on MyInvois** — open the document directly in the LHDN portal for official verification.
 
-### Statuses
+### Invoice Statuses
 
 | Status | Meaning |
 |--------|---------|
-| **Pending** | Not yet submitted to MyInvois |
-| **Submitted** | Submitted and awaiting validation |
-| **Valid** | Accepted by LHDN |
-| **Invalid** | Rejected — see the error details for the reason |
-| **Cancelled** | Cancelled after submission |
-
-## E-Invoice Settings
-
-Go to **E-Invoicing → Settings** to configure:
-
-- **Environment** — Sandbox (for testing) or Production.
-- **Client ID / Client Secret** — from your MyInvois developer account.
-- **Supplier TIN** — your company's TIN registered with LHDN.
-
-<Warning>
-  Switch from Sandbox to Production only when your integration has been fully tested. Production submissions are legally binding.
-</Warning>
+| **Pending** | Generated but not yet submitted to MyInvois |
+| **Submitted** | Sent to MyInvois and awaiting validation (usually takes a few seconds) |
+| **Valid** | Accepted and validated by LHDN |
+| **Invalid** | Rejected by LHDN — view the error details to understand the reason |
+| **Cancelled** | Cancelled after submission using the formal cancellation process |
 
 ## Submitting an Invoice
 
-E-invoices are generated automatically when a ticket is completed. If a submission fails, it will be retried automatically. You can also trigger a manual resubmit from the Documents page.
+E-invoices are generated automatically when a ticket is completed and payment is received. If a submission fails due to a network issue or credential problem, it will be retried automatically. You can also trigger a manual resubmit from the Documents page by clicking **Resubmit** on any Pending or Invalid invoice.
+
+<Tip>
+  If invoices are consistently showing as Invalid, check the error message shown on the document detail page. Common reasons include missing or incorrect TIN, invalid MSIC code, or mismatched tax amounts. Fix the issue in Settings or Locations and resubmit.
+</Tip>
+
+## Frequently Asked Questions
+
+<AccordionGroup>
+  <Accordion title="When does my business need to start submitting e-invoices?">
+    Malaysia's LHDN e-invoice mandate is being rolled out in phases based on annual revenue. Check the LHDN website or consult your accountant for the applicable date for your business size.
+  </Accordion>
+  <Accordion title="What happens if an e-invoice submission fails?">
+    Failed submissions are retried automatically up to three times. If all retries fail, the invoice moves to **Invalid** status with an error message. Fix the underlying issue (e.g. incorrect credentials or missing location details) and click **Resubmit**.
+  </Accordion>
+  <Accordion title="Can I cancel a submitted e-invoice?">
+    Yes, but only within the permitted cancellation window defined by LHDN (typically 72 hours after the issue date). Go to the document detail page and click **Cancel**. After the window closes, cancellations must be handled through a credit note.
+  </Accordion>
+  <Accordion title="Where do I get my MyInvois Client ID and Client Secret?">
+    Log in to the MyInvois developer portal (provided by LHDN) and create an API application. The Client ID and Client Secret are generated for you. Keep the Client Secret confidential — treat it like a password.
+  </Accordion>
+</AccordionGroup>
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Locations" icon="map-pin" href="/features/locations">Configure TIN, BRN, and MSIC per location</Card>
+  <Card title="Tax" icon="percent" href="/features/tax">Set up tax rates for invoice line items</Card>
+  <Card title="Settings" icon="gear" href="/features/settings">Manage global e-invoicing credentials</Card>
+  <Card title="Reports" icon="chart-bar" href="/reports/overview">View tax collected across all transactions</Card>
+</CardGroup>

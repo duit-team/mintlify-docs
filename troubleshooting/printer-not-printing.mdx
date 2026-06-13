@@ -3,29 +3,80 @@ title: "Printer Not Printing"
 description: "Diagnose and fix printer connectivity problems."
 ---
 
-## Checklist
+Work through this guide step by step. Most printer issues are caused by one of three things: wrong IP address, network connectivity, or missing routing rules.
+
+<Frame>
+  <img src="/images/printer-not-printing.png" alt="Printer troubleshooting checklist screen" />
+</Frame>
+
+## Quick Diagnosis Checklist
 
 <Steps>
   <Step title="Check power and network">
-    Make sure the printer is on and connected to the same local network as your POS device.
+    Make sure the printer is powered on (look for a solid ready light) and connected to the same local network as your POS device. If the printer is on Wi-Fi, check that it is connected to the correct access point — not a guest network.
+  </Step>
+  <Step title="Print a self-test page">
+    Print a self-test page directly from the printer (usually by holding the feed button while powering on, or via the printer's Settings menu). This confirms the printer hardware is working and shows you its current IP address and network status.
   </Step>
   <Step title="Verify the IP address">
-    Print a self-test page from the printer (usually hold the feed button at startup). Confirm the IP matches what is saved in **Manage → Printers**.
+    Compare the IP address shown on the self-test page with what is saved in **Manage → Printers**. They must match exactly. If they differ, update the IP address in the dashboard.
   </Step>
   <Step title="Send a test print">
-    In **Manage → Printers**, click **Test Print** next to the printer. Watch for any error message.
+    In **Manage → Printers**, click **Test Print** next to the printer. Watch for any error message in the dashboard. If the test print succeeds, the connection is working.
   </Step>
-  <Step title="Check port 9100">
-    Most receipt printers use port `9100`. Confirm this matches the **Port** field in the printer settings.
+  <Step title="Check the port">
+    Most receipt printers use port `9100`. Confirm this matches the **Port** field in the printer settings. Some printers use different ports — check your printer's manual if 9100 does not work.
   </Step>
   <Step title="Check routing rules">
-    Go to the **Routing Rules** tab. Confirm a rule exists that targets this printer for the relevant category or product.
+    Go to the **Routing Rules** tab on the Printers page. Confirm a rule exists that targets this printer for the relevant category, product, or order mode. Without a routing rule, nothing will print to this device.
   </Step>
 </Steps>
 
-## Printer Prints But Wrong Items
+## Error State Reference
+
+| What you see | Likely cause | Fix |
+|-------------|--------------|-----|
+| Test Print times out with no response | Wrong IP address or printer offline | Verify IP on self-test page; check power and network |
+| Test Print shows "Connection refused" | Printer on wrong port | Change port to `9100` or check printer manual |
+| Test Print succeeds but orders do not print | No routing rule for this printer | Add a routing rule targeting this printer |
+| Printer prints but wrong items only | Routing rule too narrow or wrong condition | Review routing rule condition — check category, product, and order mode filters |
+| Printer prints garbled text or symbols | Wrong paper width setting | Check paper width in Manage → Printers — should be 58mm or 80mm to match installed paper |
+| Kitchen receives orders but counter does not | Counter printer has no routing rule | Add a routing rule for receipt-type prints to the counter printer |
+
+<Tip>
+  If the printer worked before and suddenly stopped, the most common cause is a changed IP address. Printers on DHCP can get assigned a new IP after a network restart. Fix this by setting a static IP on the printer or reserving the IP on your router using the printer's MAC address.
+</Tip>
+
+## Printer Prints Wrong Items
 
 The routing rules may be too broad or conflicting. Check:
-- The rule **condition** matches only the intended categories.
-- No higher-priority rule is redirecting the job to another printer.
-- The **Priority** field — lower numbers run first.
+
+- The rule **condition** matches only the intended categories or products.
+- No higher-priority rule is overriding and redirecting the job to another printer.
+- The **Priority** field — lower numbers run first. If two rules match the same item, the lower-numbered priority wins.
+
+## Frequently Asked Questions
+
+<AccordionGroup>
+  <Accordion title="The self-test page prints but Test Print in the dashboard does not work — why?">
+    This almost always means the IP address in the dashboard does not match the printer's actual IP, or the printer is on a different network segment from the server or POS terminal. Confirm the IP on the self-test page and update it in Manage → Printers. Also check that there is no firewall blocking port 9100 between the server and the printer.
+  </Accordion>
+  <Accordion title="How do I find my printer's IP address without printing a self-test?">
+    Many printers have a small screen or status menu where you can find network settings. For Epson printers, press and hold the Feed button for 3 seconds to print a status page. For Star printers, hold the Feed button while powering on. Check your printer's manual for the exact method.
+  </Accordion>
+  <Accordion title="My printer is on Wi-Fi — does that affect anything?">
+    Wi-Fi printers work the same way as wired printers in DuitPOS — you still connect via IP address and port 9100. However, Wi-Fi connections are less reliable for printing. If you have persistent print failures, consider switching to a wired Ethernet connection for the printer.
+  </Accordion>
+  <Accordion title="Can I connect a Bluetooth printer?">
+    DuitPOS connects to printers over the local network via TCP/IP. Bluetooth printers are not supported directly — they must be connected via a Bluetooth-to-Ethernet print server adapter.
+  </Accordion>
+</AccordionGroup>
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Printers" icon="printer" href="/features/printers">Set up and manage printer devices</Card>
+  <Card title="Print Templates" icon="file-text" href="/features/print-templates">Customise receipt and kitchen docket layouts</Card>
+  <Card title="Order Modes" icon="layers" href="/features/order-modes">Use order modes in routing rules</Card>
+  <Card title="Categories" icon="folder" href="/features/categories">Use categories in routing rules</Card>
+</CardGroup>

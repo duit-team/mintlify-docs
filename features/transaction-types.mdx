@@ -3,7 +3,11 @@ title: "Transaction Types"
 description: "Define the types of transactions recorded on a ticket."
 ---
 
-**Transaction Types** are the line-item categories on a ticket — e.g. *Sale*, *Discount*, *Tax*, *Void*, *Refund*. They appear in reports and on receipts.
+**Transaction Types** are the line-item categories on a ticket — e.g. *Sale*, *Discount*, *Tax*, *Void*, *Refund*. They appear in reports and on receipts, helping you understand exactly what happened on every order.
+
+<Frame>
+  <img src="/images/transaction-types.png" alt="Transaction Types list screen showing default Sale, Tax, Discount, Void, and Refund types" />
+</Frame>
 
 ## Default Types
 
@@ -12,25 +16,63 @@ Most setups include these out of the box:
 | Code | Name | Purpose |
 |------|------|---------|
 | `SALE` | Sale | Standard product sale line |
-| `TAX` | Tax | Tax amount line |
-| `DISC` | Discount | Manual or promo discount |
-| `VOID` | Void | Cancelled line item |
-| `REFUND` | Refund | Post-sale refund |
+| `TAX` | Tax | Tax amount applied to the ticket |
+| `DISC` | Discount | Manual or promotional discount |
+| `VOID` | Void | Cancelled line item removed before payment |
+| `REFUND` | Refund | Post-payment refund issued to the customer |
+
+## Transaction Type Fields
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| **Code** | Yes | A short unique identifier used in reports and exports, e.g. `SALE`, `REFUND` |
+| **Name** | Yes | The display name shown on receipts and in the ticket detail view |
+| **Active** | No | Inactive types are hidden from new ticket creation but remain in historical records |
+
+<Tip>
+  Only create custom transaction types if your business needs to track a specific category that is not covered by the defaults — for example, a surcharge, gratuity, or rounding adjustment. Most businesses operate fine with the five default types.
+</Tip>
 
 ## Create a Custom Type
 
 <Steps>
   <Step title="Go to Manage → Transaction Types">
-    Click **Transaction Types** under Manage.
+    Click **Transaction Types** under Manage in the left sidebar.
   </Step>
   <Step title="Click New">
-    Enter a **Code** and **Name**.
+    Enter a **Code** and **Name** for the new type.
   </Step>
   <Step title="Save">
-    Click **Create**.
+    Click **Create**. The type is immediately available on new tickets.
   </Step>
 </Steps>
 
 <Warning>
-  Transaction types are referenced in historical tickets. Renaming a type changes how it appears in all reports retroactively.
+  Transaction types are referenced in historical tickets. Renaming a type changes how it appears in all reports retroactively — both past and future transactions using that type will show the new name. If you need to track a renamed concept separately, create a new type rather than renaming the existing one.
 </Warning>
+
+## Frequently Asked Questions
+
+<AccordionGroup>
+  <Accordion title="What is the difference between Void and Refund?">
+    A **Void** cancels a line item before payment is processed — it removes the item from the open ticket. A **Refund** is issued after payment has been completed — money is returned to the customer. Voids do not appear in payment processing; refunds do and may require reversing a card transaction.
+  </Accordion>
+  <Accordion title="Do I need to create transaction types before going live?">
+    The five default types (Sale, Tax, Discount, Void, Refund) are created automatically during setup. You can go live without creating any additional types.
+  </Accordion>
+  <Accordion title="Can I delete a transaction type that appears in old tickets?">
+    Deletion is blocked if the type is referenced in any historical ticket. Deactivate the type instead — it will no longer appear in new ticket creation but will remain visible in historical records.
+  </Accordion>
+  <Accordion title="How do transaction types appear on receipts?">
+    Each line item on a receipt shows the transaction type name next to the amount. For example, a discount line shows `DISC — (-RM5.00)` and a tax line shows `SST (6%) — RM3.60`. You can customise how these appear by editing the Print Template.
+  </Accordion>
+</AccordionGroup>
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Payment Types" icon="credit-card" href="/features/payment-types">Set up how payments are accepted</Card>
+  <Card title="Tax" icon="percent" href="/features/tax">Configure tax rates applied to tickets</Card>
+  <Card title="Print Templates" icon="file-text" href="/features/print-templates">Control how transaction lines appear on receipts</Card>
+  <Card title="Reports" icon="chart-bar" href="/reports/overview">View transaction breakdowns in reports</Card>
+</CardGroup>

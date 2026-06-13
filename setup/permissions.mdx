@@ -3,7 +3,15 @@ title: "Permissions"
 description: "What each permission controls."
 ---
 
-Permissions are grouped by feature area. They are assigned to **roles**, not individual users.
+Permissions are grouped by feature area. They are assigned to **roles**, not individual users. Every action in the dashboard is gated by a specific permission — if a user cannot see a page, it means their role does not have the required permission.
+
+<Frame>
+  <img src="/images/permissions.png" alt="Permissions configuration screen showing permission groups" />
+</Frame>
+
+<Tip>
+  A **Manager** role typically has all permissions. A **Cashier** role typically has no Manage or Users permissions — only what they need to operate the POS terminal.
+</Tip>
 
 ## Permission Groups
 
@@ -15,10 +23,26 @@ Permissions are grouped by feature area. They are assigned to **roles**, not ind
 | Payment Types — Create | Add new payment types |
 | Payment Types — Update | Edit existing payment types and processor config |
 | Payment Types — Delete | Remove payment types |
-| Tax — List / Create / Update / Delete | Full tax rate management |
+| Tax — List | View tax rates |
+| Tax — Create | Add new tax rates |
+| Tax — Update | Edit existing tax rates |
+| Tax — Delete | Remove tax rates |
 | Order Modes — List / Create / Update / Delete | Dine-in, takeaway, delivery mode setup |
 | Printers — List / Create / Update / Delete | Printer devices and routing rules |
 | Transaction Types — List / Create / Update / Delete | Sale, void, refund type configuration |
+| Modifiers — List / Create / Update / Delete | Product modifier groups and options |
+| Setup — List / Create / Update / Delete | Device profile configuration |
+| Settings — View / Update | Global account settings |
+| Locations — List / Create / Update / Delete | Branch and outlet management |
+
+### Menu
+
+| Permission | What it allows |
+|-----------|----------------|
+| Categories — List / Create / Update / Delete | Menu category management |
+| Products — List / Create / Update / Delete | Menu product management |
+| Brands — List / Create / Update / Delete | Product brand management |
+| Bulk Pricing — View / Update | Context-specific price overrides |
 
 ### Users
 
@@ -30,18 +54,66 @@ Permissions are grouped by feature area. They are assigned to **roles**, not ind
 | Users — Delete | Remove staff accounts |
 | Roles — List / Create / Update / Delete | Full role management |
 
+### Staff
+
+| Permission | What it allows |
+|-----------|----------------|
+| Employees — List / Create / Update / Delete | Employee record management |
+
 ### Reports
 
 | Permission | What it allows |
 |-----------|----------------|
 | Reports — View | Access all report pages |
+| Workday Reports — View | Access shift-level reconciliation reports |
+| Import History — View | See bulk import logs |
 
 ### Online Ordering
 
 | Permission | What it allows |
 |-----------|----------------|
 | QR — Manage | Configure QR codes and online menu |
+| Online Ordering Settings — Update | Set logo, welcome message, and hours |
 
-<Tip>
-  A **Manager** role typically has all permissions. A **Cashier** role typically has no Manage or Users permissions.
-</Tip>
+### E-Invoicing
+
+| Permission | What it allows |
+|-----------|----------------|
+| E-Invoicing — View | Access e-invoice documents |
+| E-Invoicing Settings — Update | Configure MyInvois credentials and environment |
+
+## How Permissions Work
+
+- Permissions are always assigned to a **role**, never directly to a user.
+- A user can have **multiple roles** — they receive the union of all permissions across their roles.
+- Removing a permission from a role takes effect immediately for all users with that role. Users currently logged in will lose access on their next page load.
+
+<Warning>
+  Never grant the **Users — Delete** or **Roles — Delete** permissions to roles unless you fully trust those users. Misuse can remove accounts (including your own admin account) from the system. Always keep at least one active admin user with full access.
+</Warning>
+
+## Frequently Asked Questions
+
+<AccordionGroup>
+  <Accordion title="A user says they cannot see a page — how do I fix it?">
+    Go to **Users → Roles**, open the role assigned to that user, and check whether the required permission (e.g. Reports — View) is toggled on. Save and ask the user to refresh their browser.
+  </Accordion>
+  <Accordion title="Can I grant a user access to only one specific feature?">
+    Yes. Create a role with only the permissions that feature requires (e.g. only Reports — View) and assign that role to the user.
+  </Accordion>
+  <Accordion title="What happens if I remove a permission from a role while a user is logged in?">
+    The change takes effect on the user's next page load or navigation. They will see an "Access Denied" message if they try to access a page the updated role no longer permits.
+  </Accordion>
+  <Accordion title="Is there a way to see all permissions a specific user has?">
+    Not directly on the user page — you need to check each role assigned to the user and combine the permissions. A future update will show a merged permissions view per user.
+  </Accordion>
+</AccordionGroup>
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Users & Roles" icon="users" href="/setup/users-and-roles">Create roles and assign them to users</Card>
+  <Card title="Employees" icon="user-check" href="/features/employees">Manage POS staff records</Card>
+  <Card title="Dashboard Overview" icon="layout-dashboard" href="/getting-started/dashboard-overview">Understand what each section does</Card>
+  <Card title="Login Problems" icon="life-buoy" href="/troubleshooting/login-problems">Fix access issues</Card>
+</CardGroup>

@@ -3,7 +3,39 @@ title: "Modifiers"
 description: "Set up product options like size, extras, or cooking preferences."
 ---
 
-**Modifiers** let customers customise a product — e.g. choose a size, add toppings, or specify cooking level. They are grouped into **Modifier Groups** and attached to products.
+**Modifiers** let customers customise a product — for example, choose a size, add toppings, or specify cooking level. They are organised into **Modifier Groups** (e.g. "Size", "Add-ons") and then attached to individual products.
+
+<Frame>
+  <img src="/images/modifiers.png" alt="Modifiers screen showing a Size group with Small, Medium, and Large options" />
+</Frame>
+
+## How Modifier Groups Work
+
+A **Modifier Group** is a named collection of options. The group defines:
+- How many options a customer must pick (Min selections).
+- How many options they are allowed to pick (Max selections).
+
+Each **option** within the group has a name and an optional price adjustment. When a customer selects an option on the POS or online ordering page, the price adjustment is added to the product's base price.
+
+**Example:**
+- Group: Size (Min: 1, Max: 1 — customer must pick exactly one size)
+  - Small — no extra charge
+  - Medium — +RM 1.00
+  - Large — +RM 2.00
+
+## Modifier Group Fields
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| **Name** | Yes | The group label shown to customers, e.g. `Size`, `Add-ons`, `Cooking Level` |
+| **Min Selections** | Yes | Minimum number of options the customer must choose. Set to `1` to make the group required |
+| **Max Selections** | Yes | Maximum number of options allowed. Set to `1` for single-select; higher numbers for multi-select |
+| **Option Name** | Yes (per option) | The name of each choice, e.g. `Small`, `Extra Cheese`, `Well Done` |
+| **Option Price** | No | Additional charge for this option. Positive numbers add to the price; use `0` for no extra charge |
+
+<Tip>
+  Set **Min Selections to 1** for groups where a choice is required (like Size). Set it to **0** for optional add-ons. This controls whether the POS will prompt staff to pick an option before completing the order.
+</Tip>
 
 ## Create a Modifier Group
 
@@ -12,12 +44,10 @@ description: "Set up product options like size, extras, or cooking preferences."
     Click **Modifiers** in the left sidebar.
   </Step>
   <Step title="Click New Group">
-    Enter a name, e.g. `Size` or `Add-ons`. Set:
-    - **Min selections** — minimum choices required (e.g. `1` for mandatory size).
-    - **Max selections** — maximum allowed (e.g. `1` for single-select, `5` for multi-select).
+    Enter the group name (e.g. `Size` or `Add-ons`) and set Min and Max selections.
   </Step>
   <Step title="Add Options">
-    Click **Add Option** inside the group. Enter the option name and any price adjustment.
+    Click **Add Option** inside the group. Enter each option's name and any price adjustment.
   </Step>
   <Step title="Save">
     Click **Create Group**.
@@ -26,12 +56,40 @@ description: "Set up product options like size, extras, or cooking preferences."
 
 ## Attach to a Product
 
-Go to **Menu Builder → Products**, open a product, and in the **Modifiers** section select the groups that apply to this product.
+Go to **Menu Builder → Products**, open a product, and in the **Modifiers** section select the groups that apply to this product. A product can have multiple modifier groups.
 
 ## Common Examples
 
 | Group | Min | Max | Options |
 |-------|-----|-----|---------|
-| Size | 1 | 1 | Small (+$0), Medium (+$1), Large (+$2) |
-| Add-ons | 0 | 5 | Extra cheese (+$0.50), Bacon (+$1.50) |
+| Size | 1 | 1 | Small (+RM 0), Medium (+RM 1), Large (+RM 2) |
+| Add-ons | 0 | 5 | Extra cheese (+RM 0.50), Bacon (+RM 1.50), Avocado (+RM 2.00) |
 | Cooking Level | 0 | 1 | Rare, Medium, Well Done |
+| Sugar Level | 1 | 1 | 0%, 25%, 50%, 75%, 100% |
+| Ice Level | 1 | 1 | No Ice, Less Ice, Normal, Extra Ice |
+
+## Frequently Asked Questions
+
+<AccordionGroup>
+  <Accordion title="What is the difference between required and optional modifiers?">
+    If **Min Selections** is `1` or more, the modifier group is required — staff cannot complete the order without making a selection. If Min is `0`, the group is optional and staff can skip it. Use required modifiers for choices like Size where there is no sensible default.
+  </Accordion>
+  <Accordion title="Can I use the same modifier group on multiple products?">
+    Yes. Create the group once and attach it to as many products as you like. If you update the group (e.g. change a price), the change applies to all products that use it.
+  </Accordion>
+  <Accordion title="Can modifier options have different prices?">
+    Yes. Each option can have its own price adjustment. You can also set an option to RM 0 if it has no extra cost.
+  </Accordion>
+  <Accordion title="Why is a modifier group not appearing on the POS for a product?">
+    Make sure you have attached the modifier group to the specific product under Menu Builder → Products → Edit → Modifiers section. Creating a modifier group does not automatically apply it to all products — it must be assigned manually.
+  </Accordion>
+</AccordionGroup>
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Products" icon="box" href="/features/products">Attach modifier groups to menu items</Card>
+  <Card title="Menu Builder" icon="utensils" href="/features/menu-builder">Manage your full menu in one place</Card>
+  <Card title="Categories" icon="folder" href="/features/categories">Organise products into categories</Card>
+  <Card title="Bulk Pricing" icon="tag" href="/features/bulk-pricing">Override prices per context</Card>
+</CardGroup>

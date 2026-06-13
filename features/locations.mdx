@@ -3,7 +3,32 @@ title: "Locations"
 description: "Manage physical branches or outlets under your account."
 ---
 
-A **Location** represents a physical outlet or branch. Each location has its own menu, settings, and reports.
+A **Location** represents a physical outlet or branch. Each location has its own address and contact details that appear on printed receipts, e-invoices, and the online ordering page. Reports can be filtered by location to compare performance across branches.
+
+<Frame>
+  <img src="/images/locations.png" alt="Locations list screen showing branch names, addresses, and active status" />
+</Frame>
+
+## Location Fields
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| **Code** | Yes | A short internal identifier for this location, e.g. `KL01` or `MAIN`. Used in reports and exports |
+| **Name** | Yes | The branch name displayed on receipts, e-invoices, and in the dashboard, e.g. `KL Central` |
+| **Address** | Yes | Full postal address printed on receipts and submitted with e-invoices |
+| **City** | Yes | City name — required for LHDN e-invoicing submissions |
+| **State** | No | State or region |
+| **Country** | Yes | Country — defaults to Malaysia |
+| **Phone** | No | Contact number printed on receipts |
+| **Email** | No | Contact email for this branch |
+| **TIN** | No (required for e-invoicing) | Tax Identification Number registered with LHDN for this outlet |
+| **BRN** | No (required for e-invoicing) | Business Registration Number for this outlet |
+| **MSIC Code** | No (required for e-invoicing) | Malaysia Standard Industrial Classification code for this location's business activity |
+| **Active** | No | Toggle off to hide this location from reports and the POS location selector |
+
+<Tip>
+  If you plan to use E-Invoicing, complete the **TIN**, **BRN**, **MSIC Code**, and full address fields before activating the e-invoice module. LHDN submissions will be rejected if these fields are missing.
+</Tip>
 
 ## Create a Location
 
@@ -12,14 +37,10 @@ A **Location** represents a physical outlet or branch. Each location has its own
     Click **Locations** in the left sidebar.
   </Step>
   <Step title="Click New Location">
-    Fill in:
-    - **Name** — the branch name, e.g. `KL Central` or `Outlet 2`.
-    - **Address** — displayed on receipts and e-invoices.
-    - **Phone / Email** — contact details for this branch.
-    - **Active** — inactive locations are hidden from reports.
+    Fill in the required fields — Code, Name, Address, City, and Country at minimum.
   </Step>
   <Step title="Save">
-    Click **Create**.
+    Click **Create**. The location is immediately available in the dashboard and POS.
   </Step>
 </Steps>
 
@@ -28,5 +49,31 @@ A **Location** represents a physical outlet or branch. Each location has its own
 Click the **Edit** icon. All fields including address and contact details can be updated. Changes take effect immediately on new receipts.
 
 <Warning>
-  Location details (name, address) appear on printed receipts and e-invoices. Update them before the next business day if they change.
+  Location details (name, address) appear on printed receipts and e-invoices. If you move premises or change your registered address, update the location before the next business day so new receipts and e-invoices reflect the correct address. Receipts and e-invoices already printed or submitted are not affected.
 </Warning>
+
+## Frequently Asked Questions
+
+<AccordionGroup>
+  <Accordion title="An employee cannot see a specific location — why?">
+    Location visibility for employees is controlled by the role assigned to their user account. If a staff member should only see one location, assign them a role scoped to that location. Contact your administrator if you are unsure how location-based permissions are set up on your account.
+  </Accordion>
+  <Accordion title="Can I have different menus for different locations?">
+    Yes. The menu can be managed per location. Products and categories are shared by default, but you can use Bulk Pricing to create location-specific price overrides.
+  </Accordion>
+  <Accordion title="What happens if I deactivate a location?">
+    Deactivating a location hides it from the POS selector and removes it from active report filters. Historical data for that location is preserved and can still be accessed by switching the report date range to include the period when the location was active.
+  </Accordion>
+  <Accordion title="Can I delete a location?">
+    Deletion is blocked if the location has any associated transactions or employees. Deactivate it instead to keep your historical data intact.
+  </Accordion>
+</AccordionGroup>
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="E-Invoicing" icon="file-text" href="/features/e-invoicing">Configure per-location TIN and BRN for LHDN</Card>
+  <Card title="Settings" icon="gear" href="/features/settings">Global business name and currency settings</Card>
+  <Card title="Employees" icon="users" href="/features/employees">Assign employees to locations</Card>
+  <Card title="Reports" icon="chart-bar" href="/reports/overview">Filter reports by location</Card>
+</CardGroup>

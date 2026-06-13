@@ -3,9 +3,28 @@ title: "Printers"
 description: "Set up receipt and kitchen printers and configure routing rules."
 ---
 
-The printer system has two parts:
-- **Printer Devices** — the physical printers (IP address, type, paper size).
-- **Routing Rules** — which items/categories print to which device.
+The printer system has two parts that work together:
+- **Printer Devices** — the physical printers identified by IP address and port.
+- **Routing Rules** — logic that decides which items or categories print to which device.
+
+<Frame>
+  <img src="/images/printers.png" alt="Printers page showing a list of printer devices with their IP addresses and status" />
+</Frame>
+
+## Printer Device Fields
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| **Name** | Yes | A label to identify this printer, e.g. `Kitchen Bar` or `Front Counter Receipt` |
+| **IP Address** | Yes | The printer's IP address on your local network. Must be static (fixed) — see tip below |
+| **Port** | Yes | The network port — default is `9100` for most receipt and kitchen printers |
+| **Paper Width** | Yes | `58mm` or `80mm` — must match the paper roll installed in the printer |
+| **Type** | Yes | `Receipt` (customer copy printed after payment) or `Kitchen` (order docket sent to kitchen) |
+| **Active** | No | Toggle off to disable this printer without deleting its routing rules |
+
+<Tip>
+  Printers must have a **static (fixed) IP address** on your local network. If the printer's IP changes (due to DHCP), it will stop printing. Set a static IP either on the printer itself (via its settings menu or self-test print) or by assigning a DHCP reservation on your router using the printer's MAC address.
+</Tip>
 
 ## Add a Printer Device
 
@@ -14,24 +33,23 @@ The printer system has two parts:
     Click **Printers** in the left sidebar.
   </Step>
   <Step title="Click New Printer">
-    Fill in:
-    - **Name** — e.g. `Kitchen Bar`, `Receipt Printer`.
-    - **IP Address** — the printer's IP on your local network.
-    - **Port** — default is `9100` for most network printers.
-    - **Paper Width** — `58mm` or `80mm`.
-    - **Type** — `Receipt` (customer copy) or `Kitchen` (kitchen order).
+    Fill in the Name, IP Address, Port, Paper Width, and Type.
   </Step>
   <Step title="Test">
-    Click **Test Print** to send a test page. Confirm the printer receives it.
+    Click **Test Print** to send a test page. Confirm the printer receives it before saving.
   </Step>
   <Step title="Save">
     Click **Create**.
   </Step>
 </Steps>
 
+<Warning>
+  If you enter the wrong IP address, the Test Print will time out and no error will appear on the printer itself. Always verify the IP from the printer's self-test page (usually printed by holding the feed button while powering on) before saving.
+</Warning>
+
 ## Add a Routing Rule
 
-Routing rules decide which items trigger a print on which printer.
+Routing rules decide which items trigger a print job on which printer.
 
 <Steps>
   <Step title="Click Routing Rules">
@@ -41,7 +59,7 @@ Routing rules decide which items trigger a print on which printer.
     Select:
     - **Printer** — the target device.
     - **Condition** — match by category, product, or order mode.
-    - **Priority** — higher priority rules take precedence when multiple rules match.
+    - **Priority** — higher priority rules take precedence when multiple rules match the same item.
   </Step>
   <Step title="Save">
     Click **Create**. Rules take effect immediately on the next order.
@@ -51,3 +69,29 @@ Routing rules decide which items trigger a print on which printer.
 ## Troubleshooting
 
 See [Printer Not Printing](/troubleshooting/printer-not-printing) if a printer is not responding.
+
+## Frequently Asked Questions
+
+<AccordionGroup>
+  <Accordion title="Why is the printer not printing any orders?">
+    Work through this checklist: (1) Is the printer powered on and showing a ready light? (2) Is it connected to the same Wi-Fi or LAN as the POS terminal? (3) Does the IP in the dashboard match the IP on the printer's self-test page? (4) Is there a routing rule targeting this printer? See [Printer Not Printing](/troubleshooting/printer-not-printing) for a full diagnosis checklist.
+  </Accordion>
+  <Accordion title="How do I test if my printer is connected correctly?">
+    Go to Manage → Printers and click **Test Print** next to the printer. If you see a test page print, the connection is working. If nothing prints, check the IP address and network connection.
+  </Accordion>
+  <Accordion title="What port should I use?">
+    Most Epson, Star, and generic receipt printers use port `9100` for RAW printing over TCP/IP. Check your printer's manual if `9100` does not work — some models use `515` or `631` for alternative protocols.
+  </Accordion>
+  <Accordion title="Can I send the same order to multiple printers?">
+    Yes. Create multiple routing rules pointing to different printers. You can also create rules that match overlapping conditions — for example, one rule sends all food items to the kitchen, and another sends the full receipt to the counter printer.
+  </Accordion>
+</AccordionGroup>
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Print Templates" icon="file-text" href="/features/print-templates">Customise receipt and kitchen docket layouts</Card>
+  <Card title="Printer Not Printing" icon="life-buoy" href="/troubleshooting/printer-not-printing">Step-by-step diagnosis guide</Card>
+  <Card title="Order Modes" icon="layers" href="/features/order-modes">Route prints by service type</Card>
+  <Card title="Categories" icon="folder" href="/features/categories">Route prints by menu category</Card>
+</CardGroup>

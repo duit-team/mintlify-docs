@@ -3,41 +3,84 @@ title: "QR Code Setup"
 description: "Generate table QR codes for contactless ordering."
 ---
 
-QR codes let customers scan and order from their phone. Each QR code maps to a specific table and venue.
+QR codes let customers scan and order directly from their phone, without waiting for a staff member to take their order. Each QR code links to a specific table and venue, and opens your online menu in the customer's browser.
+
+<Frame>
+  <img src="/images/qr-setup.png" alt="QR Code setup page showing a generated QR code for Table 1 with download and print options" />
+</Frame>
 
 ## Prerequisites
 
-Before generating QR codes, make sure:
-- You have at least one **Table** set up under Manage → Tables.
-- Stripe is configured in a Payment Type (see [Stripe Setup](/online-ordering/stripe-setup)).
-- Your online menu is published.
+Before generating QR codes, make sure you have:
+
+- At least one **Table** set up under Manage → Tables.
+- **Stripe** configured in a Payment Type — see [Stripe Setup](/online-ordering/stripe-setup).
+- Your online menu **published** with at least one active category and product.
+- Your business logo and welcome message set under **Online Ordering → Settings**.
+
+<Tip>
+  Test your full order flow before printing QR codes for your tables. Place a test order using Stripe's test card `4242 4242 4242 4242` with any future expiry and any 3-digit CVC. Confirm the order appears in your dashboard before going live.
+</Tip>
 
 ## Generate a QR Code
 
 <Steps>
   <Step title="Go to Online Ordering → QR Codes">
-    Click **QR Codes** in the left sidebar.
+    Click **QR Codes** in the left sidebar under Online Ordering.
   </Step>
   <Step title="Select a Table">
-    Choose the table you want to generate a code for.
+    Choose the table you want to generate a code for from the table dropdown. A QR code is generated automatically.
   </Step>
   <Step title="Download or Print">
-    Click **Download QR** to get a PNG, or **Print** to send directly to a printer.
+    Click **Download QR** to get a high-resolution PNG file, or **Print** to send it directly to a connected printer. Use the PNG to create branded table tents in a design tool if you want a more polished presentation.
+  </Step>
+  <Step title="Place the QR code">
+    Print and laminate the QR code, then place it at the corresponding table — ideally in a table tent or stand at eye level. Make sure the code is not obscured or damaged, as this will prevent it from scanning correctly.
   </Step>
 </Steps>
 
-## Test the Flow
+## Test the Full Order Flow
 
-1. Scan your QR code with a phone camera.
+1. Scan your QR code with a phone camera (no app download required — it opens in the browser).
 2. Browse the menu and add items to the cart.
 3. Proceed to checkout — a Stripe payment page opens.
 4. Complete the test payment using a [Stripe test card](https://stripe.com/docs/testing#cards).
-5. Confirm the order appears in your dashboard.
-
-<Tip>
-  Use `4242 4242 4242 4242` with any future expiry and any CVC as a Stripe test card number.
-</Tip>
+5. Confirm the order appears in your POS dashboard and any connected printers receive the kitchen docket.
 
 ## Customise the Landing Page
 
-Go to **Online Ordering → Settings** to upload your logo, set a welcome message, and configure operating hours.
+Go to **Online Ordering → Settings** to:
+- Upload your **logo** — shown at the top of the customer ordering page.
+- Set a **welcome message** — displayed below the logo.
+- Configure **operating hours** — show a closed message when orders are not being accepted.
+- Set a **primary colour** — matches the page accent to your brand.
+
+<Tip>
+  Place QR codes in a location customers will naturally look — the centre of the table is best. Avoid placing them near the edge where they might be covered by plates or swept off. A simple printed card in a clear acrylic stand works well for most venues.
+</Tip>
+
+## Frequently Asked Questions
+
+<AccordionGroup>
+  <Accordion title="Do customers need to download an app to use QR ordering?">
+    No. The QR code opens directly in the customer's mobile browser. No app download is required. The ordering page works on all modern iOS and Android browsers.
+  </Accordion>
+  <Accordion title="What happens if a customer scans the wrong table's QR code?">
+    The order will be placed against the wrong table number. Staff should verify the table number when delivering orders. You can reprint QR codes for any table at any time — make sure each table's code is clearly labelled with the table number.
+  </Accordion>
+  <Accordion title="Can customers order from their own phone and pay later at the counter?">
+    Currently, the QR ordering flow requires payment at checkout via Stripe. Cash-on-collection flows are not supported for QR orders.
+  </Accordion>
+  <Accordion title="How do I change the menu shown on the QR ordering page?">
+    The online menu reflects your standard product catalogue. Any product set to Active with an Active category will appear. Use [Bulk Pricing](/features/bulk-pricing) to create a specific online menu context with different prices or availability if needed.
+  </Accordion>
+</AccordionGroup>
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Stripe Setup" icon="credit-card" href="/online-ordering/stripe-setup">Connect Stripe to accept payments</Card>
+  <Card title="Payment Types" icon="wallet" href="/features/payment-types">Configure your online payment method</Card>
+  <Card title="Products" icon="box" href="/features/products">Manage what appears on the online menu</Card>
+  <Card title="Payment Issues" icon="life-buoy" href="/troubleshooting/payment-issues">Troubleshoot online payment problems</Card>
+</CardGroup>

@@ -4,10 +4,23 @@ description: "Manage platform-level administrator accounts."
 ---
 
 <Warning>
-  Root users have **full access** to all tenants and platform settings. Create these accounts with care.
+  Root users have **full access** to all tenants and platform settings. Create these accounts with extreme care and only for people who genuinely need platform-level access.
 </Warning>
 
-**Root Users** are platform-level administrators who can manage tenants, database servers, and global configuration. They are separate from tenant users.
+**Root Users** are platform-level administrators who can manage tenants, database servers, and global configuration. They are completely separate from tenant users — a root user can log in to the root admin panel regardless of any individual tenant's settings.
+
+<Frame>
+  <img src="/images/root-users.png" alt="Root Users list showing admin accounts with name, email, and active status" />
+</Frame>
+
+## Root User Fields
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| **Name** | Yes | The administrator's display name shown in the root admin panel and audit logs |
+| **Email** | Yes | Used as the login username — must be unique across all root users |
+| **Password** | Yes (on create) | Set a strong password. Root users have platform-wide access, so password strength is critical |
+| **Active** | No | Toggle off to suspend access without deleting the account |
 
 ## Create a Root User
 
@@ -16,13 +29,45 @@ description: "Manage platform-level administrator accounts."
     Click **Root Users** in the root admin sidebar.
   </Step>
   <Step title="Click New Root User">
-    Enter a name, email, and password.
+    Enter the name, email, and a strong password.
   </Step>
   <Step title="Save">
     Click **Create**. The user can immediately log in at the root admin login page.
   </Step>
 </Steps>
 
+<Tip>
+  Keep the number of root users as small as possible — ideally two or three people. More root accounts means more attack surface. Use strong, unique passwords and consider using a password manager.
+</Tip>
+
 ## Edit or Deactivate
 
-Click **Edit** to change a root user's details. Toggle **Active** off to suspend access without deleting the account.
+Click **Edit** to change a root user's name or email. Toggle **Active** off to suspend access without deleting the account. Suspended root users cannot log in but their audit trail is preserved.
+
+<Warning>
+  Never delete the last active root user. Doing so will lock everyone out of the root admin panel. Always keep at least two active root user accounts in case one is lost.
+</Warning>
+
+## Frequently Asked Questions
+
+<AccordionGroup>
+  <Accordion title="What can root users do that tenant admins cannot?">
+    Root users can: create and delete tenants, add database servers, manage root user accounts, and run platform-level database migrations. Tenant admins can only manage their own tenant's data — they cannot see other tenants or platform infrastructure.
+  </Accordion>
+  <Accordion title="Can a root user log in to a tenant's dashboard?">
+    Root users access the root admin panel at a separate URL. They do not have direct access to individual tenant dashboards unless they also have a tenant user account created within that tenant.
+  </Accordion>
+  <Accordion title="I forgot my root admin password — how do I recover access?">
+    If another root admin is active, they can reset your password. If all root admin accounts are locked, access must be recovered by directly resetting the password in the database — contact your server administrator.
+  </Accordion>
+  <Accordion title="Should root users share the same account?">
+    No. Each administrator should have their own individual root user account. Shared accounts make it impossible to audit who made which change and create security risks if someone leaves the organisation.
+  </Accordion>
+</AccordionGroup>
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Tenants" icon="building" href="/features/tenants">Manage business accounts on the platform</Card>
+  <Card title="Database Servers" icon="server" href="/features/db-servers">Manage PostgreSQL server infrastructure</Card>
+</CardGroup>

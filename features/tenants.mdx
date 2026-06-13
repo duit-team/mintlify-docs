@@ -7,7 +7,20 @@ description: "Manage the businesses (tenants) registered on the platform."
   This section is for **root administrators** only. Tenant users do not have access to this page.
 </Warning>
 
-A **Tenant** is a separate business account with its own isolated database, users, and settings.
+A **Tenant** is a separate business account with its own isolated database, users, menu, and settings. Each tenant is completely independent — one tenant cannot see or access another's data.
+
+<Frame>
+  <img src="/images/tenants.png" alt="Tenants list in the root admin panel showing business names, domain names, and database server assignments" />
+</Frame>
+
+## Tenant Fields
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| **Name** | Yes | The business name displayed in the root admin panel |
+| **Domain Name** | Yes | The unique slug used in all API and dashboard URLs, e.g. `my-restaurant`. Cannot be changed after creation |
+| **Database Server** | Yes | Which PostgreSQL server to provision the tenant's database on. See [Database Servers](/features/db-servers) |
+| **Active** | No | Toggle off to suspend access for this tenant without deleting their data |
 
 ## Create a Tenant
 
@@ -16,20 +29,51 @@ A **Tenant** is a separate business account with its own isolated database, user
     Click **Tenants** in the root admin sidebar.
   </Step>
   <Step title="Click New Tenant">
-    Fill in:
-    - **Name** — the business name.
-    - **Domain Name** — the unique slug used in all API and UI URLs (e.g. `my-restaurant`).
-    - **Database Server** — which database server to provision the tenant database on.
+    Fill in the Name, Domain Name, and select a Database Server.
   </Step>
   <Step title="Save">
-    Click **Create**. The tenant database is provisioned automatically and migrations run on startup.
+    Click **Create**. The tenant database is provisioned automatically on the selected server and migrations run on the next application startup.
   </Step>
 </Steps>
 
+<Tip>
+  Choose the Domain Name carefully — it becomes part of every URL for that business (e.g. `app.duitpos.com/my-restaurant/login`). Use a slug that matches the business name, is lowercase, and uses hyphens instead of spaces.
+</Tip>
+
 ## Manage a Tenant
 
-Click **Edit** on any tenant to update its name or settings. The domain name cannot be changed after creation.
+Click **Edit** on any tenant to update its name or Active status.
+
+<Warning>
+  The **Domain Name** cannot be changed after creation. It is embedded in the tenant's database name, all URLs, and all API routes. If a tenant needs a new domain name, a new tenant must be created and data migrated manually.
+</Warning>
 
 ## Tenant Isolation
 
-Each tenant's data is completely isolated in its own database. One tenant cannot access another's data.
+Each tenant's data is completely isolated in its own PostgreSQL database. No tenant can access another's data — even if they are on the same database server.
+
+## Frequently Asked Questions
+
+<AccordionGroup>
+  <Accordion title="How do I add a new business to the platform?">
+    Create a new tenant from the Tenants page. Set the Domain Name to a unique slug for that business. After creation, the business owner can log in at their tenant URL and complete their own setup.
+  </Accordion>
+  <Accordion title="The tenant database is not connecting — what do I check?">
+    Verify that the Database Server assigned to the tenant is reachable and the credentials are correct. Go to Database Servers, click Edit on the server, and click **Test Connection**. If the connection fails, check network access and PostgreSQL credentials. Also check that the tenant's database was provisioned — it should be created automatically on first application startup.
+  </Accordion>
+  <Accordion title="Can I move a tenant to a different database server?">
+    This requires a manual database migration and is not supported through the UI. Contact your platform administrator to coordinate a tenant database move.
+  </Accordion>
+  <Accordion title="What happens when I deactivate a tenant?">
+    Deactivated tenants cannot log in to the dashboard and the POS will not function. Their data is fully preserved and the tenant can be reactivated at any time.
+  </Accordion>
+</AccordionGroup>
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Database Servers" icon="server" href="/features/db-servers">Manage PostgreSQL servers for tenant hosting</Card>
+  <Card title="Root Users" icon="shield" href="/features/root-users">Manage platform administrator accounts</Card>
+  <Card title="Locations" icon="map-pin" href="/features/locations">Manage physical branches within a tenant</Card>
+  <Card title="Settings" icon="gear" href="/features/settings">Configure tenant-level preferences</Card>
+</CardGroup>

@@ -3,40 +3,85 @@ title: "Products"
 description: "Add and manage the items sold at your POS and online."
 ---
 
-**Products** are the items customers can order. Each product belongs to a category and can have modifiers, a tax rate, and context-specific price overrides.
+**Products** are the items customers can order. Each product belongs to a category and can have modifiers, a tax rate, and context-specific price overrides. Products appear on the POS order screen and on the customer-facing online ordering menu.
+
+<Frame>
+  <img src="/images/products.png" alt="Products list showing items with names, prices, categories, and active status" />
+</Frame>
+
+## Product Fields
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| **Name** | Yes | The product name displayed on the POS, receipts, and online menu |
+| **Code / SKU** | No | An optional internal reference code for stock management or reporting |
+| **Price** | Yes | The base selling price, excluding tax unless tax-inclusive pricing is enabled |
+| **Category** | Yes | Which category this product belongs to. Determines where it appears on the POS |
+| **Tax** | No | The tax rate to apply per sale. See [Tax](/features/tax) |
+| **Brand** | No | Optional grouping under a named brand. See [Brands](/features/brands) |
+| **Barcode** | No | One or more barcodes that can be scanned to add the product to a ticket |
+| **Image** | No | A photo shown on the online ordering page |
+| **Active** | No | Toggle off to hide the product from the POS and online menu without deleting it |
+
+<Tip>
+  Set your base **Price** as the standard selling price. If you need a different price for delivery, happy hour, or another context, use [Bulk Pricing](/features/bulk-pricing) to create an override — this keeps the base price clean for in-store use.
+</Tip>
 
 ## Create a Product
 
 <Steps>
   <Step title="Go to Menu Builder → Products">
-    Select a category in the Menu Builder first to scope where the product appears.
+    Select a category in the Menu Builder first to scope where the product appears. Or navigate via the Products sidebar link.
   </Step>
   <Step title="Click New Product">
-    Fill in:
-    - **Name** — displayed on the POS and receipts.
-    - **Code / SKU** — optional internal reference.
-    - **Price** — the base selling price (excluding tax unless the price is tax-inclusive).
-    - **Category** — which category this product belongs to.
-    - **Tax** — the tax rate to apply. See [Tax](/features/tax).
-    - **Brand** — optional. See [Brands](/features/brands).
-    - **Active** — toggle off to hide from the POS.
+    Fill in the required fields: Name, Price, and Category.
   </Step>
   <Step title="Add modifiers (optional)">
     In the **Modifiers** section, attach modifier groups (e.g. Size, Add-ons). See [Modifiers](/features/modifiers).
   </Step>
   <Step title="Save">
-    Click **Create** (or **Save** on the edit page).
+    Click **Create** (or **Save** on the edit page). The product is immediately available on the POS.
   </Step>
 </Steps>
 
 ## Edit a Product
 
-Click the **Edit** icon on any product row. All fields are editable. Price changes take effect on the next order.
+Click the **Edit** icon on any product row. All fields are editable. Price changes take effect on the next order placed after saving.
 
 ## Bulk Price Overrides
 
-To set a different price for a specific context (e.g. delivery), use [Bulk Pricing](/features/bulk-pricing) instead of editing the base price.
+To set a different price for a specific context (e.g. delivery pricing), use [Bulk Pricing](/features/bulk-pricing) instead of editing the base price. This preserves the original price for in-store use.
 
 ## Delete a Product
 
-Click **Delete** on the product row. Products referenced by existing tickets cannot be deleted — deactivate them instead.
+Click **Delete** on the product row.
+
+<Warning>
+  Products referenced by existing tickets cannot be deleted — the system will block the deletion to preserve historical accuracy. Deactivate the product instead to hide it from the POS while keeping all records intact. You can reactivate it at any time.
+</Warning>
+
+## Frequently Asked Questions
+
+<AccordionGroup>
+  <Accordion title="Why is a product not showing on the POS?">
+    Check three things: (1) The product is set to **Active**. (2) The product's **Category** is set to Active. A product in an inactive category is hidden even if the product itself is active. (3) Reload the POS app — it caches the menu and may not show changes immediately.
+  </Accordion>
+  <Accordion title="How does barcode scanning work?">
+    Add one or more barcodes to a product in the **Barcode** field. When staff scan the barcode on a connected scanner, the product is automatically added to the current ticket. You can add multiple barcodes per product (e.g. to cover different packaging sizes of the same item).
+  </Accordion>
+  <Accordion title="Can I create product variants (e.g. Small / Medium / Large as separate products)?">
+    The recommended approach is to use **Modifiers** — create a Size modifier group with Small, Medium, and Large options, each with a price adjustment, and attach it to the product. This keeps your product list clean and groups variants together on the POS. Alternatively, you can create separate products for each variant.
+  </Accordion>
+  <Accordion title="Can I import products in bulk instead of adding them one by one?">
+    Yes. Use the **Import** button on the Products page to upload a CSV file. See [Import History](/reports/import-history) to review the result of any import.
+  </Accordion>
+</AccordionGroup>
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Categories" icon="folder" href="/features/categories">Organise products into menu sections</Card>
+  <Card title="Modifiers" icon="list" href="/features/modifiers">Add size, add-on, and customisation options</Card>
+  <Card title="Bulk Pricing" icon="tag" href="/features/bulk-pricing">Set different prices per context</Card>
+  <Card title="Tax" icon="percent" href="/features/tax">Assign tax rates to products</Card>
+</CardGroup>

@@ -3,6 +3,12 @@ title: "Users & Roles"
 description: "Invite staff and control what each person can do."
 ---
 
+**Users** are the people who can log in to the DuitPOS dashboard. **Roles** define what each user can see and do. Every user must have at least one role.
+
+<Frame>
+  <img src="/images/users-and-roles.png" alt="Users and Roles management screen" />
+</Frame>
+
 ## Roles
 
 A **role** is a named set of permissions (e.g. *Cashier*, *Manager*, *Supervisor*). Every user must be assigned at least one role.
@@ -24,7 +30,21 @@ A **role** is a named set of permissions (e.g. *Cashier*, *Manager*, *Supervisor
   </Step>
 </Steps>
 
+<Tip>
+  Start with a **Manager** role (all permissions) and a **Cashier** role (view-only, no Manage or User admin). You can fine-tune permissions at any time without recreating roles.
+</Tip>
+
 ## Users
+
+### User Fields
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| **Name** | Yes | The user's display name, shown in reports and the audit log |
+| **Email** | Yes | Used as the login username — must be unique across your account |
+| **Password** | Yes (on create) | Set a temporary password; ask the user to change it on first login |
+| **Role(s)** | Yes | One or more roles to assign. Permissions are additive across all assigned roles |
+| **Active** | No | Toggle off to disable login without deleting the account |
 
 ### Invite a New User
 
@@ -44,15 +64,35 @@ A **role** is a named set of permissions (e.g. *Cashier*, *Manager*, *Supervisor
 </Steps>
 
 <Warning>
-  Share the temporary password securely. Ask the user to change it on first login.
+  Share the temporary password securely — do not send it via the same channel as the email address. Ask the user to change it on first login. Never remove your own admin role while logged in; doing so will lock you out of the user management pages.
 </Warning>
 
 ### Edit or Deactivate a User
 
-Click the **Edit** (pencil) icon next to any user. Toggle **Active** off to prevent login without deleting the account.
+Click the **Edit** (pencil) icon next to any user. Toggle **Active** off to prevent login without deleting the account. Their historical data (sales, reports) is preserved.
 
-## Common Questions
+## Frequently Asked Questions
 
-**Can a user have multiple roles?** Yes. Permissions are additive — the user gets the union of all assigned roles' permissions.
+<AccordionGroup>
+  <Accordion title="Can a user have multiple roles?">
+    Yes. Permissions are additive — the user gets the union of all assigned roles' permissions. For example, assigning both a Cashier and a Supervisor role gives the user all permissions from both.
+  </Accordion>
+  <Accordion title="Can I delete a role that is currently in use?">
+    No. You must reassign all users away from the role first, then delete it. The system will warn you if any users are still assigned.
+  </Accordion>
+  <Accordion title="A user cannot log in after I changed their role — why?">
+    Role permission changes take effect on the next login. If the user was already logged in, ask them to sign out and sign back in. If the login still fails, check that the account is set to Active.
+  </Accordion>
+  <Accordion title="What permissions does a Cashier role typically have?">
+    A Cashier typically has no Manage, Users, or Reports permissions — only the ability to operate the POS terminal. See [Permissions](/setup/permissions) for the full list of available permissions to choose from.
+  </Accordion>
+</AccordionGroup>
 
-**Can I delete a role that is in use?** No. You must reassign all users first, then delete the role.
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Permissions" icon="shield-check" href="/setup/permissions">See what each permission controls</Card>
+  <Card title="Employees" icon="user-check" href="/features/employees">Manage POS staff records and PINs</Card>
+  <Card title="Dashboard Overview" icon="layout-dashboard" href="/getting-started/dashboard-overview">Understand the full dashboard layout</Card>
+  <Card title="Login Problems" icon="life-buoy" href="/troubleshooting/login-problems">Fix sign-in issues</Card>
+</CardGroup>
