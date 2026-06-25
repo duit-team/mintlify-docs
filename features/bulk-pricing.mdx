@@ -11,10 +11,10 @@ description: "Override product prices, names, and availability for a specific co
 
 ## How It Works
 
-A **context** is a named scenario where prices or availability differ from the standard menu. For example:
-- **Delivery** — a higher price to account for delivery platform commission.
-- **Happy Hour** — a lower price on selected drinks from 5pm to 7pm.
-- **Outlet B** — a different price point for a second location.
+A **context** is simply a combination of a **Location** and/or an **Order Mode** you already have set up — there is no separate "Context" list to create or manage. You pick the combination from the dropdowns at the top of the page (the same selector shown in Menu Builder), for example:
+- **Location: Outlet B, Order Mode: All** — a different price point for one branch, across every order mode.
+- **Location: All, Order Mode: Delivery** — a higher price to account for delivery platform commission, at every location.
+- **Location: Outlet B, Order Mode: Delivery** — both combined, for the most specific override.
 
 Each row in the bulk pricing grid represents one product. You can override:
 
@@ -29,6 +29,17 @@ Changes here do **not** affect the base product — only the selected context.
 <Tip>
   Leave a field blank to inherit the default value from the base product. You only need to fill in the fields that differ from the standard menu for this context.
 </Tip>
+
+## Override Priority
+
+You can set up multiple overrides for the same product across different contexts. When an order comes in, the most specific match wins:
+
+1. **Exact match** — a specific Location **and** a specific Order Mode.
+2. **Location-only** — a specific Location, Order Mode set to All.
+3. **Order Mode-only** — Order Mode set to a specific mode, Location set to All.
+4. **Global** — Location and Order Mode both set to All — applies everywhere nothing more specific exists.
+
+If no override matches at all, the base product price, name, and availability are used as-is.
 
 ## Apply Overrides
 
@@ -59,7 +70,7 @@ Use the **Context** dropdown at the top of the Menu Builder to preview how the m
 
 <AccordionGroup>
   <Accordion title="How do I create a new context?">
-    Contexts are created separately in the system configuration. Contact your administrator or look for a Contexts or Price Contexts option in the Manage section to add a new one.
+    You don't create contexts separately — a context is just a Location and/or Order Mode you already have. Pick the combination you want from the dropdowns at the top of the page. If the combination you need isn't available, make sure the Location (under Manage → Locations) or Order Mode (under Manage → Order Modes) exists first.
   </Accordion>
   <Accordion title="If I change the base product price, do bulk pricing overrides update automatically?">
     No. Override prices are stored independently. If you lower a product's base price but a bulk pricing context has an override, the context will continue to use the override price. You must manually update the override if you want it to reflect the new base price.

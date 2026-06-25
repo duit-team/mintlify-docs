@@ -1,0 +1,112 @@
+---
+title: "LHDN Intermediary Setup (Root Admin)"
+description: "Platform-level MyInvois intermediary credentials and signing certificate — set once for the whole platform."
+---
+
+<Warning>
+  This section is for **root administrators** only. Tenant users configure their own supplier TIN under [E-Invoicing](/features/e-invoicing) — they never see or enter the credentials described here.
+</Warning>
+
+The platform submits e-invoices to LHDN MyInvois as a registered **intermediary**, on behalf of every tenant. This means there is **one** set of OAuth credentials and **one** signing certificate for the entire platform — not one per tenant. Root admins configure this once; tenants only need to fill in their own business TIN and location details.
+
+<Frame>
+  <img src="/images/lhdn-admin.png" alt="Root admin LHDN credentials screen showing Client ID, Client Secret, environment selector, and signing certificate upload" />
+</Frame>
+
+## How the Intermediary Model Works
+
+- The **platform** (not the tenant) holds a Client ID and Client Secret issued by LHDN's MyInvois developer portal for the intermediary account.
+- Every e-invoice submitted by any tenant goes through this same intermediary, with an `onbehalfof` header set to that tenant's own TIN.
+- Each **tenant** must separately authorize the intermediary inside their own MyInvois Portal account before submissions succeed (see [Prerequisite](#prerequisite-tenant-must-authorize-the-intermediary) below).
+
+<Tip>
+  If you're wondering why a tenant's E-Invoicing settings page doesn't ask for a Client ID or Client Secret — that's expected. Those credentials live here, at the platform level, and are shared across all tenants.
+</Tip>
+
+## Intermediary Credential Fields
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| **Client ID** | Yes | The intermediary's OAuth Client ID from the MyInvois developer portal |
+| **Client Secret** | Yes | The intermediary's OAuth Client Secret. Stored encrypted — never shown in full again after saving |
+| **Environment** | Yes | `Sandbox` (preprod-api.myinvois.hasil.gov.my) or `Production` (api.myinvois.hasil.gov.my) |
+| **Intermediary TIN** | Yes | The platform's own TIN, registered with LHDN as an intermediary |
+| **Intermediary BRN** | No | The platform's Business Registration Number |
+| **Intermediary Name** | No | Display name for the intermediary, shown in status checks |
+
+## Signing Certificate (for v1.1 / Production)
+
+Uploading a signing certificate switches every tenant's submissions from unsigned UBL v1.0 documents to digitally signed v1.1 documents (XAdES-RSA signature) — **required for production B2B submissions.** Without a certificate, documents are still submitted but as v1.0, which is acceptable for Sandbox testing only.
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| **Signing Certificate (.p12)** | No (required for Production) | The PKCS#12 certificate file issued for e-invoice signing |
+| **Passphrase** | Yes, if a certificate is uploaded | The password protecting the .p12 file. Stored encrypted |
+
+<Warning>
+  Switch the Environment to **Production** only after the certificate is uploaded and you've fully tested in Sandbox. Production submissions are legally binding for every tenant on the platform — there is no "undo" once LHDN validates a document.
+</Warning>
+
+## Setup Steps
+
+<Steps>
+  <Step title="Go to Platform Admin → LHDN Intermediary Setup">
+    Available only to root admin accounts.
+  </Step>
+  <Step title="Enter intermediary credentials">
+    Fill in Client ID, Client Secret, Environment, and Intermediary TIN.
+  </Step>
+  <Step title="Upload the signing certificate (for Production)">
+    Upload the .p12 file and its passphrase. Skip this step if you are only testing in Sandbox.
+  </Step>
+  <Step title="Save and check status">
+    Save the credentials, then use the credential status check to confirm everything is configured correctly before any tenant goes live.
+  </Step>
+</Steps>
+
+## Prerequisite: Tenant Must Authorize the Intermediary
+
+Configuring credentials here is not enough on its own. **Each tenant's MyInvois account must separately grant the intermediary permission** before that tenant's submissions will succeed:
+
+<Steps>
+  <Step title="Tenant logs in to their own MyInvois Portal account">
+    Using their business's own LHDN-registered credentials, not the intermediary's.
+  </Step>
+  <Step title="Go to Settings → ERP / Intermediary">
+    Add the intermediary's TIN (the platform's TIN configured above).
+  </Step>
+  <Step title="Grant two permissions">
+    - **Document - Submit** — required for the platform to submit invoices on the tenant's behalf.
+    - **Document - View** — required for the platform to poll submission status.
+  </Step>
+</Steps>
+
+<Warning>
+  Without this tenant-side authorization, submissions fail with `INTERMEDIARY_PERMISSION_DENIED` (403) or an async validation error like "authenticated TIN and documents TIN is not matching." This is the most common cause of a tenant's e-invoices failing in Production despite credentials being configured correctly here.
+</Warning>
+
+## Frequently Asked Questions
+
+<AccordionGroup>
+  <Accordion title="Do tenants need their own MyInvois Client ID and Client Secret?">
+    No. The platform submits on behalf of every tenant using one shared intermediary Client ID/Secret, configured here at the root level. Tenants only provide their own business TIN and location details under [E-Invoicing](/features/e-invoicing).
+  </Accordion>
+  <Accordion title="A tenant's invoices are stuck as Invalid even though credentials look correct — what should I check?">
+    Confirm the tenant has authorized the intermediary in their own MyInvois Portal (see Prerequisite above) with both "Document - Submit" and "Document - View" permissions. This tenant-side step is separate from the root-level credentials and is the most common cause of submission failures.
+  </Accordion>
+  <Accordion title="What's the difference between v1.0 and v1.1 documents?">
+    v1.0 is unsigned and works in Sandbox. v1.1 adds an XAdES-RSA digital signature using the uploaded signing certificate, and is required for Production B2B submissions. The system automatically uses v1.1 once a signing certificate is configured.
+  </Accordion>
+  <Accordion title="Can different tenants use different environments (one Sandbox, one Production)?">
+    The intermediary credentials and certificate configured here are platform-wide. Each tenant's own E-Invoicing config has its own environment setting, but submissions for tenants set to Production will only succeed once the platform-level certificate and Production-ready credentials are in place.
+  </Accordion>
+</AccordionGroup>
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="E-Invoicing" icon="file-text" href="/features/e-invoicing">Tenant-side TIN and location setup</Card>
+  <Card title="Tenants" icon="building" href="/features/tenants">Manage businesses on the platform</Card>
+  <Card title="Locations" icon="map-pin" href="/features/locations">Configure TIN, BRN, and MSIC per location</Card>
+  <Card title="Root Users" icon="shield" href="/features/root-users">Manage who can access these credentials</Card>
+</CardGroup>

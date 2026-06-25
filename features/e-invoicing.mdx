@@ -9,12 +9,23 @@ The **E-Invoicing** module integrates with **LHDN MyInvois** to generate, submit
   <img src="/images/e_inovoices.png" alt="E-Invoicing documents list showing invoice statuses including Valid, Pending, and Invalid" />
 </Frame>
 
+## How This Works: the Intermediary Model
+
+DuitPOS submits e-invoices on your behalf as a registered **intermediary** with LHDN — you do **not** need your own MyInvois API Client ID or Client Secret. The platform holds one shared set of OAuth credentials and a signing certificate for everyone (set up by the platform admin, not you). As a tenant, you only need to:
+
+1. Authorize the platform's intermediary account inside your own MyInvois Portal.
+2. Fill in your business TIN and location details below.
+
+<Tip>
+  If you were expecting a "Client ID / Client Secret" field in your E-Invoicing settings — there isn't one. That configuration is centralized at the platform level. See [LHDN Intermediary Setup](/features/lhdn-admin) if you're a platform admin setting this up for the first time.
+</Tip>
+
 ## Prerequisites
 
 Before activating e-invoicing, complete the following:
 
 - Your business **TIN** (Tax Identification Number) from LHDN.
-- **MyInvois API credentials** — Client ID and Client Secret from the MyInvois developer portal.
+- **Authorize the intermediary** in your own MyInvois Portal account: go to Settings → ERP/Intermediary, add the platform's intermediary TIN, and grant both **Document - Submit** and **Document - View** permissions. Without this step, every submission will fail even though your settings look correct.
 - Location details completed — **TIN, BRN, MSIC code, and full address** — set under **Manage → Locations → Edit** for each location.
 - At least one tax rate configured under **Manage → Tax**.
 
@@ -25,20 +36,20 @@ Before activating e-invoicing, complete the following:
 ## E-Invoicing Setup
 
 <Steps>
+  <Step title="Authorize the intermediary in MyInvois Portal">
+    Log in to your business's own MyInvois Portal account (not DuitPOS) and add the platform's intermediary TIN under Settings → ERP/Intermediary, granting Document - Submit and Document - View permissions.
+  </Step>
   <Step title="Go to E-Invoicing → Settings">
     Click **Settings** under the E-Invoicing section in the left sidebar.
   </Step>
   <Step title="Select the Environment">
     Choose **Sandbox** for testing or **Production** for live submissions.
   </Step>
-  <Step title="Enter your credentials">
-    Fill in:
-    - **Client ID** — from your MyInvois developer account.
-    - **Client Secret** — from your MyInvois developer account.
-    - **Supplier TIN** — your company's TIN registered with LHDN.
+  <Step title="Enter your Supplier TIN">
+    Fill in your company's **TIN** registered with LHDN. This is the only identity field you need — no API credentials.
   </Step>
   <Step title="Save">
-    Click **Save Settings**. The system will test the connection and confirm if the credentials are valid.
+    Click **Save Settings**.
   </Step>
   <Step title="Update your location details">
     Go to **Manage → Locations → Edit** for each location and fill in the TIN, BRN, MSIC code, and complete address. These are required for every e-invoice submission.
@@ -83,8 +94,11 @@ E-invoices are generated automatically when a ticket is completed and payment is
   <Accordion title="Can I cancel a submitted e-invoice?">
     Yes, but only within the permitted cancellation window defined by LHDN (typically 72 hours after the issue date). Go to the document detail page and click **Cancel**. After the window closes, cancellations must be handled through a credit note.
   </Accordion>
-  <Accordion title="Where do I get my MyInvois Client ID and Client Secret?">
-    Log in to the MyInvois developer portal (provided by LHDN) and create an API application. The Client ID and Client Secret are generated for you. Keep the Client Secret confidential — treat it like a password.
+  <Accordion title="Do I need a MyInvois Client ID and Client Secret?">
+    No. DuitPOS submits on your behalf as a registered intermediary, using one shared set of platform-level credentials. You only need your business TIN and to authorize the intermediary in your own MyInvois Portal account — see Prerequisites above.
+  </Accordion>
+  <Accordion title="My submissions fail with an authorization or permission error even though my TIN is correct — why?">
+    This almost always means the intermediary authorization step was skipped or one of the two required permissions wasn't granted. Log in to your MyInvois Portal account, go to Settings → ERP/Intermediary, and confirm both **Document - Submit** and **Document - View** are granted to the platform's intermediary TIN.
   </Accordion>
 </AccordionGroup>
 
@@ -93,6 +107,6 @@ E-invoices are generated automatically when a ticket is completed and payment is
 <CardGroup cols={2}>
   <Card title="Locations" icon="map-pin" href="/features/locations">Configure TIN, BRN, and MSIC per location</Card>
   <Card title="Tax" icon="percent" href="/features/tax">Set up tax rates for invoice line items</Card>
-  <Card title="Settings" icon="gear" href="/features/settings">Manage global e-invoicing credentials</Card>
+  <Card title="LHDN Intermediary Setup" icon="server" href="/features/lhdn-admin">Platform-level credentials (root admin)</Card>
   <Card title="Reports" icon="chart-bar" href="/reports/overview">View tax collected across all transactions</Card>
 </CardGroup>

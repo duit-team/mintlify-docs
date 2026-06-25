@@ -28,9 +28,12 @@ Permissions are grouped by feature area. They are assigned to **roles**, not ind
 | Tax — Update | Edit existing tax rates |
 | Tax — Delete | Remove tax rates |
 | Order Modes — List / Create / Update / Delete | Dine-in, takeaway, delivery mode setup |
-| Printers — List / Create / Update / Delete | Printer devices and routing rules |
+| Printer Devices — List / Create / Update / Delete | Physical printer setup (IP, port, paper width) |
+| Print Templates — List / Create / Update / Delete | Receipt, kitchen, and label layouts |
+| Printer Routing — List / Create / Update / Delete | Rules deciding which printer/template handles which items |
 | Transaction Types — List / Create / Update / Delete | Sale, void, refund type configuration |
-| Modifiers — List / Create / Update / Delete | Product modifier groups and options |
+| Modifier Groups — List / Create / Update / Delete / Export | Modifier groups, including category/product bulk-mapping |
+| Modifiers — List / Create / Update / Delete / Export | Individual modifier options within a group |
 | Setup — List / Create / Update / Delete | Device profile configuration |
 | Settings — View / Update | Global account settings |
 | Locations — List / Create / Update / Delete | Branch and outlet management |
@@ -40,9 +43,9 @@ Permissions are grouped by feature area. They are assigned to **roles**, not ind
 | Permission | What it allows |
 |-----------|----------------|
 | Categories — List / Create / Update / Delete | Menu category management |
-| Products — List / Create / Update / Delete | Menu product management |
+| Products — List / Create / Update / Delete / Export | Menu product management |
+| Product Overrides — List / Create / Update / Delete | Per-location / per-order-mode price, name, and availability overrides (the "Bulk Pricing" page) |
 | Brands — List / Create / Update / Delete | Product brand management |
-| Bulk Pricing — View / Update | Context-specific price overrides |
 
 ### Users
 
@@ -80,7 +83,24 @@ Permissions are grouped by feature area. They are assigned to **roles**, not ind
 | Permission | What it allows |
 |-----------|----------------|
 | E-Invoicing — View | Access e-invoice documents |
-| E-Invoicing Settings — Update | Configure MyInvois credentials and environment |
+| E-Invoicing Settings — Update | Configure your business TIN and environment (Sandbox/Production) |
+
+### Platform Admin (Root Users Only)
+
+These permissions only apply to **root admin** accounts and are separate from the tenant role system above — a tenant role can never grant access to these.
+
+| Permission | What it allows |
+|-----------|----------------|
+| Tenants — List / Create / Update | View and manage business accounts on the platform |
+| Clear Location Sales | Permanently delete tickets, workdays, and e-invoice documents for one location — see [Tenant Operations](/features/tenant-operations) |
+| Wipe Tenant | Permanently delete and reseed an entire tenant database — see [Tenant Operations](/features/tenant-operations) |
+| Clone Tenant | Create a new tenant by copying an existing one — see [Tenant Operations](/features/tenant-operations) |
+| Database Servers — List / Create / Update / Delete | Manage PostgreSQL servers used to host tenants |
+| Root Users — List / Create / Update / Delete | Manage platform administrator accounts |
+
+<Warning>
+  The LHDN intermediary credential and signing-certificate endpoints (see [LHDN Intermediary Setup](/features/lhdn-admin)) are restricted to root accounts but do not have a separate granular permission — **any active root user can access them.** Keep the root user list small (see [Root Users](/features/root-users)).
+</Warning>
 
 ## How Permissions Work
 
@@ -113,7 +133,7 @@ Permissions are grouped by feature area. They are assigned to **roles**, not ind
 
 <CardGroup cols={2}>
   <Card title="Users & Roles" icon="users" href="/setup/users-and-roles">Create roles and assign them to users</Card>
-  <Card title="Employees" icon="user-check" href="/features/employees">Manage POS staff records</Card>
+  <Card title="Tenant Operations" icon="triangle-alert" href="/features/tenant-operations">Destructive root-only actions</Card>
   <Card title="Dashboard Overview" icon="layout-dashboard" href="/getting-started/dashboard-overview">Understand what each section does</Card>
   <Card title="Login Problems" icon="life-buoy" href="/troubleshooting/login-problems">Fix access issues</Card>
 </CardGroup>

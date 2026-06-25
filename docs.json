@@ -4,17 +4,17 @@
   "name": "DuitPOS Help Center",
   "description": "Setup guides and feature documentation for DuitPOS.",
   "colors": {
-    "primary": "#0D9373",
-    "light": "#07C983",
-    "dark": "#0D9373"
+    "primary": "#000000",
+    "light": "#000000",
+    "dark": "#FFFFFF"
   },
   "favicon": "/favicon.ico",
   "icons": {
     "library": "lucide"
   },
   "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
+    "light": "/logo/duit_logo_black.png",
+    "dark": "/logo/duit_logo_white.png"
   },
   "navbar": {
     "links": [],
@@ -107,8 +107,10 @@
         "icon": "server",
         "pages": [
           "features/tenants",
+          "features/tenant-operations",
           "features/db-servers",
-          "features/root-users"
+          "features/root-users",
+          "features/lhdn-admin"
         ]
       },
       {

@@ -58,13 +58,33 @@ Routing rules decide which items trigger a print job on which printer.
   <Step title="Click New Rule">
     Select:
     - **Printer** — the target device.
-    - **Condition** — match by category, product, or order mode.
-    - **Priority** — higher priority rules take precedence when multiple rules match the same item.
+    - **Template** — optional; if left blank, the device's default template is used.
+    - **Condition** — match by category, product, and/or order mode.
+    - **Priority** — higher priority rules are evaluated first. The first rule whose conditions match wins.
   </Step>
   <Step title="Save">
     Click **Create**. Rules take effect immediately on the next order.
   </Step>
 </Steps>
+
+## Include vs Exclude, and Catch-All Rules
+
+Each rule's category/product/order-mode lists can work two ways, controlled by **Filter Mode**:
+
+| Filter Mode | Behaviour |
+|-------------|-----------|
+| **Include** | The rule matches only items in the selected categories/products/order modes |
+| **Exclude** | The rule matches every item **except** the ones selected — useful for "send everything to the kitchen printer except drinks" |
+
+A rule can also be marked **Catch-All**, meaning it matches every item regardless of its category/product/order-mode conditions. Catch-all rules are typically given the **lowest priority** so they only fire when no more specific rule matches — acting as a default printer for anything not explicitly routed elsewhere.
+
+<Tip>
+  A good pattern: one specific high-priority rule per category that needs special handling (e.g. "Drinks → Bar Printer"), plus one low-priority catch-all rule pointing to your main kitchen printer for everything else.
+</Tip>
+
+## Simulate Routing
+
+Before relying on a new or edited routing rule in production, use **Simulate Routing** on the Printers page to test it without creating a real order. Enter a sample order mode and a list of items (by category and product), and the system shows exactly which printer and template each item would be routed to — based on your current active rules, in priority order. This is the fastest way to confirm a rule change behaves as expected before staff start taking real orders.
 
 ## Troubleshooting
 

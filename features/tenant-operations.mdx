@@ -1,0 +1,97 @@
+---
+title: "Tenant Operations"
+description: "Destructive platform-level actions: clear location sales, wipe a tenant, or clone a tenant."
+---
+
+<Warning>
+  This section is for **root administrators** only, and every action here is **destructive or hard to reverse**. Read each section carefully before clicking anything — there is no undo button for these operations.
+</Warning>
+
+**Tenant Operations** are platform-level actions that operate on an entire tenant's data. They are separate from normal tenant management ([Tenants](/features/tenants)) because they delete or duplicate data at scale rather than editing a single record.
+
+<Frame>
+  <img src="/images/tenant-operations.png" alt="Tenant Operations panel showing Clear Location Sales, Wipe Tenant, and Clone Tenant actions with a confirmation field" />
+</Frame>
+
+## Clear Location Sales
+
+Deletes all **tickets, workday records, and e-invoice documents** for a single location within a tenant. Use this to reset a location's sales history — for example, after a demo, a testing period, or a data-entry mistake — without affecting other locations or the tenant's configuration (products, users, settings).
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| **Location** | Yes | The specific location whose sales data will be deleted. Other locations in the same tenant are unaffected |
+| **Confirm Domain Name** | Yes | Type the tenant's exact domain name to confirm. The request is rejected if this does not match |
+
+<Warning>
+  This permanently deletes tickets, workdays, and e-invoice documents for the selected location. Products, categories, users, and settings are **not** affected. There is no recovery — confirm you have the right location before proceeding.
+</Warning>
+
+## Wipe Tenant
+
+Deletes **everything** in a tenant's database — every table is truncated — and then reseeds the tenant with a fresh default admin user and default program settings, as if the tenant had just been created.
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| **Confirm Domain Name** | Yes | Type the tenant's exact domain name to confirm. The request is rejected if this does not match |
+
+<Tip>
+  After a wipe, the tenant is reseeded with a default tenant admin account so someone can log back in and start configuring from scratch. The exact email is shown in the result returned by the wipe action.
+</Tip>
+
+<Warning>
+  **Wipe Tenant deletes the entire tenant database** — every table, every row, with no exceptions. This is the most destructive action on the platform. Only use it for test/demo tenants, or when a business has explicitly asked for a full reset. Always double-check the domain name before confirming.
+</Warning>
+
+## Clone Tenant
+
+Creates a **new tenant** by copying data from an existing source tenant onto a new database server. This is useful for spinning up a demo environment from a known-good template, or duplicating a configured tenant as a starting point for a new business.
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| **Source Tenant** | Yes | The existing tenant to copy data from |
+| **New Tenant Name** | Yes | Display name for the new tenant. Its domain name is derived automatically from this name |
+| **Database Server** | Yes | Which PostgreSQL server hosts the new tenant's database |
+| **Country Code** | No | Defaults to the source tenant's country code if left blank |
+
+Cloning runs **asynchronously** — the request returns immediately with a queued job status, and the actual copy happens in the background. Check the [Tenants](/features/tenants) list a short while later to see the new tenant once provisioning completes.
+
+<Steps>
+  <Step title="Go to Tenant Operations → Clone Tenant">
+    Select the source tenant you want to copy.
+  </Step>
+  <Step title="Name the new tenant">
+    Enter a name for the new business and pick a target database server.
+  </Step>
+  <Step title="Submit">
+    The clone job is queued. You'll see a job ID and a "queued" status immediately — the copy itself happens in the background.
+  </Step>
+  <Step title="Verify">
+    Check the Tenants list a few minutes later to confirm the new tenant appears and has data.
+  </Step>
+</Steps>
+
+## Frequently Asked Questions
+
+<AccordionGroup>
+  <Accordion title="Why do Clear Location Sales and Wipe Tenant require typing the domain name?">
+    This is a deliberate safety check. Both actions are permanent and cannot be undone, so requiring the exact domain name prevents accidental clicks from destroying the wrong tenant's data — especially when working across multiple browser tabs with different tenants open.
+  </Accordion>
+  <Accordion title="Can I undo a Wipe Tenant or Clear Location Sales action?">
+    No. Both actions permanently delete data with no recovery mechanism in the dashboard. Restoring data would require a database backup taken before the action — if you have automated backups configured at the infrastructure level, that is the only path back.
+  </Accordion>
+  <Accordion title="How long does Clone Tenant take?">
+    It depends on how much data the source tenant has. Small demo tenants clone in seconds; tenants with a large sales history or large catalog may take longer. The job runs in the background — you do not need to keep the page open.
+  </Accordion>
+  <Accordion title="Does cloning a tenant copy sales history too?">
+    Clone Tenant is intended for duplicating a tenant's configuration (catalog, settings, users) as a starting template. Check with your platform team on the exact scope of data copied for your version, especially if you only want the menu/setup and not historical sales.
+  </Accordion>
+</AccordionGroup>
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Tenants" icon="building" href="/features/tenants">Create and manage tenant accounts</Card>
+  <Card title="Database Servers" icon="server" href="/features/db-servers">Manage PostgreSQL servers for tenant hosting</Card>
+  <Card title="Root Users" icon="shield" href="/features/root-users">Manage who can perform these actions</Card>
+  <Card title="Locations" icon="map-pin" href="/features/locations">Manage individual branches within a tenant</Card>
+</CardGroup>

@@ -52,6 +52,10 @@ Click **Edit** on any tenant to update its name or Active status.
 
 Each tenant's data is completely isolated in its own PostgreSQL database. No tenant can access another's data — even if they are on the same database server.
 
+<Warning>
+  Need to clear a location's sales history, fully reset a tenant, or duplicate one as a template? Those are destructive, hard-to-reverse actions handled on a separate page: see [Tenant Operations](/features/tenant-operations). They are not available from the regular tenant edit screen.
+</Warning>
+
 ## Frequently Asked Questions
 
 <AccordionGroup>
@@ -72,8 +76,8 @@ Each tenant's data is completely isolated in its own PostgreSQL database. No ten
 ## Related
 
 <CardGroup cols={2}>
+  <Card title="Tenant Operations" icon="triangle-alert" href="/features/tenant-operations">Clear sales, wipe, or clone a tenant</Card>
   <Card title="Database Servers" icon="server" href="/features/db-servers">Manage PostgreSQL servers for tenant hosting</Card>
   <Card title="Root Users" icon="shield" href="/features/root-users">Manage platform administrator accounts</Card>
   <Card title="Locations" icon="map-pin" href="/features/locations">Manage physical branches within a tenant</Card>
-  <Card title="Settings" icon="gear" href="/features/settings">Configure tenant-level preferences</Card>
 </CardGroup>

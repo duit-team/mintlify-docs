@@ -58,6 +58,26 @@ Each **option** within the group has a name and an optional price adjustment. Wh
 
 Go to **Menu Builder → Products**, open a product, and in the **Modifiers** section select the groups that apply to this product. A product can have multiple modifier groups.
 
+## Bulk-Assign to a Category or Multiple Products
+
+Attaching a group one product at a time is fine for a handful of items, but most menus need a group like "Sugar Level" or "Ice Level" applied to dozens of drinks at once. From the Modifiers page, open a group and use:
+
+| Action | What it does |
+|--------|--------------|
+| **Assign to Category** | Attaches the group to **every product currently in the selected category**. New products added to that category later are not automatically included — re-run this if you add new items |
+| **Assign to Products** | Attaches the group to a hand-picked list of products, regardless of category |
+| **Unassign Product** | Removes the group from a single product, even if it was originally added via a category assignment |
+| **Unassign Category** | Removes the group from every product in that category in one action |
+| **View Mapped Products** | Shows every product currently carrying this group, grouped by category — useful for auditing before making a bulk change |
+
+<Tip>
+  Category assignment is a one-time bulk action, not a live rule. If you assign "Ice Level" to the Drinks category and later add a new drink, you need to either re-run **Assign to Category** or attach the group to that one product individually. The group does not "follow" the category automatically going forward.
+</Tip>
+
+<Tip>
+  You can mix and match: assign a group to a whole category, then use **Unassign Product** to remove it from the one or two items in that category that shouldn't have it (e.g. a bottled drink that doesn't need an Ice Level option).
+</Tip>
+
 ## Common Examples
 
 | Group | Min | Max | Options |
@@ -81,7 +101,10 @@ Go to **Menu Builder → Products**, open a product, and in the **Modifiers** se
     Yes. Each option can have its own price adjustment. You can also set an option to RM 0 if it has no extra cost.
   </Accordion>
   <Accordion title="Why is a modifier group not appearing on the POS for a product?">
-    Make sure you have attached the modifier group to the specific product under Menu Builder → Products → Edit → Modifiers section. Creating a modifier group does not automatically apply it to all products — it must be assigned manually.
+    Make sure the group has been attached to that product — either individually under Menu Builder → Products → Edit → Modifiers, or in bulk via **Assign to Category** / **Assign to Products** on the Modifiers page. Creating a modifier group does not automatically apply it to any product; it must be assigned.
+  </Accordion>
+  <Accordion title="I assigned a group to a category — why doesn't a newly added product in that category have it?">
+    Category assignment runs once, against the products in the category at that moment. It is not a standing rule. After adding new products to the category, either re-run **Assign to Category** on the group, or attach the group to the new product individually.
   </Accordion>
 </AccordionGroup>
 
