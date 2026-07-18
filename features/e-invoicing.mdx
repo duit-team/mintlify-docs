@@ -1,112 +1,140 @@
 ---
-title: "E-Invoicing (LHDN MyInvois)"
-description: "Submit and manage e-invoices through Malaysia's MyInvois platform."
+title: "E-Invoices"
+description: "The day-to-day E-Invoices screen — how a completed sale becomes a claimable, submittable, LHDN-tracked e-invoice."
 ---
 
-The **E-Invoicing** module integrates with **LHDN MyInvois** to generate, submit, and track e-invoices as required under Malaysia's e-invoice mandate. Businesses above the revenue threshold are legally required to submit e-invoices for all transactions via the MyInvois platform.
+The **E-Invoices** page lists every e-invoice document generated across **all** of your locations — one screen to see what's been claimed, what's waiting on you to submit, and what LHDN has accepted or rejected. This page assumes your locations are already set up for e-invoicing (TIN, BRN, MSIC code, consolidation period); if you haven't done that yet, start on [Locations → E-Invoice Tab](/features/locations) first. Everything below is about what happens **after** setup, day to day.
 
 <Frame>
-  <img src="/images/e_inovoices.png" alt="E-Invoicing documents list showing invoice statuses including Valid, Pending, and Invalid" />
+  <img src="/images/e_inovoices.png" alt="E-Invoice documents list showing invoice statuses, filters, and QR/detail row actions" />
 </Frame>
 
-## How This Works: the Intermediary Model
+## How a Sale Becomes an E-Invoice
 
-DuitPOS submits e-invoices on your behalf as a registered **intermediary** with LHDN — you do **not** need your own MyInvois API Client ID or Client Secret. The platform holds one shared set of OAuth credentials and a signing certificate for everyone (set up by the platform admin, not you). As a tenant, you only need to:
-
-1. Authorize the platform's intermediary account inside your own MyInvois Portal.
-2. Fill in your business TIN and location details below.
-
-<Tip>
-  If you were expecting a "Client ID / Client Secret" field in your E-Invoicing settings — there isn't one. That configuration is centralized at the platform level. See [LHDN Intermediary Setup](/features/lhdn-admin) if you're a platform admin setting this up for the first time.
-</Tip>
-
-## Prerequisites
-
-Before activating e-invoicing, complete the following:
-
-- Your business **TIN** (Tax Identification Number) from LHDN.
-- **Authorize the intermediary** in your own MyInvois Portal account: go to Settings → ERP/Intermediary, add the platform's intermediary TIN, and grant both **Document - Submit** and **Document - View** permissions. Without this step, every submission will fail even though your settings look correct.
-- Location details completed — **TIN, BRN, MSIC code, and full address** — set under **Manage → Locations → Edit** for each location.
-- At least one tax rate configured under **Manage → Tax**.
-
-<Warning>
-  Switch from Sandbox to Production only when your integration has been fully tested. Production submissions are legally binding and cannot be reversed without the formal cancellation process. Always test in Sandbox mode first.
-</Warning>
-
-## E-Invoicing Setup
+Every e-invoice moves through the same lifecycle, whether it started at the POS or was typed in by hand on [Submit Invoice](/features/submit-invoice). Understanding this flow before you look at any field on this page is the fastest way to stop being confused by a status you weren't expecting.
 
 <Steps>
-  <Step title="Authorize the intermediary in MyInvois Portal">
-    Log in to your business's own MyInvois Portal account (not DuitPOS) and add the platform's intermediary TIN under Settings → ERP/Intermediary, granting Document - Submit and Document - View permissions.
+  <Step title="A ticket closes → a Draft is created automatically">
+    The moment a POS ticket is closed and paid, DuitPOS silently creates a **Draft** e-invoice behind the scenes and generates a QR code — a "claim link" — that gets printed on the customer's receipt. You don't have to do anything for this to happen. That QR code is valid for **24 hours**.
   </Step>
-  <Step title="Go to E-Invoicing → Settings">
-    Click **Settings** under the E-Invoicing section in the left sidebar.
+  <Step title="The customer optionally claims it within 24 hours">
+    If the customer scans the receipt QR, they land on a public page where they fill in their own name, ID, and (optionally) TIN so the invoice can be issued properly to them — as a person or as a business. If they never scan it, the draft just sits there unclaimed; see [Consolidation Period](/features/locations) for what eventually happens to unclaimed drafts.
   </Step>
-  <Step title="Select the Environment">
-    Choose **Sandbox** for testing or **Production** for live submissions.
+  <Step title="The invoice gets submitted to LHDN">
+    Submission happens one of two ways: automatically, when the monthly-ish consolidation job bundles up unclaimed drafts (configured per location — see [Locations](/features/locations)), or manually, right here on this page, by opening a document and clicking **Submit to LHDN** (or bulk-submitting a whole location's drafts from that location's Invoices tab).
   </Step>
-  <Step title="Enter your Supplier TIN">
-    Fill in your company's **TIN** registered with LHDN. This is the only identity field you need — no API credentials.
+  <Step title="DuitPOS checks LHDN for a status update every few minutes">
+    Once submitted, a background job polls LHDN roughly every 3 minutes until the document reaches a final state. It flips automatically to **Valid** (accepted) or **Invalid**/**Rejected** — you never need to manually refresh anything to see the outcome.
   </Step>
-  <Step title="Save">
-    Click **Save Settings**.
+  <Step title="A Valid invoice can be cancelled within 72 hours">
+    If a submitted invoice turns out to be wrong, open it and click **Cancel Invoice** — you'll be asked to type a reason first. LHDN only allows cancellation within roughly 72 hours of the original submission; after that window closes, LHDN itself will refuse it and the fix has to go through a formal credit note process instead.
   </Step>
-  <Step title="Update your location details">
-    Go to **Manage → Locations → Edit** for each location and fill in the TIN, BRN, MSIC code, and complete address. These are required for every e-invoice submission.
+  <Step title="Only non-final documents can be permanently deleted">
+    Documents still in **Draft**, **Cancelled**, **Invalid**, or **Rejected** status can be permanently purged. Anything that reached **Submitted** or **Valid** can never be deleted — only cancelled — because LHDN already has a record of it.
   </Step>
 </Steps>
 
-## E-Invoice Documents
+## Invoice Statuses
 
-The **Documents** page shows all e-invoices submitted or pending submission. For each invoice you can:
+| Status | What it means |
+|--------|----------------|
+| **Draft** | Generated automatically when the ticket closed. Not yet claimed by the customer, not yet submitted to LHDN. |
+| **Pending** | The customer claimed it (filled in their buyer details) but it hasn't been submitted to LHDN yet. |
+| **Submitted** | Sent to LHDN and waiting for a response — this is a transient state; the poller checks back every few minutes. |
+| **Valid** | LHDN accepted and validated the invoice. This is the end state for a normal, successful invoice. |
+| **Invalid** | LHDN rejected the invoice. Open the document detail to see the exact error message and reason. |
+| **Rejected** | Same idea as Invalid — LHDN refused to accept the submission; check the error detail for why. |
+| **Cancelled** | Cancelled after submission, using the formal cancellation flow and a typed reason (only possible within the LHDN cancellation window). |
 
-- **View details** — see line items, tax breakdown, and submission status.
-- **View QR** — display or print the QR code for the e-invoice (required to be shown to customers).
-- **View on MyInvois** — open the document directly in the LHDN portal for official verification.
+<Warning>
+  **Receipt QR Base URL matters more than it looks.** This is the public web address DuitPOS glues the tenant domain and invoice ID onto when it builds the claim-link QR printed on every receipt. If it's set wrong — a typo, an old domain, `http` instead of `https` — every printed QR code silently points to a broken link, and customers won't be able to claim their e-invoice at all until you fix it and the next batch of receipts print correctly. There's no error shown anywhere in the app when this happens; the only symptom is customers telling you the link doesn't work.
+</Warning>
 
-### Invoice Statuses
+## The E-Invoice Documents Screen
 
-| Status | Meaning |
-|--------|---------|
-| **Pending** | Generated but not yet submitted to MyInvois |
-| **Submitted** | Sent to MyInvois and awaiting validation (usually takes a few seconds) |
-| **Valid** | Accepted and validated by LHDN |
-| **Invalid** | Rejected by LHDN — view the error details to understand the reason |
-| **Cancelled** | Cancelled after submission using the formal cancellation process |
+### Receipt QR Base URL
 
-## Submitting an Invoice
+| Field | Description |
+|-------|--------------|
+| **Receipt QR Base URL** | The base address used to build the claim-link QR printed on receipts, e.g. `https://app.duitpos.com`. Your tenant domain and the invoice's local ID are appended automatically — don't include them yourself. |
 
-E-invoices are generated automatically when a ticket is completed and payment is received. If a submission fails due to a network issue or credential problem, it will be retried automatically. You can also trigger a manual resubmit from the Documents page by clicking **Resubmit** on any Pending or Invalid invoice.
+### Run Consolidation
+
+A **Run Consolidation** button appears at the top of the page, but only if LHDN consolidation is turned on for your tenant. Clicking it triggers the monthly bundling job immediately instead of waiting for its automatic schedule — useful for testing your setup, or for clearing a backlog of unclaimed drafts before month-end without waiting for the scheduled run.
+
+### Filters
+
+| Filter | What it does |
+|--------|----------------|
+| **Date range** (From / To) | Narrows the list to invoices created within a specific window. |
+| **Status** | Filters by any of the seven statuses above. |
+| **Branch/Location** | Only shown if your account has more than one location — filters to a single branch. |
+| **Search** | Matches against the invoice number. |
+
+### Table columns
+
+| Column | Shows |
+|--------|--------|
+| **Invoice No.** | The invoice number, with a **Cons.** badge for consolidated invoices or a **B2C** badge for claimed personal invoices, plus the internal local ID underneath. |
+| **Provider** | The e-invoicing provider handling this document (`lhdn` for Malaysia). |
+| **Status** | The status badge — see the table above. |
+| **Total** | The invoice's grand total, in its currency. |
+| **Date** | When the document was created. |
+
+### Row actions
+
+| Action | What it does |
+|--------|----------------|
+| **View details** | Opens the detail modal — amounts breakdown, buyer info (if claimed), error info (if Invalid/Rejected), and Submit/Cancel actions. |
+| **View QR** | Opens the claim QR — the same one printed on the receipt — plus a link to view it on the MyInvois portal. |
+| **View source documents** | Consolidated invoices only. Shows every individual receipt that was bundled into this one consolidated invoice, with its own status and total. |
+| **View on MyInvois** | Opens the document directly on LHDN's government MyInvois portal in a new tab, for official verification. |
+
+## How Customers Claim Their E-Invoice
+
+This part of the flow is customer-facing and needs no login — but it's worth understanding here because it's the main way individual invoices leave **Draft** status without you doing anything.
+
+<Steps>
+  <Step title="Customer scans the receipt QR">
+    The QR printed on the receipt links straight to a public claim page for that specific invoice.
+  </Step>
+  <Step title="They fill in their own details">
+    The form asks for **Nationality** (a Malaysian/Foreigner toggle that changes which ID types are offered), **Identification Type**, **Identification No.**, **TIN** (optional — leave blank if they don't have one), **Full Name**, **Mobile Number**, **Email Address**, **Address Line 1**, **City**, **Postcode**, and **State**.
+  </Step>
+  <Step title="They submit and see a confirmation screen">
+    A "Request Submitted!" confirmation explains that validation typically takes a few minutes and that they can view the finished e-invoice on the MyInvois portal once LHDN accepts it.
+  </Step>
+</Steps>
 
 <Tip>
-  If invoices are consistently showing as Invalid, check the error message shown on the document detail page. Common reasons include missing or incorrect TIN, invalid MSIC code, or mismatched tax amounts. Fix the issue in Settings or Locations and resubmit.
+  The claim link **expires after 24 hours**. If a customer misses the window, the draft doesn't disappear — it either rolls into the next automatic consolidation batch, or your staff can manually issue a proper invoice for that customer using [Submit Invoice](/features/submit-invoice) instead.
 </Tip>
 
 ## Frequently Asked Questions
 
 <AccordionGroup>
-  <Accordion title="When does my business need to start submitting e-invoices?">
-    Malaysia's LHDN e-invoice mandate is being rolled out in phases based on annual revenue. Check the LHDN website or consult your accountant for the applicable date for your business size.
+  <Accordion title="What if a customer doesn't scan the QR?">
+    Nothing breaks — the e-invoice just stays in **Draft** status, unclaimed. Depending on your location's consolidation setting, it will eventually be bundled into a consolidated invoice automatically, or your staff can manually submit it (or create a fresh invoice for that customer) via [Submit Invoice](/features/submit-invoice).
   </Accordion>
-  <Accordion title="What happens if an e-invoice submission fails?">
-    Failed submissions are retried automatically up to three times. If all retries fail, the invoice moves to **Invalid** status with an error message. Fix the underlying issue (e.g. incorrect credentials or missing location details) and click **Resubmit**.
+  <Accordion title="Can I cancel an invoice after submitting?">
+    Yes, but only within LHDN's cancellation window — roughly 72 hours after the original submission. Open the document detail, click **Cancel Invoice**, and type a reason. After the window closes, LHDN no longer allows cancellation and the correction has to go through a formal credit note instead.
   </Accordion>
-  <Accordion title="Can I cancel a submitted e-invoice?">
-    Yes, but only within the permitted cancellation window defined by LHDN (typically 72 hours after the issue date). Go to the document detail page and click **Cancel**. After the window closes, cancellations must be handled through a credit note.
+  <Accordion title="Why does an invoice show Invalid?">
+    Open the document's detail view — the exact error message and code from LHDN is shown there. Common causes are a missing or malformed TIN, an incorrect MSIC code on the location, or a tax amount that doesn't reconcile with the line items. Fix the underlying data and resubmit.
   </Accordion>
-  <Accordion title="Do I need a MyInvois Client ID and Client Secret?">
-    No. DuitPOS submits on your behalf as a registered intermediary, using one shared set of platform-level credentials. You only need your business TIN and to authorize the intermediary in your own MyInvois Portal account — see Prerequisites above.
+  <Accordion title="What's the difference between Draft and Pending?">
+    Both are pre-submission states. **Draft** means nobody has claimed it yet — it's exactly what the POS generated. **Pending** means the customer scanned the QR and filled in their buyer details, but it hasn't been sent to LHDN yet. Either one can be submitted manually or picked up by consolidation.
   </Accordion>
-  <Accordion title="My submissions fail with an authorization or permission error even though my TIN is correct — why?">
-    This almost always means the intermediary authorization step was skipped or one of the two required permissions wasn't granted. Log in to your MyInvois Portal account, go to Settings → ERP/Intermediary, and confirm both **Document - Submit** and **Document - View** are granted to the platform's intermediary TIN.
+  <Accordion title="Can I permanently delete an e-invoice?">
+    Only if it's in Draft, Cancelled, Invalid, or Rejected status — this is called "purging" and is done from the location's own Invoices tab, not this global list. Submitted or Valid invoices can never be deleted, only cancelled, because LHDN already has an official record of them.
   </Accordion>
 </AccordionGroup>
 
 ## Related
 
 <CardGroup cols={2}>
-  <Card title="Locations" icon="map-pin" href="/features/locations">Configure TIN, BRN, and MSIC per location</Card>
-  <Card title="Tax" icon="percent" href="/features/tax">Set up tax rates for invoice line items</Card>
-  <Card title="LHDN Intermediary Setup" icon="server" href="/features/lhdn-admin">Platform-level credentials (root admin)</Card>
-  <Card title="Reports" icon="chart-bar" href="/reports/overview">View tax collected across all transactions</Card>
+  <Card title="Submit Invoice" icon="pen-to-square" href="/features/submit-invoice">Manually create an e-invoice for a walk-in or B2B customer</Card>
+  <Card title="Locations" icon="map-pin" href="/features/locations">Configure TIN, BRN, MSIC, and consolidation period per location</Card>
+  <Card title="LHDN Intermediary Setup" icon="server" href="/features/lhdn-admin">Platform-level credentials and signing certificate (root admin)</Card>
+  <Card title="Tax" icon="percent" href="/features/tax">Configure the tax rates that appear on invoice line items</Card>
 </CardGroup>

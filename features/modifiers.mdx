@@ -3,80 +3,128 @@ title: "Modifiers"
 description: "Set up product options like size, extras, or cooking preferences."
 ---
 
-**Modifiers** let customers customise a product — for example, choose a size, add toppings, or specify cooking level. They are organised into **Modifier Groups** (e.g. "Size", "Add-ons") and then attached to individual products.
+**Modifiers** let customers customise a product — for example, choose a size, add toppings, or specify cooking level. Modifiers follow a three-layer structure: you create a **Modifier Group** (e.g. "Cheese Options"), add **Modifier Items** to it (e.g. "No Cheese", "Regular Cheddar", "Extra Cheddar" with prices), and then create **Mappings** to link that group to products or categories so those options appear during checkout.
 
 <Frame>
   <img src="/images/modifiers.png" alt="Modifiers screen showing a Size group with Small, Medium, and Large options" />
 </Frame>
 
-## How Modifier Groups Work
+## The Three-Layer Model
 
-A **Modifier Group** is a named collection of options. The group defines:
-- How many options a customer must pick (Min selections).
-- How many options they are allowed to pick (Max selections).
+Understanding the structure helps you scale your menu efficiently:
 
-Each **option** within the group has a name and an optional price adjustment. When a customer selects an option on the POS or online ordering page, the price adjustment is added to the product's base price.
+1. **Modifier Group** — a container and policy (e.g. "Cheese Options" with Min 1, Max 1 selection)
+2. **Modifier Items** — individual options inside the group (e.g. "No Cheese", "Regular Cheddar", "Extra Cheddar +RM 0.50"), each with its own price and settings
+3. **Mappings** — rules that attach the group to products or categories, so those items show on the POS checkout screen
 
-**Example:**
-- Group: Size (Min: 1, Max: 1 — customer must pick exactly one size)
-  - Small — no extra charge
-  - Medium — +RM 1.00
-  - Large — +RM 2.00
+**Why this matters:** A single group like "Cheese Options" can be attached to dozens of products (burgers, pizzas, sandwiches) without duplication. Edit the group once, and the change applies everywhere it's mapped.
 
-## Modifier Group Fields
+**Example flow:**
+- Create group: "Cheese Options" (Min 1, Max 1 — customer picks exactly one)
+- Add items: "No Cheese" (RM 0), "Regular Cheddar" (RM 0), "Extra Cheddar" (+RM 0.50)
+- Map to category: "Burgers" — now every burger in your menu offers these cheese choices
+- Map to specific product: "Deluxe Pizza" (on top of any category mapping) — now pizza gets the group too
+
+## Modifier Groups
+
+A **Modifier Group** is a named collection of options. The group defines how many options a customer must or can pick from.
 
 | Field | Required | Description |
 |-------|----------|-------------|
-| **Name** | Yes | The group label shown to customers, e.g. `Size`, `Add-ons`, `Cooking Level` |
-| **Min Selections** | Yes | Minimum number of options the customer must choose. Set to `1` to make the group required |
-| **Max Selections** | Yes | Maximum number of options allowed. Set to `1` for single-select; higher numbers for multi-select |
-| **Option Name** | Yes (per option) | The name of each choice, e.g. `Small`, `Extra Cheese`, `Well Done` |
-| **Option Price** | No | Additional charge for this option. Positive numbers add to the price; use `0` for no extra charge |
+| **Name** | Yes | The group label shown to customers (e.g. `Size`, `Add-ons`, `Cooking Level`, `Cheese Options`) |
+| **Description** | No | Internal notes (not shown to customers) — useful for staff reference |
+| **Min Selections** | Yes | Minimum number of items the customer must choose. Set to `1` to make the group required; `0` for optional |
+| **Max Selections** | Yes | Maximum number of items allowed. Set to `1` for single-select (e.g. Size); higher numbers for multi-select (e.g. Add-ons) |
+| **Active** | Yes | Toggle whether this group is available for assignment. Inactive groups remain on existing products but can't be attached to new ones |
 
 <Tip>
-  Set **Min Selections to 1** for groups where a choice is required (like Size). Set it to **0** for optional add-ons. This controls whether the POS will prompt staff to pick an option before completing the order.
+  Set **Min Selections to 1** for groups where a choice is required (like Size). Set it to **0** for optional add-ons. This controls whether the POS will prompt staff to pick options before completing the order.
 </Tip>
+
+## Modifier Items
+
+Once you create a group, the **Modifier Items** tab shows a CRUD table of individual options inside that group. Each item is a choice a customer can make.
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| **Name** | Yes | The option label (e.g. `Small`, `Extra Cheese`, `Well Done`, `Salsa`) |
+| **Price Adjustment** | No | Additional charge for this option. Positive numbers add to the product's base price; `0` means no extra cost |
+| **Max Items** | No | Maximum quantity of this one specific option a customer can add to a single product order (rarely used; typically leave blank or set to `1`). This is different from the group's Max Selections |
+| **Active** | Yes | Toggle whether this item is available for selection. Inactive items don't show on the POS menu but remain in the group's history |
+
+**Example items for a "Size" group (Min 1, Max 1):**
+- Small — RM 0
+- Medium — RM 1.00
+- Large — RM 2.00
+
+**Example items for an "Add-ons" group (Min 0, Max 5):**
+- Extra Cheese — RM 0.50
+- Bacon — RM 1.50
+- Avocado — RM 2.00
 
 ## Create a Modifier Group
 
 <Steps>
-  <Step title="Go to Manage → Modifiers">
-    Click **Modifiers** in the left sidebar.
+  <Step title="Go to Catalog → Modifiers">
+    Click **Modifiers** in the left sidebar under Catalog.
   </Step>
   <Step title="Click New Group">
-    Enter the group name (e.g. `Size` or `Add-ons`) and set Min and Max selections.
+    Enter the group name (e.g. `Size` or `Cheese Options`), optional description, and set Min and Max selections.
   </Step>
-  <Step title="Add Options">
-    Click **Add Option** inside the group. Enter each option's name and any price adjustment.
+  <Step title="Save and add items">
+    Click **Create Group**. The group detail page opens, and you can see the **Modifier Items** tab. Click **Add Item** to add each option with its price adjustment.
   </Step>
-  <Step title="Save">
-    Click **Create Group**.
+  <Step title="Save items">
+    Click **Save** for each item. Once your items are ready, move to the **Mappings** tab to assign the group to products or categories.
   </Step>
 </Steps>
 
-## Attach to a Product
+## Mappings
 
-Go to **Menu Builder → Products**, open a product, and in the **Modifiers** section select the groups that apply to this product. A product can have multiple modifier groups.
+After creating a Modifier Group and its items, you need to attach (map) that group to products or categories so it appears on the POS checkout screen. The **Mappings** tab shows how many products currently have this group and lets you bulk-assign or remove it.
 
-## Bulk-Assign to a Category or Multiple Products
+### Assign by Category
 
-Attaching a group one product at a time is fine for a handful of items, but most menus need a group like "Sugar Level" or "Ice Level" applied to dozens of drinks at once. From the Modifiers page, open a group and use:
+Assign this modifier group to **every product currently in a selected category** in one action.
+
+**How it works:**
+- Choose a category (e.g. "Burgers")
+- The group is attached to all existing products in that category at that moment
+- New products added to the category later are **not** automatically included — this is a one-time bulk action, not a live rule
+- If you add new burgers to your menu, re-run this action or attach the group to individual products
+
+**When to use:** Most modifiers fall here. E.g. assign "Cheese Options" to "Burgers", "Cooking Level" to "Steaks", "Sugar Level" to "Beverages".
+
+### Assign by Product
+
+Assign this modifier group to a hand-picked list of specific products, regardless of their category.
+
+**How it works:**
+- Search or multi-select individual products
+- The group is attached only to those chosen products
+- Useful for fine-grained control when some products in a category shouldn't have the group (e.g. "Vodka Sauce" modifier group applied only to select pasta items, not all pastas)
+
+**When to use:** When you want an exceptions list or when a modifier applies to products scattered across multiple categories.
+
+### Managing Mappings
 
 | Action | What it does |
 |--------|--------------|
-| **Assign to Category** | Attaches the group to **every product currently in the selected category**. New products added to that category later are not automatically included — re-run this if you add new items |
-| **Assign to Products** | Attaches the group to a hand-picked list of products, regardless of category |
-| **Unassign Product** | Removes the group from a single product, even if it was originally added via a category assignment |
+| **View Mapped Products** | Shows every product currently carrying this group, grouped by category. Useful for auditing before making a bulk change or to confirm a previous assignment worked |
+| **Unassign Product** | Removes the group from a single product, even if it was originally added via a category assignment. Handy for exceptions (e.g. a bottled drink that shouldn't have "Ice Level") |
 | **Unassign Category** | Removes the group from every product in that category in one action |
-| **View Mapped Products** | Shows every product currently carrying this group, grouped by category — useful for auditing before making a bulk change |
 
 <Tip>
-  Category assignment is a one-time bulk action, not a live rule. If you assign "Ice Level" to the Drinks category and later add a new drink, you need to either re-run **Assign to Category** or attach the group to that one product individually. The group does not "follow" the category automatically going forward.
+  Category assignment is a one-time bulk action, not a live rule. If you assign "Ice Level" to the Drinks category and later add a new drink, you need to either re-run **Assign to Category** or attach the group to that one product individually.
 </Tip>
 
 <Tip>
-  You can mix and match: assign a group to a whole category, then use **Unassign Product** to remove it from the one or two items in that category that shouldn't have it (e.g. a bottled drink that doesn't need an Ice Level option).
+  You can mix and match: assign a group to a whole category, then use **Unassign Product** to remove it from the one or two items that shouldn't have it. The same group can be assigned via both category and individual products — the system deduplicates, so you won't see the group twice on a product.
 </Tip>
+
+<Warning>
+  Bulk assignments in the Mappings tab write to many products at once. Review the category or product list carefully before confirming, especially when using **Unassign Category**.
+</Warning>
 
 ## Common Examples
 
@@ -94,14 +142,20 @@ Attaching a group one product at a time is fine for a handful of items, but most
   <Accordion title="What is the difference between required and optional modifiers?">
     If **Min Selections** is `1` or more, the modifier group is required — staff cannot complete the order without making a selection. If Min is `0`, the group is optional and staff can skip it. Use required modifiers for choices like Size where there is no sensible default.
   </Accordion>
+  <Accordion title="What's the difference between 'Max Selections' on the group and 'Max Items' on an individual modifier?">
+    **Max Selections** (on the group) — the maximum number of *different items* the customer can pick from this group. E.g. if Max Selections = 3 in an "Add-ons" group with items [Cheese, Bacon, Avocado], the customer can pick any combination up to 3 items: Cheese + Bacon, or Bacon + Avocado + Cheese, etc. **Max Items** (on an individual item) — the maximum quantity of that *one specific option* they can add. E.g. if Bacon has Max Items = 2, the customer can add Bacon twice in a single order, but that counts as 2 toward the group's Max Selections. In most cases, Max Items is left blank (defaults to unlimited quantity of that item, subject to the group's Max Selections limit). It's rarely needed except for special cases (e.g. limiting a premium topping to 1 per order).
+  </Accordion>
   <Accordion title="Can I use the same modifier group on multiple products?">
-    Yes. Create the group once and attach it to as many products as you like. If you update the group (e.g. change a price), the change applies to all products that use it.
+    Yes. Create the group once and attach it to as many products as you like. If you update the group (e.g. change a price or add a new item), the change applies to all products that use it.
   </Accordion>
   <Accordion title="Can modifier options have different prices?">
     Yes. Each option can have its own price adjustment. You can also set an option to RM 0 if it has no extra cost.
   </Accordion>
+  <Accordion title="Can I assign a modifier group to just one product?">
+    Yes. Use the **Assign by Product** mode in the Mappings tab to hand-pick specific products, or go to **Menu Builder → Products → Edit → Modifiers** and select the group for that one product. Both approaches work for single-product assignments.
+  </Accordion>
   <Accordion title="Why is a modifier group not appearing on the POS for a product?">
-    Make sure the group has been attached to that product — either individually under Menu Builder → Products → Edit → Modifiers, or in bulk via **Assign to Category** / **Assign to Products** on the Modifiers page. Creating a modifier group does not automatically apply it to any product; it must be assigned.
+    Make sure the group has been attached to that product — either individually under Menu Builder → Products → Edit → Modifiers, or in bulk via **Assign to Category** / **Assign by Product** in the Mappings tab on the Modifiers page. Creating a modifier group does not automatically apply it to any product; it must be mapped.
   </Accordion>
   <Accordion title="I assigned a group to a category — why doesn't a newly added product in that category have it?">
     Category assignment runs once, against the products in the category at that moment. It is not a standing rule. After adding new products to the category, either re-run **Assign to Category** on the group, or attach the group to the new product individually.
@@ -111,8 +165,8 @@ Attaching a group one product at a time is fine for a handful of items, but most
 ## Related
 
 <CardGroup cols={2}>
-  <Card title="Products" icon="box" href="/features/products">Attach modifier groups to menu items</Card>
-  <Card title="Menu Builder" icon="utensils" href="/features/menu-builder">Manage your full menu in one place</Card>
-  <Card title="Categories" icon="folder" href="/features/categories">Organise products into categories</Card>
-  <Card title="Bulk Pricing" icon="tag" href="/features/bulk-pricing">Override prices per context</Card>
+  <Card title="Products" icon="box" href="/features/products">Attach modifier groups to individual products via the Modifiers tab on product edit</Card>
+  <Card title="Menu Builder" icon="utensils" href="/features/menu-builder">Drag-and-drop 3-panel menu layout with inline modifier assignment on product detail</Card>
+  <Card title="Categories" icon="folder" href="/features/categories">Organise products into categories, then bulk-assign modifier groups to entire categories</Card>
+  <Card title="Bulk Pricing" icon="tag" href="/features/bulk-pricing">Override prices and availability per context (separate from modifier price adjustments)</Card>
 </CardGroup>

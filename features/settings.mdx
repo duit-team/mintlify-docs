@@ -3,73 +3,221 @@ title: "Settings"
 description: "Configure tenant-wide preferences for your account."
 ---
 
-**Settings** contains global configuration that applies across your entire account. Changes here affect all locations, all users, and all POS terminals under your tenant.
+**Settings** contains system-wide configuration for your DuitPOS account. Changes here affect all locations, all users, and all POS terminals under your tenant. Each tab controls a different aspect of your business:
 
 <Frame>
-  <img src="/images/settings.png" alt="Settings page showing General, Notification, and Currency sections" />
+  <img src="/images/settings.png" alt="Settings page with General, Denomination, Plan, and Security tabs" />
 </Frame>
 
-## Settings Sections
+## Settings Overview
 
-| Section | What it controls |
-|---------|-----------------|
-| **General** | Business name, logo, currency, timezone, and receipt footer text |
-| **Notifications** | Email and in-app alerts for key business events |
-| **Receipt** | Default receipt footer, paper size defaults, and header format |
-| **Online Ordering** | Welcome message, operating hours, and logo for the customer-facing QR ordering page |
-| **E-Invoicing** | MyInvois environment (Sandbox/Production), Client ID, Client Secret, and Supplier TIN |
+| Tab | What it controls |
+|-----|-----------------|
+| **General** | Timezone, date/time format, currency, language, and business defaults |
+| **Denomination** | Cash drawer denominations for staff count-up during cash reconciliation |
+| **Plan** | Your current subscription plan, billing status, seat usage, and upgrade options |
+| **Security** | Password management for your account |
 
-## General Settings
+---
 
-| Setting | Description |
-|---------|-------------|
-| **Business Name** | Appears on receipts, e-invoices, and the customer-facing online menu |
-| **Logo** | Displayed on receipts (if your printer supports image printing) and the online ordering page |
-| **Currency** | The currency used for all prices, reports, and receipts |
-| **Timezone** | Controls report date grouping, scheduled jobs, and timestamp display |
-| **Receipt Footer** | Custom text printed at the bottom of every receipt (e.g. "Thank you for dining with us!") |
+## General Tab
 
-## Notification Settings
+Configure your account's core preferences. These settings apply globally across all locations.
 
-Configure email or in-app alerts for key events:
-- **Daily Sales Summary** — receive a summary of the day's revenue at a set time.
-- **Failed Payments** — get an alert whenever a payment fails online.
-- **Import Completion** — be notified when a bulk import finishes (with a success or error count).
+### Timezone
+- **Why it matters**: Your timezone determines when daily reports roll over (at midnight in your timezone). If you set the wrong timezone, your daily sales summaries will group sales from the wrong calendar day.
+- **How to set**: Use the searchable combobox to find your IANA timezone (e.g. "Asia/Kuala_Lumpur"). The dropdown shows UTC offset (e.g. UTC+8).
+- **Default**: Auto-detected from your device on first login.
+
+### Date Format
+- **Why it matters**: Affects how dates display on receipts, reports, and the UI.
+- **Options**:
+  - **DD/MM/YYYY** — 15/07/2024 (common in Malaysia and Europe)
+  - **MM/DD/YYYY** — 07/15/2024 (common in the USA)
+  - **YYYY-MM-DD** — 2024-07-15 (ISO standard, good for sorting and logs)
+- **Tip**: Set once, then use consistently across all locations for staff clarity.
+
+### Time Format
+- **Why it matters**: Determines whether times on receipts and reports show as 24-hour (HH:MM) or 12-hour (HH:MM AM/PM) format.
+- **Options**:
+  - **24-hour** — 14:30 (no AM/PM suffix; common in Malaysia)
+  - **12-hour** — 02:30 PM (with AM/PM suffix)
+
+### Currency Code & Symbol
+- **Why it matters**: Affects how prices display on receipts, reports, and the POS screen.
+- **Examples**:
+  - MYR (Malaysia) / RM
+  - SGD (Singapore) / S$
+  - USD (USA) / $
+  - THB (Thailand) / ฿
+- **Warning** — Changing the currency does not convert existing prices. All product prices are stored as raw numbers — changing from MYR to USD will display the same prices in USD. You must manually update all product prices if you switch currencies.
+
+### Language
+- **Why it matters**: Sets the UI language for all users on the account.
+- **Options**:
+  - **English** — Default; all features available
+  - **Bahasa Malaysia** — Complete Malaysian translation
+  - **中文 (Chinese)** — Simplified Chinese translation
+- **Note**: Language is account-wide. Individual users cannot override this setting.
+
+<Tip>
+  Set **Timezone** correctly before your first day of trading. Reports group sales by midnight in your configured timezone — a wrong timezone will make daily summaries inaccurate forever.
+</Tip>
+
+---
+
+## Denomination Tab
+
+Set up the cash denominations that match your actual cash drawer. This helps staff count up accurately during reconciliation.
+
+### What are denominations?
+Denominations are the coin and note values in your drawer:
+- **Notes**: $1, $5, $10, $50, $100 (or equivalent in your currency)
+- **Coins**: $0.05, $0.10, $0.20, $0.50 (or equivalent)
+
+### How to add denominations
+1. Click the **+ Add Denomination** button.
+2. Enter the **Value** (e.g. `10` for a $10 note).
+3. Select the **Type**: 
+   - **Note** — for banknotes
+   - **Coin** — for coins
+4. Click **Save**.
+
+### Why this matters
+When staff use the cash drawer reconciliation screen, they'll count how many of each denomination they have. DuitPOS will automatically calculate the total cash amount by multiplying count × value × type. Without accurate denominations, staff have to manually convert everything to a base unit, which is error-prone.
+
+### Example
+If your drawer has:
+- 2× $100 notes
+- 5× $50 notes
+- 3× $10 notes
+- 10× $1 notes
+- 25× $0.50 coins
+
+Set up these 5 denominations on this tab, and staff can simply enter the count for each during reconciliation.
+
+<Tip>
+  Add denominations that match your actual cash drawer layout. If you accept both MYR and SGD, create separate denominations for each currency's notes and coins.
+</Tip>
+
+---
+
+## Plan Tab
+
+Your plan determines which features are available on your account and how many users or locations you can have.
+
+### Plan Information
+
+| Field | What it shows |
+|-------|--------------|
+| **Current Plan** | Your subscription tier (e.g. Free, Pro, Enterprise) |
+| **Status** | Active, Inactive, Cancelled, or Expired |
+| **Expiry Date** | When your current plan renews or expires |
+| **Users Used / Limit** | How many team members are on your account (e.g. "3 of 5 users") |
+| **Locations Used / Limit** | How many store locations you operate (e.g. "1 of 3 locations") |
+
+### Plan Features
+Your plan controls access to:
+- Advanced reporting and analytics
+- Online ordering (QR code and digital menu)
+- E-invoicing (LHDN MyInvois integration)
+- Payment processor integrations (Stripe, Share Commerce)
+- Multi-location management
+- Unlimited products and inventory
+- Priority support
+
+### How to upgrade
+If you've reached your seat or location limit, or need advanced features:
+
+1. Click **Contact Support** or **Upgrade Plan** button on this tab.
+2. Specify which plan features you need (more users, more locations, advanced reports, etc.).
+3. Our team will send you a quote and help you onboard to the new plan.
+
+You can also email support@duitpos.com or call your account manager directly.
+
+### Understanding your usage
+- **Users**: Count of active team member accounts on your account. Archived or disabled users do not count toward the limit.
+- **Locations**: Count of separate store locations you've created under Manage → Locations.
+
+If your usage reaches the plan limit, new users or locations will be rejected until you upgrade.
+
+<Info>
+  Your plan is billed annually or monthly, depending on your agreement. Check the expiry date to know when your next billing cycle begins.
+</Info>
+
+---
+
+## Security Tab
+
+Manage your account password and authentication settings.
+
+### Change Password
+Update the password for your currently logged-in user account.
+
+1. Enter your **Current Password** (to verify it's really you).
+2. Enter your **New Password** (minimum 8 characters, must include uppercase, lowercase, number, and special character).
+3. Confirm the **New Password** by typing it again.
+4. Click **Save**.
+
+Your password will be updated immediately. You'll stay logged in; no need to re-authenticate.
+
+### Password Requirements
+- Minimum 8 characters
+- At least one uppercase letter (A–Z)
+- At least one lowercase letter (a–z)
+- At least one number (0–9)
+- At least one special character (!@#$%^&*)
+
+### Important Notes
+- This changes **only your password**, not global or team-wide passwords.
+- If you forget your password, use the login page's "Forgot Password" link to reset it via email.
+- For other team members' passwords, they can reset their own passwords independently, or a Root Admin can reset them (see [User Management & Permissions](/features/permissions)).
+
+<Warning>
+  Never share your password with others, even support staff. DuitPOS support will never ask for your password.
+</Warning>
+
+---
 
 ## Saving Changes
 
-All settings are saved per-field as you update them. Changes take effect immediately — no restart required.
+Changes are saved automatically as you update each field. All settings take effect immediately — no restart or re-login required (except password changes, which apply on your next login).
 
-<Warning>
-  Changing the **Currency** does not convert existing prices. Product prices are stored as raw numbers — changing the currency symbol from MYR to USD will display the same numbers in USD without converting them. Update all your product prices manually after a currency change. This also affects any in-progress online orders.
-</Warning>
-
-<Tip>
-  Set your **Timezone** correctly before going live. Reports group sales by calendar day in the configured timezone — if the timezone is wrong, midnight cutoffs for your reports will be off, making daily summaries inaccurate.
-</Tip>
+---
 
 ## Frequently Asked Questions
 
 <AccordionGroup>
-  <Accordion title="Where do I upload my business logo?">
-    Go to Settings → General and click the **Logo** upload button. Supported formats are PNG and JPG. The logo will appear on the online ordering page immediately and on printed receipts if your printer supports image printing (most modern thermal printers do).
-  </Accordion>
-  <Accordion title="Will changing the receipt footer update receipts that have already been printed?">
-    No. The footer change only applies to receipts printed after you save the new setting. Past receipts are not affected.
-  </Accordion>
   <Accordion title="Can I have different settings for different locations?">
-    The Settings page applies to the entire account (tenant). Location-specific details like address, phone, and TIN are configured per location under Manage → Locations → Edit.
+    No. The Settings page applies to your entire account (all locations at once). Location-specific details like address, phone, and TIN are configured per location under Manage → Locations → Edit.
   </Accordion>
-  <Accordion title="How do I configure E-Invoicing settings?">
-    Go to Settings → E-Invoicing and enter your MyInvois Client ID, Client Secret, and Supplier TIN. Make sure the environment is set to Sandbox for testing and Production for live submissions. See [E-Invoicing](/features/e-invoicing) for the full setup guide.
+  <Accordion title="What happens if I change the timezone?">
+    Future reports will group sales by midnight in the new timezone. Past reports are not recalculated. We recommend setting the timezone correctly before your first trading day.
+  </Accordion>
+  <Accordion title="If I change the currency, will my prices convert automatically?">
+    No. Prices are stored as raw numbers and will display in the new currency without conversion. For example, if your product is priced at 50 in MYR and you switch to USD, it will still show as 50 (now in USD). You must manually update all product prices after a currency change.
+  </Accordion>
+  <Accordion title="How do I add more users or locations to my plan?">
+    Click the **Upgrade Plan** or **Contact Support** button on the Plan tab. Tell us how many additional users or locations you need, and we'll send you a quote.
+  </Accordion>
+  <Accordion title="Can I change my password from a web browser on a different device?">
+    Yes. The Settings page is available on any device where you can log in. Your password change will apply to all sessions — you may need to re-log in on other devices.
+  </Accordion>
+  <Accordion title="What denominations should I add for my cash drawer?">
+    Add denominations matching your actual drawer. For Malaysia (MYR), typical denominations are: Notes ($1, $5, $10, $20, $50, $100) and Coins ($0.05, $0.10, $0.20, $0.50, $1). For other currencies, use your country's standard denominations.
+  </Accordion>
+  <Accordion title="Can I use multiple currencies in DuitPOS?">
+    Currently, DuitPOS supports one global currency per account. If you operate in multiple currencies, create separate accounts (separate tenants) for each currency. Multi-currency support is on our roadmap.
   </Accordion>
 </AccordionGroup>
+
+---
 
 ## Related
 
 <CardGroup cols={2}>
-  <Card title="Locations" icon="map-pin" href="/features/locations">Configure per-location details like address and TIN</Card>
-  <Card title="Print Templates" icon="file-text" href="/features/print-templates">Customise receipt layout and content</Card>
+  <Card title="Setup" icon="gear" href="/features/setup">Configure device-level printer, payment processor, and order mode settings</Card>
+  <Card title="User Permissions & Access" icon="shield" href="/features/permissions">Manage team member roles, permissions, and account access</Card>
+  <Card title="Locations" icon="map-pin" href="/features/locations">Set up and manage store locations</Card>
   <Card title="E-Invoicing" icon="file-text" href="/features/e-invoicing">Set up LHDN MyInvois integration</Card>
-  <Card title="Online Ordering QR Setup" icon="qr-code" href="/online-ordering/qr-setup">Configure your customer-facing online menu</Card>
 </CardGroup>

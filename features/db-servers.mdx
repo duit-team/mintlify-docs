@@ -21,8 +21,29 @@ description: "Manage the PostgreSQL servers used to host tenant databases."
 | **Host** | Yes | The PostgreSQL hostname or IP address |
 | **Port** | Yes | The PostgreSQL port — default is `5432` |
 | **Username** | Yes | A PostgreSQL user with permission to create new databases and run migrations |
-| **Password** | Yes | The password for the PostgreSQL user. Stored encrypted |
+| **Password** | Yes | The password for the PostgreSQL user. Stored encrypted in the platform configuration |
+| **SSL** | No | Toggle on to enable SSL/TLS encryption for the connection |
 | **Default** | No | Toggle on to make this the default server selected when creating a new tenant |
+
+## Connection Status
+
+When you open the Database Servers page, each server shows a **connection status badge**:
+- **Connected** (green) — The platform successfully reached the server and validated the credentials
+- **Disconnected** (gray) — The server is unreachable or credentials are invalid
+- **Last checked** timestamp — Shows when the status was last verified
+
+Click **Recheck** to manually test a server's connection without making any changes.
+
+## Server Purpose
+
+Database Servers are where tenant databases are physically created and hosted. When you create a new tenant, the platform:
+
+1. Connects to the database server using the credentials stored here
+2. Creates a new PostgreSQL database for that tenant (e.g., `tenant_acme_corp_2024`)
+3. Runs all required migrations to set up the tenant's schema
+4. Returns a ready-to-use tenant environment
+
+A tenant's database remains on its assigned server for its entire lifetime — server assignments cannot be changed after tenant creation.
 
 ## Add a Database Server
 
@@ -72,7 +93,8 @@ When creating a tenant, select which database server to provision it on. Existin
 
 ## Related
 
-<CardGroup cols={2}>
+<CardGroup cols={3}>
   <Card title="Tenants" icon="building" href="/features/tenants">Manage business accounts on this platform</Card>
   <Card title="Root Users" icon="shield" href="/features/root-users">Manage platform administrator accounts</Card>
+  <Card title="LHDN Admin" icon="lock" href="/features/lhdn-admin">Configure platform-wide e-invoicing credentials</Card>
 </CardGroup>

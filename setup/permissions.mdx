@@ -13,6 +13,10 @@ Permissions are grouped by feature area. They are assigned to **roles**, not ind
   A **Manager** role typically has all permissions. A **Cashier** role typically has no Manage or Users permissions — only what they need to operate the POS terminal.
 </Tip>
 
+<Note>
+  These permissions are the **building blocks of roles**. To create a new role or assign permissions to a user, see [Users and Roles](/setup/users-and-roles). This page is a reference guide for understanding what each permission controls.
+</Note>
+
 ## Permission Groups
 
 ### Manage
@@ -126,6 +130,9 @@ These permissions only apply to **root admin** accounts and are separate from th
   </Accordion>
   <Accordion title="Is there a way to see all permissions a specific user has?">
     Not directly on the user page — you need to check each role assigned to the user and combine the permissions. A future update will show a merged permissions view per user.
+  </Accordion>
+  <Accordion title="How do I know which permissions to assign to a new role?">
+    Start with an existing role that is closest to your use case (e.g. **Manager** for admin, **Cashier** for POS operators). In the [Users and Roles](/setup/users-and-roles) section, duplicate that role and remove or add specific permissions. For example, a **Stock Manager** might copy **Manager** permissions but remove **Users — Delete** and **E-Invoicing** permissions. Test the role with a test account to confirm access is correct.
   </Accordion>
 </AccordionGroup>
 

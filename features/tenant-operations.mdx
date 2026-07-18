@@ -1,97 +1,329 @@
 ---
 title: "Tenant Operations"
-description: "Destructive platform-level actions: clear location sales, wipe a tenant, or clone a tenant."
+description: "Destructive platform-level actions: clear location sales, wipe a tenant, or clone a tenant. Read before proceeding."
 ---
 
 <Warning>
-  This section is for **root administrators** only, and every action here is **destructive or hard to reverse**. Read each section carefully before clicking anything — there is no undo button for these operations.
+  This section is for **root administrators** only. Every action described here is **irreversible without database backups**. There is no "undo" button. Read each section carefully, understand the consequences, and always double-check the domain name before confirming.
 </Warning>
 
-**Tenant Operations** are platform-level actions that operate on an entire tenant's data. They are separate from normal tenant management ([Tenants](/features/tenants)) because they delete or duplicate data at scale rather than editing a single record.
+**Tenant Operations** are platform-level actions that operate on an entire tenant's data at scale. They are separate from normal tenant management ([Tenants](/features/tenants)) because they delete or duplicate data wholesale rather than editing a single record.
+
+This page focuses on **destructive-only operations**. For everyday tenant creation, updates, and basic administration, see [Tenants](/features/tenants).
 
 <Frame>
   <img src="/images/tenant-operations.png" alt="Tenant Operations panel showing Clear Location Sales, Wipe Tenant, and Clone Tenant actions with a confirmation field" />
 </Frame>
 
+---
+
 ## Clear Location Sales
 
-Deletes all **tickets, workday records, and e-invoice documents** for a single location within a tenant. Use this to reset a location's sales history — for example, after a demo, a testing period, or a data-entry mistake — without affecting other locations or the tenant's configuration (products, users, settings).
+Deletes all **tickets, workdays, e-invoices, and related ledger data** (payments, transactions, charges) for a single location within a tenant. Use this to reset a location's sales history without affecting other locations or the tenant's configuration.
+
+### What Gets Deleted
+
+- **Tickets** (all sales orders for that location)
+- **Workday records** (shift/workday containers)
+- **E-invoice documents** (LHDN submissions, QR codes)
+- **Ledger data tied to sales**: payment records, transaction lines, charges, refunds, discounts
+
+### What Stays
+
+- **Location configuration** (name, address, settings)
+- **Catalog** (products, categories, pricing, taxes)
+- **Employee records** (names, roles, POS logins)
+- **Other locations** in the same tenant (completely unaffected)
+
+### Form Fields
 
 | Field | Required | Description |
 |-------|----------|-------------|
 | **Location** | Yes | The specific location whose sales data will be deleted. Other locations in the same tenant are unaffected |
-| **Confirm Domain Name** | Yes | Type the tenant's exact domain name to confirm. The request is rejected if this does not match |
+| **Confirm Domain Name** | Yes | Type the tenant's exact domain name (e.g., `my-restaurant.duitpos.io`) to confirm. The request is rejected if this does not match |
+
+### Use Cases
+
+- **Demo or test run**: You ran a demo on the live location and want to clean up the test orders before handing over to the client.
+- **Data entry error**: An employee accidentally created tickets in the wrong location; clear them and re-enter in the correct location.
+- **Re-opening after maintenance**: A location closed for renovation; clear old tickets and start fresh on re-opening day.
+
+### Workflow
+
+<Steps>
+  <Step title="Go to Tenant Operations → Clear Location Sales">
+    Select the tenant first, then the specific location to clear.
+  </Step>
+  <Step title="Review what will be deleted">
+    The UI lists the location name, date range, and approximate row count for confirmation.
+  </Step>
+  <Step title="Type the domain name">
+    Enter the tenant's exact domain name (e.g., `my-restaurant.duitpos.io`). This is a critical safety check.
+  </Step>
+  <Step title="Confirm">
+    Click the button. The deletion is immediate and cannot be undone.
+  </Step>
+</Steps>
 
 <Warning>
-  This permanently deletes tickets, workdays, and e-invoice documents for the selected location. Products, categories, users, and settings are **not** affected. There is no recovery — confirm you have the right location before proceeding.
+  **This action is permanent.** All deleted data is lost except from database backups taken before the deletion. The audit trail of deleted sales cannot be recovered. Once you click confirm, there is no way to reverse this operation.
 </Warning>
 
-## Wipe Tenant
+---
 
-Deletes **everything** in a tenant's database — every table is truncated — and then reseeds the tenant with a fresh default admin user and default program settings, as if the tenant had just been created.
+## Wipe Tenant ("Refresh Data")
+
+Truncates every table in a tenant's database — deleting all data without exception — and then reseeds the tenant with default roles, permissions, and a single admin user. The tenant is then ready for fresh configuration from scratch, as if it were a brand-new signup.
+
+### What Gets Deleted
+
+- **Everything**: all tables, all rows
+  - Products, categories, suppliers
+  - Tickets, workdays, e-invoices
+  - Employees and their login credentials
+  - User accounts and roles
+  - Settings, configurations, integrations
+  - Device profiles, printer routing rules
+  - Payments, transactions, ledger entries
+
+### What Happens After
+
+The platform automatically reseeds the tenant with:
+- Default role structure (Admin, Manager, Cashier, Kitchen)
+- One default admin user (e-mail shown in confirmation dialog; temporary password generated)
+- Default tax configuration
+- Empty product catalog
+
+### Form Fields
 
 | Field | Required | Description |
 |-------|----------|-------------|
 | **Confirm Domain Name** | Yes | Type the tenant's exact domain name to confirm. The request is rejected if this does not match |
 
+### Use Cases
+
+- **Resetting a test/demo tenant**: You've been testing features and want to clear all test data for the next demo.
+- **Starting fresh**: A business explicitly requested a full reset and wants to configure everything from zero.
+- **Recovering from a large failed import**: An automated data migration or bulk import went wrong and contaminated the entire tenant; wipe and start over.
+
+### Workflow
+
+<Steps>
+  <Step title="Go to Tenant Operations → Wipe Tenant">
+    Select the tenant from the dropdown.
+  </Step>
+  <Step title="Review the warning">
+    The UI reminds you that this deletes all data and requires the domain name to confirm.
+  </Step>
+  <Step title="Type the domain name">
+    Enter the tenant's exact domain name (e.g., `my-restaurant.duitpos.io`).
+  </Step>
+  <Step title="Submit">
+    The wipe job is queued. The UI shows the job ID and returns immediately.
+  </Step>
+  <Step title="Monitor status">
+    The actual truncation and reseeding happens in the background. You'll see status notifications in the dashboard. Depending on tenant size, this may take a few minutes.
+  </Step>
+  <Step title="Log in with new credentials">
+    Once complete, the tenant is ready. Log in with the default admin e-mail and temporary password provided in the wipe result.
+  </Step>
+</Steps>
+
 <Tip>
-  After a wipe, the tenant is reseeded with a default tenant admin account so someone can log back in and start configuring from scratch. The exact email is shown in the result returned by the wipe action.
+  After a wipe, the platform automatically creates a default admin user so someone can log back in and start configuration. The exact e-mail and temporary password are displayed in the wipe operation result.
 </Tip>
 
 <Warning>
-  **Wipe Tenant deletes the entire tenant database** — every table, every row, with no exceptions. This is the most destructive action on the platform. Only use it for test/demo tenants, or when a business has explicitly asked for a full reset. Always double-check the domain name before confirming.
+  **This is the most destructive action on the platform.** Wipe Tenant permanently deletes every row in the tenant's database with zero exceptions and no recovery path (except database backups at the infrastructure level). Only use it on test/demo tenants or when a business has explicitly requested a full reset. Always verify the domain name one more time before confirming.
 </Warning>
+
+---
 
 ## Clone Tenant
 
-Creates a **new tenant** by copying data from an existing source tenant onto a new database server. This is useful for spinning up a demo environment from a known-good template, or duplicating a configured tenant as a starting point for a new business.
+Creates a new tenant by copying the configuration (but not sales history or secrets) from an existing source tenant. The new tenant is provisioned on a separate PostgreSQL database server and is immediately ready to use.
+
+### What Gets Copied
+
+- **Complete catalog configuration**: products, categories, pricing, modifiers, recipe/ingredient structure
+- **Menu structure**: menu items, menu categories, seasonal menus, availability rules
+- **Tax setup**: tax groups, tax rates by jurisdiction
+- **Payment types & processors**: payment method configuration (Stripe, Share Commerce, etc.), processor settings
+- **User & role structure**: roles and their permissions, user accounts (see note on passwords below)
+- **Order modes**: dine-in, takeaway, delivery, online, kiosk — all settings
+- **Printer routing rules**: device profiles, ticket printer routing, label printer routing
+- **Device profiles**: POS terminal configurations, display settings, receipt templates
+- **Employee records**: staff names, positions, roles (but not passwords/PIN codes)
+
+### What Does NOT Get Copied
+
+- **Sales history**: no tickets, workdays, e-invoices, or ledger entries (payments, transactions, charges)
+  - *Rationale*: The clone is meant to be a template. You don't want test/demo sales history to appear in a new production tenant.
+- **API keys and secrets**: Stripe keys, webhook secrets, integration credentials
+  - *Rationale*: Automatic copying of production secrets is a security hazard. Each tenant's integrations must be set up explicitly.
+- **Password/PIN reset data**: Employee POS PIN codes and password hashes are never copied.
+  - *Rationale*: Security—cloned users must reset their passwords on first login.
+- **Source tenant's domain name**: The clone gets a brand-new domain name based on the name you provide.
+  - *Rationale*: Each tenant must have a unique domain. The source remains unchanged.
+
+### Form Fields
 
 | Field | Required | Description |
 |-------|----------|-------------|
-| **Source Tenant** | Yes | The existing tenant to copy data from |
-| **New Tenant Name** | Yes | Display name for the new tenant. Its domain name is derived automatically from this name |
-| **Database Server** | Yes | Which PostgreSQL server hosts the new tenant's database |
-| **Country Code** | No | Defaults to the source tenant's country code if left blank |
+| **Source Tenant** | Yes | The existing tenant whose configuration will be copied |
+| **New Tenant Name** | Yes | Display name for the new tenant. A domain name is derived automatically from this name |
+| **Database Server** | Yes | Which PostgreSQL server hosts the new tenant's database. Must be the same server where the source tenant is hosted OR a different one if you're migrating across infrastructure |
+| **Country Code** | No | Billing/tax country. If left blank, defaults to the source tenant's country code |
 
-Cloning runs **asynchronously** — the request returns immediately with a queued job status, and the actual copy happens in the background. Check the [Tenants](/features/tenants) list a short while later to see the new tenant once provisioning completes.
+### Use Cases
+
+- **Franchise onboarding**: A new franchisee is signing up. Clone the master menu and configuration from an existing location to save weeks of manual setup.
+- **Test configuration changes**: Clone a working tenant, make risky configuration changes on the clone, verify it works, then apply the same changes to production (or delete the clone if something breaks).
+- **Demo environment**: Create a pristine copy of a production tenant as a demo/sandbox for stakeholders to explore without affecting real data.
+- **Regional rollout**: You have one restaurant's configuration that works well. Clone it for each location in a multi-location rollout.
+
+### Workflow
 
 <Steps>
   <Step title="Go to Tenant Operations → Clone Tenant">
-    Select the source tenant you want to copy.
+    Select the source tenant whose configuration you want to copy.
   </Step>
   <Step title="Name the new tenant">
-    Enter a name for the new business and pick a target database server.
+    Enter a display name for the new tenant (e.g., "Burger Palace - Downtown"). The domain is auto-generated (e.g., `burger-palace-downtown.duitpos.io`).
+  </Step>
+  <Step title="Choose a database server">
+    Select which PostgreSQL server will host the cloned tenant's database. This can be the same server as the source or a different one.
+  </Step>
+  <Step title="Confirm country code">
+    The source tenant's country is pre-filled. Change it if the new tenant is in a different region.
   </Step>
   <Step title="Submit">
-    The clone job is queued. You'll see a job ID and a "queued" status immediately — the copy itself happens in the background.
+    The clone job is queued. You see a job ID and "queued" status immediately.
   </Step>
-  <Step title="Verify">
-    Check the Tenants list a few minutes later to confirm the new tenant appears and has data.
+  <Step title="Monitor progress">
+    The actual copy happens in the background. Status notifications show progress. Small demo tenants clone in seconds; large catalogs may take 2–5 minutes.
+  </Step>
+  <Step title="Verify the new tenant">
+    Once complete, the new tenant appears in the [Tenants](/features/tenants) list. Log in with the source tenant's admin credentials (credentials are copied for convenience during setup). Change the admin password immediately.
   </Step>
 </Steps>
+
+<Tip>
+  **Safe configuration changes**: Clone a tenant, test major changes (menu restructure, new tax logic, printer routing) on the clone, verify it works, then delete the clone if satisfied. The production tenant remains untouched. This is much safer than editing configuration directly on a live restaurant.
+</Tip>
+
+<Warning>
+  **Cloned users must reset their credentials.** Employee POS PIN codes and password hashes are never copied for security. Cloned users will need to reset their passwords on first login to the new tenant.
+</Warning>
+
+---
+
+## Decision Table: Which Operation Should I Use?
+
+Use this matrix to pick the right operation:
+
+| Situation | Recommended Action | Why |
+|-----------|-------------------|-----|
+| I accidentally ran a demo/test on one location only, and need to clean it up | **Clear Location Sales** | Preserves config, catalog, and other locations. Surgical deletion of just sales data. |
+| I accidentally ran a demo/test across the entire tenant (all locations) | **Wipe Tenant** | Deletes all data. If only one location is affected, consider Clear Location Sales instead. |
+| I need to reset this test/demo tenant for the next demo cycle | **Wipe Tenant** | Fastest way to return to a blank slate with default roles and admin user. |
+| I'm setting up a second location/branch and want to copy the menu structure from Location 1 | **Clone Tenant** | Creates a new tenant with the same catalog and configuration. You'll manually move employees/update address/reconfigure if locations have different integrations. |
+| A new franchisee is signing up and should start with the standard menu and role structure | **Clone Tenant** | Faster than manual data entry. Clone the master template, customize for the franchisee. |
+| I'm testing a major menu restructure or pricing change and don't want to risk breaking the live tenant | **Clone Tenant** | Clone, test on the clone, verify, then either delete the clone (if happy with production) or apply the changes to production. Zero risk to the live system. |
+| A business asked to delete all their data and start fresh | **Wipe Tenant** | Clears everything, reseeds defaults. Business is ready to configure from scratch. |
+| I need to recover from a failed bulk import that contaminated multiple parts of the tenant | **Wipe Tenant** | Fastest recovery if the contamination is widespread. Restore from backup if you want to keep some data. |
+
+---
 
 ## Frequently Asked Questions
 
 <AccordionGroup>
   <Accordion title="Why do Clear Location Sales and Wipe Tenant require typing the domain name?">
-    This is a deliberate safety check. Both actions are permanent and cannot be undone, so requiring the exact domain name prevents accidental clicks from destroying the wrong tenant's data — especially when working across multiple browser tabs with different tenants open.
+    This is a **deliberate safety check**. Both actions are permanent and cannot be undone. Requiring the exact domain name forces you to pause and verify you're operating on the correct tenant — especially important when you have multiple browser tabs open with different tenants. It prevents accidental clicks from destroying the wrong tenant's data.
   </Accordion>
+
   <Accordion title="Can I undo a Wipe Tenant or Clear Location Sales action?">
-    No. Both actions permanently delete data with no recovery mechanism in the dashboard. Restoring data would require a database backup taken before the action — if you have automated backups configured at the infrastructure level, that is the only path back.
+    **No.** Both actions permanently delete data with no recovery mechanism in the dashboard itself. The only recovery path is a **database backup taken before the action**. If your infrastructure has automated backups (e.g., AWS RDS snapshots, PostgreSQL WAL backups), you can request a restore from your hosting/database admin. Otherwise, the data is gone forever.
   </Accordion>
+
+  <Accordion title="I cleared location sales by accident. Can I get the data back?">
+    Only if you have a **database backup from before the deletion**. Contact your hosting provider or database administrator to request a point-in-time restore. This requires infrastructure-level backups (outside the DuitPOS platform). See your backup retention policy to know what restore windows are available.
+  </Accordion>
+
   <Accordion title="How long does Clone Tenant take?">
-    It depends on how much data the source tenant has. Small demo tenants clone in seconds; tenants with a large sales history or large catalog may take longer. The job runs in the background — you do not need to keep the page open.
+    It depends on the size of the source tenant:
+    - **Small demo tenant** (100 products, minimal settings): a few seconds
+    - **Medium restaurant** (500–1000 products, standard config): 30 seconds to 1 minute
+    - **Large chain location** (2000+ products, complex routing rules, many employees): 2–5 minutes
+
+    The job runs in the background. You do not need to keep the browser window open. Check the [Tenants](/features/tenants) list a few minutes later to see the new tenant.
   </Accordion>
-  <Accordion title="Does cloning a tenant copy sales history too?">
-    Clone Tenant is intended for duplicating a tenant's configuration (catalog, settings, users) as a starting template. Check with your platform team on the exact scope of data copied for your version, especially if you only want the menu/setup and not historical sales.
+
+  <Accordion title="Does Clone Tenant copy sales history (tickets, payments)?">
+    **No.** Clone Tenant is designed to duplicate configuration (catalog, settings, user structure) as a template, not historical sales data. If you want to include sales history, you must request a database backup restore or custom data migration — contact your platform team.
+  </Accordion>
+
+  <Accordion title="Does cloning copy API keys, Stripe secrets, and webhook endpoints?">
+    **No. Secrets are never copied** for security reasons. After cloning, you must:
+    - Re-enter API keys for integrations (payment processors, e-invoice providers, etc.)
+    - Re-configure webhook endpoints and secrets
+    - Verify all external integrations point to the correct environment (test vs. production)
+
+    This is deliberate — automatic copying of production secrets to a clone would be a serious security risk.
+  </Accordion>
+
+  <Accordion title="What about employee passwords and POS PIN codes when cloning?">
+    Passwords and PIN codes are **never copied**. This is a security feature — you don't want cloned employees to have the same credentials in two separate tenants (it would be impossible to know which tenant they're logging into).
+
+    After cloning, cloned employees must reset their password on first login to the new tenant. You can send them a password reset link, or they can self-service via "Forgot Password."
+  </Accordion>
+
+  <Accordion title="Can I clone a tenant and rename the source tenant?">
+    **You cannot rename a tenant's domain name after creation.** The domain is permanent and immutable. If you want to change a tenant's domain, you would need to:
+    1. Clone the tenant with the new desired name
+    2. Manually migrate any remaining data if needed
+    3. Delete the old tenant
+
+    This is not recommended because it's error-prone. Plan domain names carefully when creating tenants.
+  </Accordion>
+
+  <Accordion title="Can I clone across different database servers?">
+    **Yes.** When cloning, you can choose a different database server for the new tenant. This is useful if:
+    - You're migrating to a new infrastructure
+    - You want to distribute tenants across geographically separated databases
+    - You're consolidating tenants onto a new server
+
+    The clone operation handles data transfer automatically.
+  </Accordion>
+
+  <Accordion title="What happens to subscriptions, billing, and licenses when I clone a tenant?">
+    **Subscriptions and billing are separate from data.** Cloning copies only configuration and catalog data, not subscription/license information. You must:
+    - Assign a separate subscription to the cloned tenant in the billing system
+    - Ensure the new tenant has the appropriate license/entitlements for its features
+    - Update the country code if billing depends on it (VAT, tax setup, etc.)
+
+    Contact your billing administrator to set up the subscription for the cloned tenant.
+  </Accordion>
+
+  <Accordion title="Is there an audit trail of these operations?">
+    Yes. Wipe Tenant, Clear Location Sales, and Clone Tenant operations are logged in the root admin audit trail with timestamps and the admin user who triggered them. However, the actual deleted data is not recoverable from the audit log — only the fact that the operation occurred.
+  </Accordion>
+
+  <Accordion title="What's the difference between Clear Location Sales and Wipe Tenant?">
+    - **Clear Location Sales**: Deletes sales data (tickets, workdays, e-invoices) for **one location only**. Configuration, catalog, and other locations stay intact.
+    - **Wipe Tenant**: Deletes **all data** in the entire tenant database (all locations, all configuration, everything) and reseeds defaults.
+
+    Use Clear Location Sales if only one branch needs cleaning. Use Wipe Tenant if you want to reset the entire business.
   </Accordion>
 </AccordionGroup>
+
+---
 
 ## Related
 
 <CardGroup cols={2}>
-  <Card title="Tenants" icon="building" href="/features/tenants">Create and manage tenant accounts</Card>
-  <Card title="Database Servers" icon="server" href="/features/db-servers">Manage PostgreSQL servers for tenant hosting</Card>
-  <Card title="Root Users" icon="shield" href="/features/root-users">Manage who can perform these actions</Card>
-  <Card title="Locations" icon="map-pin" href="/features/locations">Manage individual branches within a tenant</Card>
+  <Card title="Tenants" icon="building" href="/features/tenants">Create, list, and manage tenant accounts</Card>
+  <Card title="Database Servers" icon="server" href="/features/db-servers">Provision and manage PostgreSQL servers for tenant hosting</Card>
+  <Card title="Root Users" icon="shield" href="/features/root-users">Manage platform admins who can perform these operations</Card>
+  <Card title="Locations" icon="map-pin" href="/features/locations">Manage individual branches/locations within a tenant</Card>
 </CardGroup>

@@ -1,0 +1,84 @@
+---
+title: "Tickets & Voids"
+description: "Look up one specific order, or investigate revenue lost to voids, comps, and gifts."
+---
+
+**Tickets & Voids** covers the two tabs on the Reports screen that don't behave like the six [Sales Reports](/reports/sales-reports): Ticket Summary and Item Reason Summary. Neither one is a simple sum-by-day-or-item report. Ticket Summary is a flat, per-order list built for drilling into one specific transaction. Item Reason Summary isn't really a sales report at all — it's a loss report, and it's the only one of the nine tabs that requires a Reason to exist on a line item before that item shows up anywhere in it.
+
+<Frame>
+  <img src="/images/reports-tickets.png" alt="Ticket Summary table with an open ticket detail modal showing line items and payments" />
+</Frame>
+
+## Ticket Summary
+
+Ticket Summary is the **only report that is not aggregated** — every other report on the Reports screen groups and sums rows; this one shows one row per individual ticket.
+
+| Field | Description |
+|-------|-------------|
+| **Order #** | Ticket/invoice number |
+| **Date** | When the ticket was opened |
+| **Status** | Open, Closed, or Voided |
+| **Location** | Which location the ticket belongs to |
+| **Order Mode** | Dine In, Takeaway, Delivery, etc. |
+| **Item Count** | Number of line items on the ticket |
+| **Total** | Ticket total (including tax) |
+| **Opened At / Closed At** | Timestamps for when the ticket started and finished |
+
+Ticket Summary is also the only report with a **Status** filter (All / Open / Closed / Voided) — none of the six Sales Reports have this filter, since they aggregate past any individual ticket's status.
+
+<Tip>
+  Use Ticket Summary when you need to investigate **one specific order** — a customer dispute, a suspicious void, a missing payment. Use it to find the ticket, not to read totals off the table; for totals, use [Sales Summary](/reports/sales-reports#sales-summary) instead.
+</Tip>
+
+### Ticket Detail
+
+Click any **Order #** to open the full detail modal for that ticket:
+
+- **Line items**, with modifiers grouped by modifier group (so you see exactly which options were selected, not a flat list)
+- **Payments** applied to the ticket, including tender type and amount
+- **Totals** — subtotal, tax, discounts, and grand total
+
+This is the drill-down view — everything you'd need to fully reconstruct what happened on that order, in one place.
+
+## Item Reason Summary
+
+Found under the **Void/Comp/Gift** tab. This is the only report that requires a **Reason** to exist on a line item before that item appears in it at all — reasons are configured under [Reasons](/features/reasons). Groups by Reason:
+
+| Field | Description |
+|-------|-------------|
+| **Reason** | Reason name, with a type badge: Void, Comp, or Gift |
+| **Quantity** | Total units affected by that reason |
+| **Value** | Total value given away or lost under that reason |
+| **Ticket Count** | Number of distinct tickets that used that reason |
+
+<Warning>
+  If a line item is voided, comped, or gifted **without a Reason attached**, it will not appear in this report at all — silently. The void/comp/gift itself is still recorded on the ticket (visible in [Ticket Detail](#ticket-detail)), but Item Reason Summary has nothing to group it under. If this report looks unexpectedly small, check whether staff are actually selecting a reason when they void, or whether [Reasons](/features/reasons) even has any configured yet.
+</Warning>
+
+Item Reason Summary answers "how much revenue did we give away or lose to voids/comps/gifts, and why" — this is the report to check for staff-error patterns or fraud, not a sales report at all. A reason with an outsized Value relative to its Quantity, or one staff member's shifts consistently showing more voids than others', is worth a closer look.
+
+## Frequently Asked Questions
+
+<AccordionGroup>
+  <Accordion title="A ticket shows Status: Voided in Ticket Summary but isn't in Item Reason Summary — why?">
+    Item Reason Summary is line-item level, not ticket level, and it only counts lines that have a Reason attached. A ticket can be voided as a whole without every (or any) line item carrying a reason code, in which case it shows correctly as Voided in Ticket Summary but contributes nothing to Item Reason Summary.
+  </Accordion>
+  <Accordion title="Can I filter Ticket Summary by Status without also setting a date range?">
+    No — Status is an additional filter on top of the standard date range, Location, and Order Mode filters, not a replacement for them. Set a wide enough date range to cover the order you're looking for, then narrow with Status.
+  </Accordion>
+  <Accordion title="What's the difference between a Comp and a Gift reason?">
+    Both remove revenue without a corresponding void of the underlying sale — the distinction is business-specific (e.g. Comp for a service-recovery discount, Gift for a promotional giveaway). Configure the exact reasons and their types under [Reasons](/features/reasons) to match your own policy.
+  </Accordion>
+  <Accordion title="Who can see who voided an item?">
+    Open the ticket in [Ticket Detail](#ticket-detail) — voided line items show the reason and are tied to the ticket, which records which staff member/shift it belongs to. Cross-reference with [Workday Reports](/reports/workday) if you need to confirm which employee was on shift at the time.
+  </Accordion>
+</AccordionGroup>
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Reports Overview" icon="chart-bar" href="/reports/overview">The "which report do I want" decision table and shared filter/export behavior</Card>
+  <Card title="Sales Reports" icon="bar-chart-3" href="/reports/sales-reports">The six aggregate reports — Sales Summary, By Item, By Category, By Payment, By Order Mode, By Terminal</Card>
+  <Card title="Reasons" icon="tag" href="/features/reasons">Configure the Void/Comp/Gift reason codes that Item Reason Summary groups by</Card>
+  <Card title="Workday Reports" icon="clock" href="/reports/workday">Per-shift sales and cash reconciliation</Card>
+</CardGroup>

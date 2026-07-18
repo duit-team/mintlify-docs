@@ -1,82 +1,185 @@
 ---
 title: "Menu Builder"
-description: "Manage categories, products, and modifiers in one place."
+description: "Build and manage your complete menu in a unified three-panel interface with live context preview."
 ---
 
-The **Menu Builder** is the central place to build and maintain your menu. It provides a unified view of categories, products, and modifier groups so you can make changes quickly without switching between multiple pages.
+The **Menu Builder** is your central hub for designing and maintaining your restaurant menu. Unlike managing categories, products, and modifiers separately across different screens, the Menu Builder brings them all into one place with a three-panel drag-and-drop interface — so you see your entire menu layout at a glance and can make changes instantly without navigating between pages.
 
 <Frame>
-  <img src="/images/menu_builder.png" alt="Menu Builder showing categories panel on the left and products panel on the right" />
+  <img src="/images/menu_builder.png" alt="Menu Builder showing three panels: Categories on the left, Products in the middle, and Product Detail slide-in on the right" />
 </Frame>
 
-## How It Works
+## Three-Panel Layout Overview
 
-Your menu is structured in three layers:
+The Menu Builder uses a full-height three-panel design to keep you focused while building:
 
-1. **Categories** — the top-level groupings shown as tabs on the POS (e.g. Burgers, Drinks, Desserts).
-2. **Products** — the items within each category that customers can order.
-3. **Modifiers** — optional customisations attached to products (e.g. Size, Add-ons, Cooking Level).
+- **Panel 1 (Left — Categories):** Your complete category list. Click a category to populate Panel 2 with its products.
+- **Panel 2 (Middle — Products):** Products from the selected category. Click a product to open its detailed editor in Panel 3.
+- **Panel 3 (Right — Product Detail):** A slide-in editor for the selected product — change its name, price, image, modifiers, or variants without leaving the builder. Close it by clicking the X or selecting a different product.
 
-Build from top to bottom: create your categories first, then add products to each category, then attach modifier groups to products that need them.
+**Why this matters:** You can review your menu's entire structure in one workflow. Top-selling categories on top? Move them up by dragging. Price looks wrong for a delivery order? Pick the location and order mode in the Context Selector bar (see below), then click the product and edit the price inline — you'll see the strikethrough update live.
 
-## Layout
+## Context Selector Bar
 
-The Menu Builder has two main panels:
+At the top of the Menu Builder, you'll see a **Context Selector** with dropdowns for **Location** and **Order Mode**. This preview tool shows you how your menu appears in a specific sales context — for example, what prices customers see if ordering for delivery, or which items are hidden if this location is closed.
 
-- **Left — Categories**: Your full category list. Click a category to view its products in the right panel.
-- **Right — Products**: Products in the selected category. Expand a product row to see its attached modifier groups.
+**How it works:**
+1. Leave both dropdowns blank (default) to see your global menu as defined.
+2. Pick a location and/or order mode to apply overrides — the panels update live.
+3. Categories and products show badges:
+   - **Red badge "Hidden in context":** The item is globally Active, but an override makes it unavailable in this context.
+   - **Yellow badge "Shown in context":** The item is globally Inactive, but an override shows it here.
+   - **Strikethrough price:** An override sets a different price than the global one.
 
-## Adding Items
+**Different from the Products page:** The Products page's Context Selector is for bulk-editing overrides. Here, it's a live preview — you're not editing overrides in the Menu Builder, just seeing what they look like. If you need to create or modify an override, go to **Products → Pricing & Availability** tab.
 
-<CardGroup cols={2}>
-  <Card title="New Category" icon="folder-plus" href="/features/categories">
-    Click **New Category** at the top of the category panel to add a menu section.
-  </Card>
-  <Card title="New Product" icon="plus" href="/features/products">
-    Select a category first, then click **New Product** in the product panel.
-  </Card>
-  <Card title="Modifier Groups" icon="list" href="/features/modifiers">
-    Expand a product and click **Add Modifier Group** to attach customisation options.
-  </Card>
-  <Card title="Bulk Pricing" icon="tag" href="/features/bulk-pricing">
-    Use Bulk Pricing to override prices for a specific sales context like delivery.
-  </Card>
-</CardGroup>
+**Refresh button:** Click the refresh icon to re-fetch overrides if you recently changed them elsewhere.
 
-## Reordering
+## Categories Panel (Left)
 
-Drag any category or product row by its handle (the six-dot icon on the left) to change the display order on the POS. The order here is exactly what staff and customers see.
+Your categories are listed in the left panel. Each category shows:
+
+- **Avatar:** A small image (if uploaded) or the category's first letter in a colored box.
+- **Name:** The category name as it appears on the POS.
+- **Status dot:** A small circle indicating its active state:
+  - **No dot (or dot of context color):** Active globally or in the selected context.
+  - **Red dot:** Inactive globally (unless overridden to active by the context).
+  - **Color dot matching context:** Name or availability overridden in the selected context.
+
+**Drag to reorder:** Grab the six-dot handle on the left of any category and drag it up or down. The order persists immediately — no Save button needed. The reordering applies globally (or per-context if you selected one).
+
+**Edit/Delete on hover:** Hover over a category row to see pencil (Edit) and trash (Delete) icons. Editing opens a small dialog where you can change the category's code, name, description, sort order, and active status. Deleting a category does not delete its products — they just lose their category assignment and will need to be reassigned.
+
+**Add category button:** At the bottom of the left panel, click **Add category** to create a new one. A dialog will open for you to enter the code, name, optional description, and active status.
+
+## Products Panel (Middle)
+
+The middle panel shows all products in the selected category. If no category is selected, the panel is empty — pick one from the left.
+
+Each product card displays:
+
+- **Avatar:** Product image (if uploaded) or its first letter.
+- **Name:** The product name; shows a strikethrough of the original name if an override is active.
+- **Price:** The selling price in RM. If a context override applies, the override price is shown in brand color, and the original price is struck through.
+- **Availability badge:** 
+  - **"Hidden" badge (gray):** The product has the **Hide in Order** POS behavior enabled — it exists in your system but won't appear in normal POS order flow (useful for items you only want staff to ring up on request).
+  - **"Hidden in context" badge (red):** The product is active globally but unavailable in the selected context.
+  - **"Shown in context" badge (yellow):** The product is inactive globally but shown in the selected context.
+
+**Gray visual:** Products with **Hide in Order** enabled appear slightly faded/grayed out as a visual reminder they're suppressed.
+
+**Drag to reorder within the category:** Use the grip handle to drag products up or down within this category. The new order applies immediately.
+
+**Edit/Delete on hover:** Hover over a product card for Edit and Delete buttons. Edit opens a quick-edit dialog. Delete removes the product permanently (cannot be undone). If you want to keep the product but move it to a different category, edit it and change the **Category** field instead.
+
+**Add product button:** At the bottom of the panel, click **Add product** to create a new item in the currently selected category. A dialog opens where you enter the name, price, SKU, description, and POS behaviors (Force Quantity, Force Price, Hide in Order). The product is inserted with a default sort order and can be dragged to reposition immediately after creation.
+
+**"Hidden from order" banner:** If any products in the category have **Hide in Order** enabled, a yellow banner appears at the top of the product list explaining that those items are shown in gray below — this is a quick reminder for you when reviewing the layout.
+
+## Product Detail Slide-In (Right)
+
+Click any product card to open the **Product Detail Panel** on the right. This is a read/edit interface with three tabs — think of it as everything from the full product edit page, but accessible without leaving the Menu Builder.
+
+### Details Tab
+
+Edit the product's core information:
+
+- **Image:** Upload or change the product image. Click the upload box to select a PNG/JPG file.
+- **Name:** Product name as shown on the POS.
+- **Selling price (RM):** The base price. If you change it here, it updates globally — to set a different price for a specific location or order mode, go to **Products → Pricing & Availability** instead.
+- **SKU / Code:** Internal product code (e.g., CLAT-002), used for inventory and reports.
+- **Category:** Pick which category this product belongs to. Moving it here doesn't require a separate save — it updates when you click the Save changes button.
+- **Description:** Optional description shown on the POS (if your POS layout includes it).
+- **Active toggle:** Turn this off to hide the product globally on the POS.
+- **POS Behaviour section:**
+  - **Force Quantity:** If ON, the cashier must enter a quantity before adding this product to an order (useful for items like "Gift Cards" or "Custom Order").
+  - **Force Price:** If ON, the cashier must enter a price before adding (useful for items where the customer decides the amount, like "Donation").
+  - **Hide in Order:** If ON, the product won't appear in normal order flow on the POS — staff can only add it via special access (useful for discontinued items you want to keep in the system for historical reporting, or items you only sell via special request).
+
+**Save changes button:** When you've made edits, click this to persist them. A spinner shows while saving.
+
+### Modifiers Tab
+
+Attach and manage modifier groups for this product (e.g., Size, Toppings, Add-ons, Cooking Level).
+
+**Attached modifier groups:** Listed as expandable rows. Click the chevron to expand and see individual modifiers within each group (e.g., "Small 0–1 selections" expands to show individual sizes). Each modifier row shows its name, price (if > 0), and On/Off status.
+
+**Edit modifier group:** Hover over the group header and click the pencil icon to edit the group's name, description, min/max selections, and active status.
+
+**Delete / Detach modifier group:** Click the X icon to detach the group from this product. The group itself is not deleted — it stays in your Modifier library and can be attached to other products. Detaching does not remove the group's modifiers.
+
+**Modifiers within a group:** Hover over a modifier row to edit or delete it inline. These changes apply to the modifier itself (across all products), not just this product.
+
+**Attach existing group button:** Click **Attach existing group** to search and link a modifier group you've already created. A modal opens with a searchable list of unattached groups.
+
+**Create new group button:** Click **Create new group** to define a new modifier group and attach it in one step. A dialog opens where you enter the group name, description, min/max selections, sort order, and active status. Once created, it's attached to this product.
+
+### Variants Tab
+
+Manage product variants — different versions of this product (e.g., sizes, colors, flavors). The interface here reuses the same variants editor from the full Products page, so you have the same options: create variants from scratch, or link existing products as variants. This avoids duplicating products when you have closely-related items like "Small Coffee" and "Large Coffee."
+
+## Drag-and-Drop Ordering
+
+Both categories (left panel) and products (middle panel) support drag-and-drop reordering:
+
+1. **Grab the handle:** Each row has a six-dot icon (⋮⋮) on the far left. Click and hold to start dragging.
+2. **Drag:** Move your mouse up or down. The row follows, and other rows shift out of the way.
+3. **Release:** Drop the row into its new position. The order persists automatically to the backend — no Save button needed.
+4. **Visual feedback:** The row becomes semi-transparent (50% opacity) while dragging.
+
+**Context-specific reordering:** If you've selected a Location and Order Mode in the Context Selector, the sort order you set applies to that specific context. Different locations can have different category/product orders. If you leave Context Selector blank, you're reordering the global menu.
 
 <Tip>
-  Put your best-selling categories and products at the top of the list — they will appear first on the POS screen, making order entry faster for your staff.
+Put your best-selling categories and products at the top — they'll appear first on the POS screen, making order entry faster for staff and improving discoverability for customers.
 </Tip>
 
-## Context View
+## Inline CRUD Operations
 
-Use the **Context** dropdown at the top of the Menu Builder to preview how the menu looks with context-specific overrides applied — for example, how prices appear under your delivery pricing or happy-hour context. This lets you verify overrides without going to the Bulk Pricing page.
+All create/edit/delete operations use small dialogs or the slide-in detail panel — you never need to navigate away from the Menu Builder:
+
+- **Add category/product:** Click the "Add" button in the relevant panel. A form dialog opens.
+- **Edit category/product:** Click the pencil icon on hover. A form dialog opens with current values pre-filled.
+- **Delete category/product:** Click the trash icon on hover. A confirm dialog asks for confirmation before permanent deletion.
+- **Modifier groups and modifiers:** Edited and deleted inline within the Product Detail panel's Modifiers tab — no dialog nav needed.
+
+This is especially useful when you're reviewing your menu layout and spot a typo or need to tweak a price — just click, edit, save, and move on.
 
 ## Frequently Asked Questions
 
 <AccordionGroup>
-  <Accordion title="What is the correct order to build a menu from scratch?">
-    Always create categories first, then products within each category, then modifier groups for products that need customisation. If you create products before categories, you will need to go back and assign them later.
+  <Accordion title="Can I drag and reorder categories and products?">
+    Yes. Grab the six-dot handle (⋮⋮) on the left of any category or product row and drag it to a new position. The order updates immediately without a Save button. The reordering applies globally, or per-context if you have a Location/Order Mode selected.
+  </Accordion>
+  <Accordion title="What does 'Hidden from order' mean?">
+    A product marked as **Hide in Order** exists in your system but won't appear in normal POS order flow. It's useful for items like discontinued products you want to keep for reporting, or special-request-only items. Staff can still add them via special access (if your POS supports it) or admin override. The product appears grayed out in the Menu Builder as a visual reminder.
+  </Accordion>
+  <Accordion title="How do I set different prices for delivery vs. dine-in?">
+    Use the **Context Selector** to pick a Location and Order Mode (e.g., Delivery), then click the product in the middle panel and edit the price in the Details tab. But this only shows you what the override looks like — it doesn't create the override. To actually create pricing overrides, go to **Products → Pricing & Availability** and add a rule for Location + Order Mode. Once created, return to the Menu Builder with the context selected, and you'll see the override live.
   </Accordion>
   <Accordion title="Can I move a product from one category to another?">
-    Yes. Edit the product and change its **Category** field. The product will immediately move to the new category in the Menu Builder.
+    Yes. Click the product to open the Detail Panel on the right, go to the **Details tab**, and change the **Category** dropdown. Click **Save changes** and the product moves immediately. The middle panel will no longer show it (since you switched its category), but it's now in the new category.
   </Accordion>
-  <Accordion title="How many categories and products can I have?">
-    There is no hard limit. However, for the best experience on the POS, keep the number of top-level categories manageable (under 15) and use the search function for large menus.
+  <Accordion title="Do I need a 'Save' button for drag reordering?">
+    No. When you drop a dragged category or product into a new position, the order is saved automatically. You'll see a brief loading state if the save is in progress.
   </Accordion>
-  <Accordion title="Why are some products not showing on the POS?">
-    Check that both the **product** and its **category** are set to Active. A product in an inactive category will not appear on the POS even if the product itself is active.
+  <Accordion title="What's the difference between the Menu Builder's Context Selector and the Products page's Context Selector?">
+    **Menu Builder's Context Selector** is a live preview — pick a location/order mode and see badges and strikethroughs update to show you what customers see. You're not editing overrides here. **Products page's Context Selector** (in the Pricing & Availability tab) is for creating and editing pricing and availability overrides. Use the Menu Builder to review, and the Products page to modify.
   </Accordion>
 </AccordionGroup>
 
 ## Related
 
 <CardGroup cols={2}>
-  <Card title="Categories" icon="folder" href="/features/categories">Create and manage menu sections</Card>
-  <Card title="Products" icon="box" href="/features/products">Add items to your menu</Card>
-  <Card title="Modifiers" icon="list" href="/features/modifiers">Add customisation options to products</Card>
-  <Card title="Bulk Pricing" icon="tag" href="/features/bulk-pricing">Set different prices per context</Card>
+  <Card title="Categories" icon="folder" href="/features/categories">
+    Create and manage menu sections. Learn about context overrides and bulk editing.
+  </Card>
+  <Card title="Products" icon="box" href="/features/products">
+    Full product editor with Pricing & Availability, Variants, and Modifiers tabs.
+  </Card>
+  <Card title="Modifiers" icon="list" href="/features/modifiers">
+    Create modifier groups and individual modifiers, and map them to categories and products.
+  </Card>
+  <Card title="Bulk Pricing" icon="tag" href="/features/bulk-pricing">
+    Set prices and availability for specific locations and order modes in bulk.
+  </Card>
 </CardGroup>

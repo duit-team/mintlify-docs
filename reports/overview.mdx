@@ -1,74 +1,90 @@
 ---
-title: "Reports"
-description: "View sales, payment, and transaction analytics."
+title: "Reports Overview"
+description: "Find the right report for what you need to know, before you start digging through numbers."
 ---
 
-The **Reports** section gives you a comprehensive view of your business performance — revenue, order counts, tax collected, and payment breakdowns. Use reports to understand trends, identify best-sellers, and prepare for end-of-period reconciliation.
+The **Reports** screen has nine tabs, and that's not accidental complexity — "how did we do" means something different depending on what you're actually checking. Total revenue for the day is a different question from what sold well, which is a different question from how customers paid, which is a different question from tracking down one specific order a customer is asking about. Picking the wrong report doesn't just waste time — it can make correct numbers look wrong (see the By Item vs Sales Summary note below).
 
 <Frame>
-  <img src="/images/reports.png" alt="Reports dashboard showing Sales Summary, Payment Breakdown, and Product Sales charts" />
+  <img src="/images/reports.png" alt="Reports screen showing the report tab list with Sales Summary selected" />
 </Frame>
 
-## Available Reports
+## Which Report Do I Want?
 
-| Report | What it shows |
-|--------|--------------|
-| **Sales Summary** | Total revenue, order count, and average order value — filterable by day, week, or month |
-| **Payment Breakdown** | Revenue split by payment type (Cash, Card, Online, etc.) to see how customers pay |
-| **Tax Report** | Tax collected per rate (e.g. SST 6%, Service Charge 10%) for compliance reporting |
-| **Product Sales** | Best and worst selling products ranked by quantity and revenue |
-| **Category Sales** | Revenue and order count per menu category — shows which sections drive the most income |
-| **Employee Sales** | Sales attributed to each employee, useful for commission or performance tracking |
-| **Void & Refund Report** | All voids and refunds in the period, with reason codes and employee attribution |
+Start here before opening any report.
 
-## Date Range
+| I want to know... | Use this report |
+|---|---|
+| How much did we make today / this week? | **Sales Summary** |
+| What are our best-selling items? | **By Item** |
+| Which menu categories perform best? | **By Category** |
+| How much cash vs card did we take? | **By Payment** |
+| How is each channel (dine-in, delivery, etc.) performing? | **By Order Mode** |
+| Which register/terminal is underperforming? | **By Terminal** |
+| I need to look up one specific order | **Tickets** (Ticket Summary) |
+| How much are we losing to voids, comps, or gifts? | **Void/Comp/Gift** (Item Reason Summary) |
+| Did the night shift balance their cash drawer? | [Workday Reports](/reports/workday) |
 
-Use the **Date** picker at the top to filter any report by a custom date range, or use the quick shortcuts:
+Those nine rows are the nine tabs, grouped into three families, each with its own page:
 
-- **Today** — current calendar day from midnight to now.
-- **This Week** — Monday to today.
-- **This Month** — 1st of the month to today.
-- **Custom** — pick any start and end date.
+- **[Sales Reports](/reports/sales-reports)** — Sales Summary, By Item, By Category, By Payment, By Order Mode, By Terminal. Six aggregate reports: every one of them groups and sums transaction data, and every one shares the same filters and export behavior described below.
+- **[Tickets & Voids](/reports/tickets-and-voids)** — Ticket Summary and Item Reason Summary. These two are different in kind, not just in subject: Ticket Summary is the only report that isn't aggregated at all (one row per order, with a drill-down detail view), and Item Reason Summary is the only report that requires a Reason to exist on a line item before it shows up.
+- **[Workday Reports](/reports/workday)** — shift and till reconciliation. This lives on a separate backend service from the other eight reports (specifically so it can reflect offline-synced tickets live rather than from a cache), has its own filter set, and is documented on its own page.
 
-<Tip>
-  For shift-by-shift breakdowns and cash drawer reconciliation, use [Workday Reports](/reports/workday) instead of the date-range reports. Workday Reports group data by business session, which more accurately reflects your trading day if you trade past midnight.
-</Tip>
+## Shared Filters
+
+Sales Summary, By Item, By Category, By Payment, By Order Mode, By Terminal, Ticket Summary, and Item Reason Summary — all eight of them, everything except Workday Reports — share the same filter bar:
+
+| Filter | Behavior |
+|--------|----------|
+| **Date Range** (From / To) | Filters by business date, not by exact clock time |
+| **Location** | Only shown if your tenant has more than one location; otherwise omitted |
+| **Order Mode** | Filter to Dine In, Takeaway, Delivery, etc. |
+
+Ticket Summary has one filter none of the other seven get: **Status** (All / Open / Closed / Voided) — see [Tickets & Voids](/reports/tickets-and-voids) for why.
 
 ## Export
 
-Click **Export CSV** on any report to download the data for use in Excel, Google Sheets, or accounting software. Exports include all rows for the selected date range, not just what is visible on screen.
+Every report in this family (Sales Reports and Tickets & Voids — not Workday's live views) can be exported to CSV or XLSX.
 
-## Filtering
+<Steps>
+  <Step title="Set your filters">
+    Apply the date range, location, and order mode you want before exporting — the export includes every row matching the current filters, not just what's visible on screen.
+  </Step>
+  <Step title="Click Export">
+    Click the **Export** button on the report toolbar and choose CSV or XLSX.
+  </Step>
+  <Step title="Download the file">
+    For smaller result sets, the file downloads immediately. For larger ones, see the note below — nothing extra to configure either way.
+  </Step>
+</Steps>
 
-Most reports support additional filters beyond the date range:
-
-- **Location** — filter to one branch or view all locations combined.
-- **Order Mode** — see sales by Dine In, Takeaway, or Delivery separately.
-- **Payment Type** — isolate sales by Cash, Card, or specific payment methods.
-- **Employee** — filter to one staff member's transactions.
+<Tip>
+  Export size is handled automatically — there's nothing you need to configure differently. If a requested export is under roughly 5,000 rows, it's generated instantly. Above that, DuitPOS prepares the file in the background and gives you a link once it's ready, which usually shows up as a notification a few seconds later. This only tends to happen with very large date ranges or "all locations" exports on high-volume tenants.
+</Tip>
 
 ## Frequently Asked Questions
 
 <AccordionGroup>
-  <Accordion title="Why do my report totals not match my bank statement?">
-    Reports show total sales (gross revenue including tax). Your bank statement shows net deposits (after payment processor fees). Card and online payments may also be batched differently. For reconciliation, use the Payment Breakdown report filtered to Card and Online types, then compare with your processor's settlement statement.
+  <Accordion title="Why don't my By Item totals match my Sales Summary totals?">
+    This is expected, not a bug. By Item deliberately excludes voided line items, so it reflects what actually sold — Sales Summary and Ticket Summary include the full transaction history. If a cashier rings up an item and then voids it, Sales Summary reflects the ticket's final state but By Item simply won't count the voided line. See [Sales Reports](/reports/sales-reports) for details.
   </Accordion>
-  <Accordion title="Can I schedule reports to be emailed automatically?">
-    Daily sales summary emails can be configured under **Manage → Settings → Notifications**. For custom scheduled exports, contact your account manager.
+  <Accordion title="Why is a sale from late last night showing up on the wrong day?">
+    Reports filter by business date, which follows your location's configured timezone and trading hours — not the exact clock timestamp. If you trade past midnight, check [Workday Reports](/reports/workday) instead, since a workday groups a full trading session together even if it spans two calendar days.
   </Accordion>
-  <Accordion title="How far back can I view historical data?">
-    All historical transaction data is retained for as long as your account is active. There is no expiry on historical reports.
+  <Accordion title="Which report should I use to investigate one order a customer is asking about?">
+    Ticket Summary. It's the only report with a Status filter and the only one where clicking a row opens a full order detail — every line item, modifiers, payments, and timestamps. See [Tickets & Voids](/reports/tickets-and-voids).
   </Accordion>
-  <Accordion title="Why is a sale from yesterday not appearing in today's report?">
-    Reports use your account's configured **Timezone** (set under Manage → Settings). If your timezone is set incorrectly, transactions near midnight may appear in the wrong day. Check your timezone setting if you see this pattern consistently.
+  <Accordion title="Item Reason Summary is empty even though I know we've had voids — why?">
+    Item Reason Summary only shows line items that have a **Reason** attached. If staff void or comp an item without selecting a reason code, it won't appear in this report at all, even though the void itself is recorded. Configure reason codes under [Reasons](/features/reasons) and make sure staff are selecting one when they void, comp, or gift an item.
   </Accordion>
 </AccordionGroup>
 
 ## Related
 
 <CardGroup cols={2}>
-  <Card title="Workday Reports" icon="clock" href="/reports/workday">Shift-level reconciliation and cash drawer reports</Card>
+  <Card title="Sales Reports" icon="chart-bar" href="/reports/sales-reports">The six aggregate reports — Sales Summary, By Item, By Category, By Payment, By Order Mode, By Terminal</Card>
+  <Card title="Tickets & Voids" icon="receipt" href="/reports/tickets-and-voids">Look up a specific order or investigate voids, comps, and gifts</Card>
+  <Card title="Workday Reports" icon="clock" href="/reports/workday">Shift-level reconciliation and live till tracking</Card>
   <Card title="Import History" icon="upload" href="/reports/import-history">Review past bulk import results</Card>
-  <Card title="Tax" icon="percent" href="/features/tax">Configure the tax rates shown in the Tax Report</Card>
-  <Card title="Employees" icon="users" href="/features/employees">Set up staff records for Employee Sales reports</Card>
 </CardGroup>

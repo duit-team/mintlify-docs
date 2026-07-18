@@ -1,9 +1,9 @@
 ---
 title: "Bulk Pricing"
-description: "Override product prices, names, and availability for a specific context."
+description: "Quickly adjust prices and availability across multiple products for a specific location and order mode."
 ---
 
-**Bulk Pricing** lets you set a different price, display name, or availability for products in a specific sales context. Common use cases include delivery platform pricing, happy-hour menus, or location-specific price adjustments.
+**Bulk Pricing** is a simplified tool for quickly overriding prices, names, and availability across many products at once for a specific **Location** and **Order Mode** combination. Instead of editing each product individually, you pick the context (location + order mode) at the top of the page and edit an inline table of all products. Perfect for delivery surcharges, location-specific pricing, time-limited promotions, or hiding products in a particular context.
 
 <Frame>
   <img src="/images/bulk-pricing.png" alt="Bulk Pricing grid showing products with override price and availability fields per context" />
@@ -11,50 +11,58 @@ description: "Override product prices, names, and availability for a specific co
 
 ## How It Works
 
-A **context** is simply a combination of a **Location** and/or an **Order Mode** you already have set up — there is no separate "Context" list to create or manage. You pick the combination from the dropdowns at the top of the page (the same selector shown in Menu Builder), for example:
-- **Location: Outlet B, Order Mode: All** — a different price point for one branch, across every order mode.
-- **Location: All, Order Mode: Delivery** — a higher price to account for delivery platform commission, at every location.
-- **Location: Outlet B, Order Mode: Delivery** — both combined, for the most specific override.
+A **context** is a combination of a **Location** and an **Order Mode**. You pick the combination from the dropdowns at the top of the page — there is no separate "Context" list to manage. For example:
+- **Location: Downtown, Order Mode: Dine-In** — to set prices just for dine-in at your downtown branch.
+- **Location: All, Order Mode: Delivery** — to add a delivery surcharge across all locations.
+- **Location: Airport, Order Mode: All** — to set location-specific pricing across all order modes at the airport.
 
-Each row in the bulk pricing grid represents one product. You can override:
+Once you pick a context, the page loads a table showing all products. You can edit any of these fields inline:
 
-| Field | What it changes |
-|-------|----------------|
-| **Price** | The price charged in this context only. Leave blank to use the base product price |
-| **Name** | The display name shown to the customer (e.g. `Large Meal Deal`). Leave blank to use the base product name |
-| **Active** | Whether the product is available in this context. Toggle off to hide it without affecting the base menu |
+| Field | What it does |
+|-------|---|
+| **Override Price** | The price charged in this context only. Leave blank to use the base product price |
+| **Display Name** | The name shown to the customer (e.g. `Large Meal Deal`). Leave blank to use the base product name |
+| **Visibility** | **Inherit** (use base active status), **Visible** (show in this context), or **Hidden** (hide in this context only) |
 
-Changes here do **not** affect the base product — only the selected context.
+All changes are saved together when you click **Save** — nothing takes effect until you commit.
 
 <Tip>
   Leave a field blank to inherit the default value from the base product. You only need to fill in the fields that differ from the standard menu for this context.
 </Tip>
 
-## Override Priority
+## Understanding Override Priority
 
-You can set up multiple overrides for the same product across different contexts. When an order comes in, the most specific match wins:
+When you set up multiple overrides for the same product across different contexts, the system picks the most specific match at sale time. **Each field (price, name, visibility) resolves independently** — meaning a single product's price can come from a location-only override while its name comes from an order-mode-only override.
 
-1. **Exact match** — a specific Location **and** a specific Order Mode.
-2. **Location-only** — a specific Location, Order Mode set to All.
-3. **Order Mode-only** — Order Mode set to a specific mode, Location set to All.
-4. **Global** — Location and Order Mode both set to All — applies everywhere nothing more specific exists.
+The priority order is:
+1. **Both Location and Order Mode specified** (most specific) — applies only to that location + order mode combination.
+2. **Location only** — applies to that location across all order modes.
+3. **Order Mode only** — applies to that order mode across all locations.
+4. **Both blank** (least specific) — applies everywhere if no more specific override exists.
 
-If no override matches at all, the base product price, name, and availability are used as-is.
+**Important:** A blank Location field means "all locations," and a blank Order Mode field means "all order modes" — they do **not** mean "applies nowhere."
 
-## Apply Overrides
+If you create an override row but leave all three fields (Price, Display Name, Visibility) blank, the system automatically deletes that row when you save, since it would have no effect.
+
+For more detail on how overrides work, see the **Pricing & Availability** tab in the [Products](/features/products) page.
+
+## Use Bulk Pricing
 
 <Steps>
   <Step title="Go to Menu Builder → Bulk Pricing">
-    Select the context (e.g. *Delivery*, *Happy Hour*) from the dropdown at the top of the page.
+    Or navigate via the sidebar link.
   </Step>
-  <Step title="Find the product">
-    Use the search bar or scroll to find the product row you want to override.
+  <Step title="Pick Location and Order Mode">
+    Use the dropdown selectors at the top to choose the context you want to edit. This loads all products for that context.
   </Step>
-  <Step title="Enter overrides">
-    Click into the price or name cell and type the override value. Toggle the active switch to hide a product in this context.
+  <Step title="Search and filter (optional)">
+    Use the search box to find specific products, or toggle "Modified only" to show just the products you've already changed.
+  </Step>
+  <Step title="Edit products inline">
+    Click into any cell (Override Price, Display Name, Visibility) to edit. Products with pending changes show a "Modified" badge.
   </Step>
   <Step title="Save">
-    Click **Save** at the top of the page. All changes for this context are saved together.
+    Click **Save Changes** at the top. All modifications for this context are saved together.
   </Step>
 </Steps>
 
@@ -62,32 +70,35 @@ If no override matches at all, the base product price, name, and availability ar
   Clicking **Save** saves all pending changes on the page at once. If you make changes across multiple rows and navigate away without saving, all unsaved changes are lost. Save frequently when making bulk edits.
 </Warning>
 
-## Viewing Overrides in the Menu Builder
+## Preview Changes in Menu Builder
 
-Use the **Context** dropdown at the top of the Menu Builder to preview how the menu looks with a specific context applied. This lets you verify your pricing overrides without going live.
+Use the **Context** dropdown at the top of the Menu Builder to preview how the menu looks with your overrides applied. This lets you verify your pricing changes without going live.
 
 ## Frequently Asked Questions
 
 <AccordionGroup>
-  <Accordion title="How do I create a new context?">
-    You don't create contexts separately — a context is just a Location and/or Order Mode you already have. Pick the combination you want from the dropdowns at the top of the page. If the combination you need isn't available, make sure the Location (under Manage → Locations) or Order Mode (under Manage → Order Modes) exists first.
+  <Accordion title="What's the difference between using Bulk Pricing vs. editing each product individually?">
+    **Bulk Pricing** is a spreadsheet-like view for quickly editing many products at once for a single context. **Products → Pricing & Availability tab** (see [Products](/features/products)) is better if you want to set multiple context overrides for one product, or if you need to see all overrides side by side. Use whichever fits your workflow better — they edit the same data.
   </Accordion>
   <Accordion title="If I change the base product price, do bulk pricing overrides update automatically?">
     No. Override prices are stored independently. If you lower a product's base price but a bulk pricing context has an override, the context will continue to use the override price. You must manually update the override if you want it to reflect the new base price.
   </Accordion>
-  <Accordion title="Can I hide an entire category from a specific context?">
-    Currently, bulk pricing works at the product level. To hide a full category in a context, toggle the Active switch off for every product in that category within the context grid.
+  <Accordion title="Can I bulk-hide a whole category?">
+    Currently, bulk pricing works at the product level. To hide a full category in a context, toggle the Visibility to **Hidden** for every product in that category within the grid. You can use the search box to filter by category name and do this in one pass.
   </Accordion>
-  <Accordion title="Does bulk pricing affect the tax calculation?">
+  <Accordion title="Does bulk pricing affect tax?">
     Tax is calculated on the effective price (the override price, if set). If you set a delivery price of RM 15.00 (vs base RM 12.00), tax is calculated on RM 15.00 for delivery orders.
+  </Accordion>
+  <Accordion title="How do I create a new Location or Order Mode to use in Bulk Pricing?">
+    Contexts are based on **Locations** and **Order Modes** that already exist in your system. If the combination you need isn't available, create the Location (under Setup → Locations) or Order Mode (under Setup → Order Modes) first, then return to Bulk Pricing to use it.
   </Accordion>
 </AccordionGroup>
 
 ## Related
 
 <CardGroup cols={2}>
-  <Card title="Products" icon="box" href="/features/products">Manage base product prices</Card>
-  <Card title="Menu Builder" icon="utensils" href="/features/menu-builder">Preview how contexts affect your menu</Card>
-  <Card title="Categories" icon="folder" href="/features/categories">Organise the products you are pricing</Card>
-  <Card title="Order Modes" icon="layers" href="/features/order-modes">Use order modes alongside pricing contexts</Card>
+  <Card title="Products" icon="box" href="/features/products">Edit product details and view all overrides for one product</Card>
+  <Card title="Categories" icon="folder" href="/features/categories">Organise the products you're pricing</Card>
+  <Card title="Menu Builder" icon="utensils" href="/features/menu-builder">Preview how overrides affect your menu by context</Card>
+  <Card title="Order Modes" icon="layers" href="/features/order-modes">Manage order mode types (delivery, dine-in, etc.)</Card>
 </CardGroup>

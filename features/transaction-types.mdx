@@ -1,9 +1,9 @@
 ---
 title: "Transaction Types"
-description: "Define the types of transactions recorded on a ticket."
+description: "Define line-item categories for accounting and reporting."
 ---
 
-**Transaction Types** are the line-item categories on a ticket — e.g. *Sale*, *Discount*, *Tax*, *Void*, *Refund*. They appear in reports and on receipts, helping you understand exactly what happened on every order.
+**Transaction Types** are the line-item categories that form the ledger of every ticket — e.g. *Sale*, *Discount*, *Tax*, *Void*, *Refund*. Each type serves a different accounting function: Sale lines become revenue, Tax lines go to your tax payable account, Discount lines post to expenses, and so on. Transaction types help you track exactly what happened on every order and keep your accounts accurate.
 
 <Frame>
   <img src="/images/transaction_types.png" alt="Transaction Types list screen showing default Sale, Tax, Discount, Void, and Refund types" />
@@ -30,7 +30,7 @@ Most setups include these out of the box:
 | **Active** | No | Inactive types are hidden from new ticket creation but remain in historical records |
 
 <Tip>
-  Only create custom transaction types if your business needs to track a specific category that is not covered by the defaults — for example, a surcharge, gratuity, or rounding adjustment. Most businesses operate fine with the five default types.
+  Only create custom transaction types if your business needs to track a specific category that is not covered by the defaults — for example, a surcharge, gratuity, or rounding adjustment. Most businesses operate fine with the five default types. Transaction types map to your accounting ledger, so keep the list focused on your actual bookkeeping needs.
 </Tip>
 
 ## Create a Custom Type
@@ -71,8 +71,8 @@ Most setups include these out of the box:
 ## Related
 
 <CardGroup cols={2}>
-  <Card title="Payment Types" icon="credit-card" href="/features/payment-types">Set up how payments are accepted</Card>
+  <Card title="Reasons" icon="tag" href="/features/reasons">Add reasons for void, comp, and gift line items</Card>
+  <Card title="Order Modes" icon="layers" href="/features/order-modes">Define service types that affect ticket behavior</Card>
   <Card title="Tax" icon="percent" href="/features/tax">Configure tax rates applied to tickets</Card>
   <Card title="Print Templates" icon="file-text" href="/features/print-templates">Control how transaction lines appear on receipts</Card>
-  <Card title="Reports" icon="chart-bar" href="/reports/overview">View transaction breakdowns in reports</Card>
 </CardGroup>

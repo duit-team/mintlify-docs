@@ -31,6 +31,7 @@
         "icon": "rocket",
         "pages": [
           "introduction",
+          "getting-started/create-account",
           "getting-started/first-login",
           "getting-started/setup-checklist",
           "getting-started/dashboard-overview"
@@ -45,30 +46,44 @@
         ]
       },
       {
-        "group": "Manage",
+        "group": "Setup & Config",
         "icon": "settings",
         "pages": [
-          "features/payment-types",
-          "features/tax",
+          "features/brands",
+          "features/locations",
           "features/order-modes",
           "features/printers",
           "features/print-templates",
-          "features/transaction-types",
-          "features/modifiers",
           "features/setup",
-          "features/settings",
-          "features/locations"
+          "features/settings"
         ]
       },
       {
-        "group": "Menu",
+        "group": "Catalog",
         "icon": "utensils",
         "pages": [
           "features/menu-builder",
           "features/categories",
           "features/products",
-          "features/brands",
+          "features/modifiers",
           "features/bulk-pricing"
+        ]
+      },
+      {
+        "group": "Restaurant",
+        "icon": "layout-grid",
+        "pages": [
+          "features/tables"
+        ]
+      },
+      {
+        "group": "Operations",
+        "icon": "percent",
+        "pages": [
+          "features/payment-types",
+          "features/tax",
+          "features/transaction-types",
+          "features/reasons"
         ]
       },
       {
@@ -83,6 +98,8 @@
         "icon": "chart-bar",
         "pages": [
           "reports/overview",
+          "reports/sales-reports",
+          "reports/tickets-and-voids",
           "reports/workday",
           "reports/import-history"
         ]
@@ -92,14 +109,16 @@
         "icon": "qr-code",
         "pages": [
           "online-ordering/qr-setup",
-          "online-ordering/stripe-setup"
+          "online-ordering/stripe-setup",
+          "online-ordering/sharecommerce-setup"
         ]
       },
       {
         "group": "E-Invoicing",
         "icon": "file-text",
         "pages": [
-          "features/e-invoicing"
+          "features/e-invoicing",
+          "features/submit-invoice"
         ]
       },
       {

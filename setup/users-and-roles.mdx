@@ -1,98 +1,219 @@
 ---
 title: "Users & Roles"
-description: "Invite staff and control what each person can do."
+description: "Manage admin panel accounts and define permission templates for your team."
 ---
 
-**Users** are the people who can log in to the DuitPOS dashboard. **Roles** define what each user can see and do. Every user must have at least one role.
+**Users** are admin panel accounts that allow staff to log in and manage DuitPOS. **Roles** are permission templates — reusable sets of capabilities that you assign to users. Together, they control who can access what in your restaurant's management dashboard. Every user must have exactly one role to function; without a role, they cannot log in.
 
 <Frame>
-  <img src="/images/users.png" alt="Users and Roles management screen" />
+  <img src="/images/users.png" alt="Users and Roles management interface" />
 </Frame>
 
-## Roles
-
-A **role** is a named set of permissions (e.g. *Cashier*, *Manager*, *Supervisor*). Every user must be assigned at least one role.
-
-### Create a Role
-
-<Steps>
-  <Step title="Go to Users → Roles">
-    Click **Roles** in the left sidebar under the Users section.
-  </Step>
-  <Step title="Click New Role">
-    Enter a name (e.g. `Cashier`) and optionally a description.
-  </Step>
-  <Step title="Select Permissions">
-    Toggle the permissions this role should have. See [Permissions](/setup/permissions) for a full list.
-  </Step>
-  <Step title="Save">
-    Click **Create**. The role is now available to assign to users.
-  </Step>
-</Steps>
-
-<Tip>
-  Start with a **Manager** role (all permissions) and a **Cashier** role (view-only, no Manage or User admin). You can fine-tune permissions at any time without recreating roles.
-</Tip>
-
 ## Users
+
+**Users** are the people who can log in to the DuitPOS admin panel. A user is identified by their email address and password, and gets their permissions from the single role you assign them. Note: Users in DuitPOS are different from **Employees** (POS staff with PINs and terminals) — see the [Employees](/features/employees) page to manage point-of-sale workers.
 
 ### User Fields
 
 | Field | Required | Description |
 |-------|----------|-------------|
-| **Name** | Yes | The user's display name, shown in reports and the audit log |
-| **Email** | Yes | Used as the login username — must be unique across your account |
-| **Password** | Yes (on create) | Set a temporary password; ask the user to change it on first login |
-| **Role(s)** | Yes | One or more roles to assign. Permissions are additive across all assigned roles |
-| **Active** | No | Toggle off to disable login without deleting the account |
+| **Name** | Yes | Display name shown in reports and audit logs. Can be changed anytime. |
+| **Email** | Yes | Login username — must be unique. Set once; cannot be changed later (delete and recreate if needed). |
+| **Password** | Yes (create only) | Initial password you set. User should change it on first login. Not editable after creation; user can reset via "Forgot Password" on the login page. |
+| **Role** | Yes | Exactly one role. Determines all permissions available to this user. Can be changed without affecting historical data. |
+| **Active** | Optional | Toggle on/off to enable/disable login without deleting the account. Historical sales and audit logs are preserved when a user is deactivated. |
 
-### Invite a New User
+### Create a User
+
+Inviting a new user means creating an admin panel account and assigning them a role that matches their responsibilities — for example, **Manager** (full access) or **Cashier** (POS-only, no admin).
 
 <Steps>
-  <Step title="Go to Users → Users">
-    Click **Users** in the left sidebar.
+  <Step title="Go to Users">
+    In the DuitPOS sidebar, click **Users & Roles** → **Users**.
   </Step>
   <Step title="Click New User">
-    Fill in the user's name, email, and a temporary password.
+    A dialog will open to create a new account.
   </Step>
-  <Step title="Assign a Role">
-    Select one or more roles from the dropdown.
+  <Step title="Fill in the details">
+    - **Name**: Enter the user's display name (e.g., "Ali Manager").
+    - **Email**: Enter a unique email address. This is their login username.
+    - **Password**: Set a temporary password (at least 6 characters). Share it securely — not via the same channel as the email.
+    - **Role**: Select one role from the dropdown (e.g., "Manager", "Cashier"). The user will get all permissions in that role.
+    - **Active**: Toggle on (default) so they can log in immediately.
   </Step>
   <Step title="Save">
-    Click **Create**. The user can now log in with the credentials you set.
+    Click **Create**. The account is now ready. Share the email and temporary password with the user; ask them to change the password on first login.
+  </Step>
+</Steps>
+
+<Tip>
+  Start with two template roles: a **Manager** role (grant all permissions) for yourself or senior staff, and a **Cashier** role (POS-only, no Manage or Users sections) for frontline staff. You can fine-tune permissions anytime without recreating roles.
+</Tip>
+
+### Edit a User
+
+After creation, you can change a user's name and active status — but not their email, password, or role without deleting and recreating them.
+
+<Steps>
+  <Step title="Find the user in the list">
+    Use the **Status** filter to quickly find Active or Inactive users.
+  </Step>
+  <Step title="Click Edit (pencil icon)">
+    The edit dialog opens showing only Name and Active fields.
+  </Step>
+  <Step title="Make changes">
+    - **Name**: Update the display name if it changes (e.g., on marriage/promotion).
+    - **Active**: Toggle off to block login (preserves all historical data), or on to re-enable access.
+  </Step>
+  <Step title="Save">
+    Click **Update**. Changes take effect on their next login.
   </Step>
 </Steps>
 
 <Warning>
-  Share the temporary password securely — do not send it via the same channel as the email address. Ask the user to change it on first login. Never remove your own admin role while logged in; doing so will lock you out of the user management pages.
+  **Email and password cannot be changed after creation.** If a user's email must change, delete the old account and create a new one with the new email. For password resets, ask the user to click "Forgot Password" on the login page; they will receive a reset link via email.
+
+  **Never remove your own admin role while logged in.** Doing so will lock you out of the Users page and all admin functions.
 </Warning>
 
-### Edit or Deactivate a User
+### List & Filters
 
-Click the **Edit** (pencil) icon next to any user. Toggle **Active** off to prevent login without deleting the account. Their historical data (sales, reports) is preserved.
+The Users list shows all admin accounts in a table with columns for **Name + Email**, **Role**, and **Status** (Active/Inactive). Use the **Status** filter at the top to quickly view only active or inactive users. Click an action icon to edit or delete (delete permanently removes historical records associated with that user).
+
+---
+
+## Roles
+
+**Roles** are named templates of permissions. Instead of setting permissions one-by-one for each user, you create a role (e.g., "Supervisor"), choose which permissions it should have, and then assign that role to all users who need the same capabilities. A user gets exactly one role, so all their permissions come from that single role.
+
+### Role Fields
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| **Name** | Yes | Role name shown in user assignment dropdowns (e.g., "Manager", "Cashier", "Supervisor"). |
+| **Description** | Optional | A note explaining the role's purpose (e.g., "Can manage inventory and staff, but not payment settings"). Shown in tooltips and role list. |
+| **Permissions** | Yes | A matrix of toggles organized by function (All / Admin / POS / KDS / Kiosk). Permissions are saved as a `permission_ids` array. No two roles can have identical permission sets if one is a direct clone. |
+
+### Permission Matrix UI
+
+When you create or edit a role, the **Permissions** panel is the main interface. It uses a visual matrix to show all available permissions grouped by function:
+
+- **Filter Tabs** (top): All, Admin, POS, KDS, Kiosk. Click a tab to show only permissions relevant to that module. (For example, a Cashier might only need POS; a manager needs Admin.)
+- **Permission Cards**: Each card represents a business function (e.g., "Users & Roles", "Tax", "Products", "Reports"). Shows the resource label and a count like "2/4 selected" (2 of 4 permissions in this resource are enabled).
+- **Toggle Permissions**: Click individual permission pills within a card to toggle them on/off. A pill shows the permission action (Create, List, Update, Delete).
+- **Select All / Deselect All**: At the top-right of each card, a checkbox lets you quickly toggle all permissions in that resource at once.
+- **Unsaved Changes Indicator**: If you've made changes, a badge or button appears (e.g., "3 unsaved"). Click **Save** to apply changes, or **Discard** to revert.
+
+Example: If you create a "Inventory Manager" role, you might enable all Permissions for Products/Categories/Modifiers/Bulk Pricing (tab: Catalog), but leave POS and KDS permissions off so they cannot operate a terminal.
+
+### Create a Role
+
+<Steps>
+  <Step title="Go to Users & Roles → Roles">
+    Click the **Roles** tab in the Users & Roles section.
+  </Step>
+  <Step title="Click New Role">
+    A sidebar and permission matrix will appear on the right. Fill in:
+    - **Name**: e.g., "Supervisor", "Inventory Specialist"
+    - **Description** (optional): e.g., "Can manage inventory, tax, and reports but cannot process payments"
+  </Step>
+  <Step title="Select Permissions">
+    Use the **Filter Tabs** to navigate by function (All / Admin / POS / KDS / Kiosk). Click individual permission pills to enable them, or use the "Select All" checkbox in each resource card to bulk-toggle. Watch the "N/M selected" count update as you choose.
+  </Step>
+  <Step title="Save">
+    Click the **Save** button at the bottom. The role is now available to assign to users.
+  </Step>
+</Steps>
+
+<Tip>
+  Common role templates to start with:
+  - **Manager**: Enable all Admin permissions (Users, Roles, Tax, Payment Types, etc.). Typically also enable all POS permissions so managers can troubleshoot terminals.
+  - **Cashier**: Enable only POS List/Create/Update. No Manage, Users, or Reports.
+  - **Inventory Specialist**: Enable all permissions in the Catalog group (Products, Categories, Modifiers), plus Reports → view (but not full admin access).
+</Tip>
+
+### Edit a Role
+
+<Steps>
+  <Step title="Go to Users & Roles → Roles">
+    The left sidebar shows all existing roles.
+  </Step>
+  <Step title="Click a role in the sidebar">
+    The role details and permission matrix load on the right.
+  </Step>
+  <Step title="Make changes">
+    - Update **Name** or **Description** fields.
+    - Toggle permissions in the matrix. Use Filter Tabs to find the ones you need.
+  </Step>
+  <Step title="Save or Discard">
+    Click **Save** to apply changes, or **Discard** to revert. Changes take effect on users' next login.
+  </Step>
+</Steps>
+
+<Warning>
+  **Changing a role's permissions affects all users with that role.** If you edit a "Cashier" role to remove POS List permission, all cashiers will lose that permission on their next login.
+
+  **If you delete a role that users have assigned, those users lose that role.** They will be unable to log in until reassigned to a different role. DuitPOS will show a "role deleted" error message if they try to access the dashboard. Always reassign users to a new role before deleting an old one.
+</Warning>
+
+### Delete a Role
+
+You can only delete a role if no users are currently assigned to it. The system will warn you if users depend on the role and prevent deletion until they are reassigned.
+
+<Steps>
+  <Step title="Go to Users & Roles → Roles">
+    Select the role in the left sidebar.
+  </Step>
+  <Step title="Click Delete Role">
+    Confirm the deletion. The role and all its permissions are permanently removed.
+  </Step>
+</Steps>
+
+---
 
 ## Frequently Asked Questions
 
 <AccordionGroup>
   <Accordion title="Can a user have multiple roles?">
-    Yes. Permissions are additive — the user gets the union of all assigned roles' permissions. For example, assigning both a Cashier and a Supervisor role gives the user all permissions from both.
+    No. In DuitPOS, each user is assigned exactly one role. The user gets all permissions defined in that single role. If you need different permission sets, create multiple roles and assign each user to the one that best matches their job.
   </Accordion>
-  <Accordion title="Can I delete a role that is currently in use?">
-    No. You must reassign all users away from the role first, then delete it. The system will warn you if any users are still assigned.
+
+  <Accordion title="Can I change a user's email address?">
+    No. Email is the login username and cannot be edited after account creation. If a user's email must change (e.g., they leave your organization), delete the old account and create a new user with the correct email. Their historical data (sales, audit logs) will be preserved in reports by their user ID, but the name will show as deleted or orphaned.
   </Accordion>
-  <Accordion title="A user cannot log in after I changed their role — why?">
-    Role permission changes take effect on the next login. If the user was already logged in, ask them to sign out and sign back in. If the login still fails, check that the account is set to Active.
+
+  <Accordion title="What if I edit a role and now users cannot log in?">
+    If you removed critical permissions from a role, users may see a "permission denied" error when accessing parts of the dashboard they used before. They will still be able to log in and access other functions. To restore access, either re-enable the permissions in the role, or reassign the users to a different role that has those permissions. Changes take effect on their next login.
   </Accordion>
-  <Accordion title="What permissions does a Cashier role typically have?">
-    A Cashier typically has no Manage, Users, or Reports permissions — only the ability to operate the POS terminal. See [Permissions](/setup/permissions) for the full list of available permissions to choose from.
+
+  <Accordion title="Can I clone or copy a role?">
+    There is no direct clone function. However, you can manually recreate a similar role by: (1) writing down the permissions from an existing role, (2) creating a new role with a new name, (3) selecting the same permissions from the matrix. For frequently-used role templates, consider documenting their permission sets (e.g., in a spreadsheet) so you can replicate them quickly.
+  </Accordion>
+
+  <Accordion title="A user was deactivated but I see their sales in reports — is that correct?">
+    Yes. Deactivating a user only blocks their login. All historical data (sales, voided items, shift logs) linked to that user is preserved in reports and audit trails. Deactivation is reversible — click Edit, toggle Active on, and they can log in again. Permanent deletion removes the user account; some reports may show them as "deleted user" for historical accuracy.
+  </Accordion>
+
+  <Accordion title="How do permissions work in DuitPOS?">
+    Permissions are action-based. Each role contains a set of permissions like "Users:Create", "Products:Update", "Reports:View". When a user logs in, DuitPOS checks their role's permissions and shows/hides dashboard sections and buttons accordingly. If a permission is missing, the user sees "Access Denied" for that feature. See [Permissions](/setup/permissions) for the complete list of available permissions.
   </Accordion>
 </AccordionGroup>
+
+---
 
 ## Related
 
 <CardGroup cols={2}>
-  <Card title="Permissions" icon="shield-check" href="/setup/permissions">See what each permission controls</Card>
-  <Card title="Employees" icon="user-check" href="/features/employees">Manage POS staff records and PINs</Card>
-  <Card title="Dashboard Overview" icon="layout-dashboard" href="/getting-started/dashboard-overview">Understand the full dashboard layout</Card>
-  <Card title="Login Problems" icon="life-buoy" href="/troubleshooting/login-problems">Fix sign-in issues</Card>
+  <Card title="Permissions" icon="shield-check" href="/setup/permissions">
+    See what each permission controls and which features require which permissions.
+  </Card>
+  <Card title="Employees" icon="user-check" href="/features/employees">
+    Manage POS staff records, PINs, and terminal assignments — separate from admin users.
+  </Card>
+  <Card title="Settings" icon="sliders" href="/features/settings">
+    Configure security settings, password policies, and other account-level preferences.
+  </Card>
+  <Card title="Login Problems" icon="life-buoy" href="/troubleshooting/login-problems">
+    Troubleshoot sign-in issues, password resets, and permission errors.
+  </Card>
 </CardGroup>

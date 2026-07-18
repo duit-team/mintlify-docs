@@ -7,7 +7,7 @@ description: "Manage the businesses (tenants) registered on the platform."
   This section is for **root administrators** only. Tenant users do not have access to this page.
 </Warning>
 
-A **Tenant** is a separate business account with its own isolated database, users, menu, and settings. Each tenant is completely independent — one tenant cannot see or access another's data.
+A **Tenant** is a separate business account with its own isolated database, users, menu, and settings. Each tenant is completely independent — one tenant cannot see or access another's data. When you create a tenant, a new PostgreSQL database is provisioned on your selected database server, and all of that tenant's sales, employees, menu configuration, and settings live in that isolated database. No tenant can ever see or access another tenant's data, even if they share the same database server.
 
 <Frame>
   <img src="/images/tenants.png" alt="Tenants list in the root admin panel showing business names, domain names, and database server assignments" />
@@ -17,10 +17,13 @@ A **Tenant** is a separate business account with its own isolated database, user
 
 | Field | Required | Description |
 |-------|----------|-------------|
-| **Name** | Yes | The business name displayed in the root admin panel |
-| **Domain Name** | Yes | The unique slug used in all API and dashboard URLs, e.g. `my-restaurant`. Cannot be changed after creation |
-| **Database Server** | Yes | Which PostgreSQL server to provision the tenant's database on. See [Database Servers](/features/db-servers) |
-| **Active** | No | Toggle off to suspend access for this tenant without deleting their data |
+| **Name** | Yes | The business name displayed in the root admin panel and in tenant dashboards |
+| **Domain Name** | Yes | The unique slug used in all API and dashboard URLs, e.g. `my-restaurant`. Cannot be changed after creation. |
+| **Country Code** | Yes | The country where the business operates (affects e-invoicing rules, tax localization, and denomination settings) |
+| **Database Server** | Yes | Which PostgreSQL server to provision the tenant's database on. See [Database Servers](/features/db-servers). |
+| **Plan** | Yes | The billing tier assigned to this tenant (controls feature access and quotas) |
+| **Business Type** | No | Category (e.g. restaurant, cafe, catering) used for onboarding workflows and feature recommendations |
+| **Active** | No | Toggle off to suspend access for this tenant without deleting their data or any history |
 
 ## Create a Tenant
 
@@ -29,55 +32,177 @@ A **Tenant** is a separate business account with its own isolated database, user
     Click **Tenants** in the root admin sidebar.
   </Step>
   <Step title="Click New Tenant">
-    Fill in the Name, Domain Name, and select a Database Server.
+    Fill in the Name, Domain Name, Country Code, select a Database Server and Plan, and optionally select a Business Type.
   </Step>
   <Step title="Save">
-    Click **Create**. The tenant database is provisioned automatically on the selected server and migrations run on the next application startup.
+    Click **Create**. The tenant database is provisioned automatically on the selected server and migrations run on the next application startup. The tenant is immediately active and can begin logging in and configuring their business.
   </Step>
 </Steps>
 
 <Tip>
-  Choose the Domain Name carefully — it becomes part of every URL for that business (e.g. `app.duitpos.com/my-restaurant/login`). Use a slug that matches the business name, is lowercase, and uses hyphens instead of spaces.
+  Choose the **Domain Name** carefully — it becomes part of every URL for that business (e.g. `app.duitpos.com/my-restaurant/login`). Use a slug that matches the business name, is lowercase, and uses hyphens instead of spaces. The domain name is permanent and cannot be changed after creation.
 </Tip>
 
-## Manage a Tenant
+## Edit a Tenant
 
-Click **Edit** on any tenant to update its name or Active status.
+Click **Edit** on any tenant to update its **Name**, **Country Code**, **Plan**, **Business Type**, or **Active** status.
 
 <Warning>
   The **Domain Name** cannot be changed after creation. It is embedded in the tenant's database name, all URLs, and all API routes. If a tenant needs a new domain name, a new tenant must be created and data migrated manually.
 </Warning>
 
-## Tenant Isolation
+## Delete a Tenant
 
-Each tenant's data is completely isolated in its own PostgreSQL database. No tenant can access another's data — even if they are on the same database server.
+Click **Delete** to permanently remove a tenant and all its data.
 
 <Warning>
-  Need to clear a location's sales history, fully reset a tenant, or duplicate one as a template? Those are destructive, hard-to-reverse actions handled on a separate page: see [Tenant Operations](/features/tenant-operations). They are not available from the regular tenant edit screen.
+  **Deleting a tenant is irreversible.** All data — sales history, employees, menu configuration, payment records, e-invoices — will be deleted permanently. The deletion will be blocked if the tenant has active data (sales or transactions); you must wipe/clear the tenant first, or ensure no recent activity exists. You will be prompted to type the tenant's domain name to confirm the deletion.
 </Warning>
+
+## Tenant Operations (Destructive)
+
+DuitPOS provides several powerful operations for managing tenant data. These operations are destructive and permanent — exercise caution and verify your intent before confirming.
+
+### Clone a Tenant
+
+**Clone** creates a new tenant as an exact copy of an existing one. This is useful for quickly onboarding new franchisees or locations with the same menu, roles, pricing, and device setup as an existing tenant, without re-entering all the configuration.
+
+**What is copied:**
+- Menu (categories, products, variants, modifiers, pricing)
+- Taxes and transaction types
+- Payment types and processor configuration
+- Order modes
+- Devices and printer profiles
+- Roles and permission templates
+- Employee records and shift assignments
+
+**What is NOT copied:**
+- Sales history, tickets, and all transaction records
+- e-Invoice records
+- Settings secrets (passwords, API keys, LHDN intermediary credentials)
+- Payment processor live credentials (only the templates are copied; secrets must be re-entered)
+
+To clone a tenant, click **Clone** on any tenant row. Enter a name and domain name for the new tenant, select a database server, and click **Create Clone**. The clone operation runs asynchronously in the background; you will receive a notification when complete. The new tenant will be ready to log in and make any final configuration adjustments.
+
+<Warning>
+  Cloning may take several minutes depending on the size of the tenant's configuration. Monitor the background task in your notifications; do not make changes to the source tenant during the clone.
+</Warning>
+
+### Wipe a Tenant ("Refresh Data")
+
+**Wipe** (also called **Refresh Data**) truncates every table in a tenant's database and reseeds the default system data. This is useful for resetting demo or test tenants back to a clean slate, erasing all sales history without deleting the tenant account itself.
+
+**What happens:**
+- All tickets, workdays, shifts, and transactions are deleted
+- All e-invoices and payment records are deleted
+- All employee records are deleted
+- Default roles (Admin, POS User, Kitchen, etc.) and the default admin user are recreated
+- The tenant can log back in immediately with the recreated admin account
+
+<Warning>
+  **Wiping a tenant is permanent and cannot be undone.** All sales history is lost. Restore from backups only if needed. You will be prompted to type the tenant's domain name to confirm.
+</Warning>
+
+To wipe a tenant, click **Wipe** on any tenant row, confirm by typing the domain name, and click **Confirm Wipe**.
+
+### Clear Location Sales
+
+**Clear Location Sales** deletes all sales history (tickets, workdays, e-invoices, payment records, charges) for a single location only, without affecting the location's configuration or other locations.
+
+This operation is available on the **Locations** sub-page of each tenant. Click the **Clear Sales** icon on any location row to delete that location's sales history. You will be prompted to type the location name to confirm.
+
+<Warning>
+  **Clearing location sales is permanent.** All tickets, transactions, and e-invoices for that location will be deleted. Other locations are unaffected. Restore from backups only if needed.
+</Warning>
+
+See [Locations](/features/locations) for more detail.
+
+### Delete a Tenant
+
+**Delete** permanently removes a tenant and all its data from the platform. This is appropriate for test accounts or when a business is no longer using the platform.
+
+The deletion will fail if the tenant has active sales data; wipe or clear data first if needed.
+
+## Tenant Sub-Pages
+
+Each tenant has several management pages accessible by clicking on the tenant name or the settings icon in the tenant row.
+
+### Locations
+
+Manage the physical branches (locations) of this tenant. Add new locations, configure location-specific settings (e-invoicing, consolidation period, address, contact info), and clear sales history for a single location.
+
+See [Locations](/features/locations) for complete detail.
+
+### Users
+
+Manage the **admin accounts** for this tenant. These are root-level accounts that can access the DuitPOS dashboard and configure the entire tenant setup — distinct from front-line **Employees** (who clock in/out and work the POS).
+
+**Actions on users:**
+- **Send Reset Email** — Email a password reset link to the user. The link expires after 1 hour. The user can click it to set a new password.
+- **Set Password** — Directly set a new password for this user without sending an email (useful for on-site password resets). The user will be signed out of all active sessions.
+
+<Tip>
+  **Employees vs Users:** A **User** is an admin account who configures the business in the dashboard. An **Employee** (managed elsewhere) is a staff member who clocks in/out and uses the POS or KDS terminals.
+</Tip>
+
+### System Info
+
+View read-only telemetry and diagnostic information about this tenant's setup.
+
+**Information shown:**
+- Application version running on the API
+- Client details (OS, browser name, browser version, screen resolution)
+- Server details (OS, Node.js version, hostname, uptime)
+- **Latest snapshot** card showing the most recent data
+- **History** table showing past snapshots, useful for tracking configuration changes over time
+
+No actions are available on this page — it is read-only.
+
+### Features
+
+Manage **per-tenant feature flag overrides**. These override the feature access granted by the tenant's assigned Plan, useful for trials, grandfathered accounts, or special promotions.
+
+**Workflow:**
+1. Click on any feature flag to toggle it on or off
+2. When overridden (explicitly set), the override is shown in bold or highlighted
+3. Click **Revert to Plan Default** to remove the override and return to the Plan's default setting
+
+For example, if a tenant's Plan includes "Online Ordering" but you want to disable it for a specific tenant, toggle the feature off here. Conversely, if you want to grant "Advanced Reports" to a tenant whose Plan doesn't normally include it, toggle the feature on.
 
 ## Frequently Asked Questions
 
 <AccordionGroup>
   <Accordion title="How do I add a new business to the platform?">
-    Create a new tenant from the Tenants page. Set the Domain Name to a unique slug for that business. After creation, the business owner can log in at their tenant URL and complete their own setup.
+    Create a new tenant from the Tenants page. Set the Domain Name to a unique slug for that business, select a country, database server, and plan. After creation, the business owner can log in at their tenant URL and complete their own setup.
   </Accordion>
-  <Accordion title="The tenant database is not connecting — what do I check?">
-    Verify that the Database Server assigned to the tenant is reachable and the credentials are correct. Go to Database Servers, click Edit on the server, and click **Test Connection**. If the connection fails, check network access and PostgreSQL credentials. Also check that the tenant's database was provisioned — it should be created automatically on first application startup.
+  <Accordion title="Can I undo a Wipe or Clear Location Sales?">
+    No, both operations are permanent and delete all related records. If you need to recover data, you must restore from a database backup. Always test on a non-production tenant first before performing these operations in production.
   </Accordion>
-  <Accordion title="Can I move a tenant to a different database server?">
-    This requires a manual database migration and is not supported through the UI. Contact your platform administrator to coordinate a tenant database move.
+  <Accordion title="What's the difference between Clone and Wipe?">
+    **Clone** creates a new tenant with a copy of the configuration (menu, roles, devices). **Wipe** truncates data in an existing tenant and reseeds it to defaults. Use Clone to quickly set up a new similar tenant; use Wipe to reset an existing test tenant.
+  </Accordion>
+  <Accordion title="What's copied when I Clone a tenant?">
+    Configuration only: menu (categories, products, modifiers, pricing), taxes, transaction types, payment processors, order modes, devices, printer profiles, roles, and employees. Sales history, e-invoices, secrets, and live processor credentials are NOT copied. You must re-enter sensitive information on the cloned tenant.
+  </Accordion>
+  <Accordion title="Can I change a tenant's domain name?">
+    No, the domain name is immutable and embedded in the database name, all URLs, and API routes. If a tenant needs a new domain name, you must create a new tenant and migrate data manually. Contact your platform administrator for assistance.
   </Accordion>
   <Accordion title="What happens when I deactivate a tenant?">
-    Deactivated tenants cannot log in to the dashboard and the POS will not function. Their data is fully preserved and the tenant can be reactivated at any time.
+    Deactivated tenants cannot log in to the dashboard and the POS will not function. Their data is fully preserved. The tenant can be reactivated at any time by toggling Active back on.
+  </Accordion>
+  <Accordion title="How do I reset a tenant's admin password?">
+    Go to the tenant's **Users** sub-page, find the admin account, and click **Set Password** to directly set a new password. Alternatively, click **Send Reset Email** to email a 1-hour password reset link.
+  </Accordion>
+  <Accordion title="What billing rules apply when a plan expires?">
+    This depends on your SaaS billing policy. Typically, expired plans either go read-only (users can view data but not create new sales) or are suspended entirely. Contact your platform administrator for your specific policy.
   </Accordion>
 </AccordionGroup>
 
 ## Related
 
 <CardGroup cols={2}>
-  <Card title="Tenant Operations" icon="triangle-alert" href="/features/tenant-operations">Clear sales, wipe, or clone a tenant</Card>
+  <Card title="Tenant Operations" icon="triangle-alert" href="/features/tenant-operations">Detailed guide to Clone, Wipe, and Clear Sales operations</Card>
+  <Card title="Locations" icon="map-pin" href="/features/locations">Manage branches within a tenant and configure e-invoicing</Card>
   <Card title="Database Servers" icon="server" href="/features/db-servers">Manage PostgreSQL servers for tenant hosting</Card>
-  <Card title="Root Users" icon="shield" href="/features/root-users">Manage platform administrator accounts</Card>
-  <Card title="Locations" icon="map-pin" href="/features/locations">Manage physical branches within a tenant</Card>
+  <Card title="LHDN Admin" icon="file-signature" href="/features/lhdn-admin">Configure shared platform e-invoicing credentials</Card>
 </CardGroup>

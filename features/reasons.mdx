@@ -1,0 +1,76 @@
+---
+title: "Reasons"
+description: "Add reason codes for void, comp, and gift line items."
+---
+
+**Reasons** are codes that explain why a line item was voided, comped (given free to the customer), or gifted (staff perk). Every void, comp, or gift line on a ticket must have a reason, creating an audit trail of what happened and why. Reasons help you spot patterns — for example, if "Customer Request" voids spike on a particular shift, you might coach staff on how to prevent those errors, or if comps are high, you can track which managers are giving them away most frequently.
+
+<Frame>
+  <img src="/images/reasons.png" alt="Reasons list screen showing VOID, COMP, and GIFT categories with associated codes" />
+</Frame>
+
+## Reason Fields
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| **Code** | Yes | A short unique identifier, e.g. `CUST_REQUEST`, `DAMAGED`, `LOYALTY`, `STAFF_MEAL`. Used in reports and exports |
+| **Name** | Yes | The display label shown when staff selects a reason on the POS, e.g. "Customer Request", "Loyalty Promotion" |
+| **Type** | Yes | Category: `VOID`, `COMP`, or `GIFT`. Determines which line-item adjustment this reason explains |
+
+## Reason Type Examples
+
+Use this table to understand which reasons belong in each category:
+
+| Type | Purpose | Example Codes |
+|------|---------|----------------|
+| **VOID** | Item was cancelled before payment | Customer Request, Damaged Item, Wrong Order, System Error, Duplicate |
+| **COMP** | Item was given free to the customer as an adjustment | Regular Customer, Loyalty Program, Promotion, Management Decision |
+| **GIFT** | Item was given to staff as a perk or payout | Staff Meal, Employee Benefit, Break Coverage, Shift Meal |
+
+<Tip>
+  Keep reason codes focused on the *why*, not the *what*. Don't create separate reasons for every item type — just for the circumstances that drive voids/comps/gifts. Most restaurants need 8–12 reason codes total (2–4 per type). Too many options slow down staff and dilute your reporting.
+</Tip>
+
+## Create a Reason
+
+<Steps>
+  <Step title="Go to Manage → Reasons">
+    Click **Reasons** in the left sidebar under Manage.
+  </Step>
+  <Step title="Click New Reason">
+    Enter a **Code**, **Name**, and select the **Type** (VOID, COMP, or GIFT).
+  </Step>
+  <Step title="Save">
+    Click **Create**. The reason is immediately available when staff voids, comps, or gifts a line item.
+  </Step>
+</Steps>
+
+<Warning>
+  Reason codes are stored with historical line items. Deleting a reason does not delete past line items with that reason — they keep a snapshot of the reason code. Deactivate reasons you no longer use instead of deleting them, so reporting remains consistent.
+</Warning>
+
+## Frequently Asked Questions
+
+<AccordionGroup>
+  <Accordion title="Can I use the same reason code for multiple types (VOID and COMP)?">
+    No. Each reason code belongs to exactly one type. If you have a situation that applies to both (e.g. "Promotion"), create two separate reasons: one marked COMP for comped items, another marked GIFT if staff can claim it. This keeps your reporting clear.
+  </Accordion>
+  <Accordion title="What happens if staff voids or comps an item without selecting a reason?">
+    The POS requires a reason to be selected before the void/comp/gift can be completed. This ensures every adjustment is tracked and no reason-less adjustments slip through.
+  </Accordion>
+  <Accordion title="How do reasons appear in reports?">
+    The **Item Reason Summary** report shows the financial impact of voids, comps, and gifts grouped by reason. This lets you see exactly which reasons cost you the most money and identify trends — for example, if "Damaged Item" is high, you might have a food quality problem.
+  </Accordion>
+  <Accordion title="Can I change a reason's type after it has been used?">
+    Changing the type of a reason that has already been used in tickets is not recommended — it would retroactively change how past line items are categorised in reports. Create a new reason instead and use it going forward.
+  </Accordion>
+</AccordionGroup>
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Transaction Types" icon="list" href="/features/transaction-types">Understand ledger categories on a ticket</Card>
+  <Card title="Item Reason Summary Report" icon="chart-bar" href="/reports/tickets-and-voids">View void, comp, and gift financial impact by reason</Card>
+  <Card title="Ticket Summary Report" icon="receipt" href="/reports/tickets-and-voids">Drill into individual tickets and line-item details</Card>
+  <Card title="Setup Checklist" icon="check-circle" href="/getting-started/setup-checklist">Configure reasons as part of initial setup</Card>
+</CardGroup>

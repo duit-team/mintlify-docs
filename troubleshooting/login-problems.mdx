@@ -3,17 +3,17 @@ title: "Login Problems"
 description: "Can't sign in? Here's what to check."
 ---
 
-If you cannot log in to DuitPOS, follow this guide to identify and fix the problem. Most login issues fall into one of five categories: wrong credentials, inactive account, wrong URL, too many failed attempts, or a browser issue.
+If you cannot log in to DuitPOS, follow this guide to identify and fix the problem. This guide covers account creation, password reset, and common login errors. Most issues fall into one of these categories: wrong credentials, inactive account, email not verified, wrong URL, too many failed attempts, or a browser issue.
 
 <Frame>
   <img src="/images/login-problems.png" alt="Login troubleshooting page showing common error messages and their solutions" />
 </Frame>
 
-## Step-by-Step Diagnosis
+## Quick Diagnosis
 
 <Steps>
   <Step title="Check which error message you see">
-    Read the error message on the login page carefully — it tells you exactly what is wrong. See the table below for what each message means.
+    Read the error message on the login page carefully — it tells you exactly what is wrong. See the Error Messages Reference table below.
   </Step>
   <Step title="Confirm you are on the correct URL">
     Each business has its own login URL that includes the tenant domain name, for example `https://app.duitpos.com/my-restaurant/login`. Make sure you are not on a generic or wrong tenant URL.
@@ -21,84 +21,229 @@ If you cannot log in to DuitPOS, follow this guide to identify and fix the probl
   <Step title="Double-check your email and password">
     Passwords are case-sensitive. Make sure Caps Lock is off. Try copying and pasting the password if you are unsure.
   </Step>
+  <Step title="If just signed up, verify your email first">
+    You must click the verification link in your signup email before you can log in. If you did not receive the email, see **Signup Verification Issues** below.
+  </Step>
   <Step title="Reset your password if needed">
     Click **Forgot password?** on the login page. Enter your email address and check your inbox for a reset link. Check your spam or junk folder if it does not arrive within a few minutes. The link expires after 1 hour.
   </Step>
-  <Step title="Contact your administrator">
-    If you still cannot log in, contact your system administrator with your email address and the exact error message shown. They can check your account status and reset your password from the Users page.
+  <Step title="Contact your administrator if stuck">
+    If you still cannot log in after trying the above, contact your system administrator with your email address and the exact error message shown.
   </Step>
 </Steps>
+
+## Signup & Email Verification
+
+### You Just Signed Up but Can't Log In
+
+After you sign up, you must **verify your email address** before you can log in. Follow these steps:
+
+1. **Look for the verification email** — Check your inbox and spam folder for an email titled "Verify your DuitPOS account" (may arrive within 1–5 minutes).
+2. **Click the verification link** — Click the link in the email. This confirms your email address and activates your account.
+3. **Try logging in** — Once verified, return to the login page and enter your email and password.
+
+### Verification Email Did Not Arrive
+
+If you did not receive the verification email:
+
+1. **Check your spam/junk folder** — Email filters sometimes catch signup emails. Look there first.
+2. **Confirm your email address** — Make sure you entered the correct email address when signing up. If unsure, ask your administrator for your registered email.
+3. **Request a new verification link** — From the login page, click **Forgot password?** and enter your email. A password reset link will be sent (this works as an alternative to re-signing up). Use this to set your password and verify your email at the same time.
+4. **Wait and try again** — Sometimes emails are delayed. Wait a few minutes and check again.
+5. **Contact your administrator** — If the email still doesn't arrive, ask them to check your account status or resend the verification from the Users page.
+
+### Verification Link Expired
+
+Verification links expire after **24 hours**. If your link has expired:
+
+1. **Use Forgot Password instead** — Click **Forgot password?** on the login page, enter your email, and use the password reset link to regain access and verify your email in one step.
+2. **Or ask your administrator** — They can resend the verification email or reactivate your account from the Users page.
+
+## Password Reset
+
+### I Forgot My Password (Account Already Active)
+
+If you have an active account but forgot your password:
+
+1. On the login page, click **Forgot password?**
+2. Enter your email address and click **Send Reset Link**.
+3. Check your inbox (and spam folder) for an email titled "Reset your DuitPOS password".
+4. Click the link in the email — it expires after **1 hour**.
+5. Enter your new password twice and click **Reset Password**.
+6. Log in with your new password.
+
+<Tip>
+  If the reset email doesn't arrive, check your spam folder. If it still doesn't come after 5 minutes, ask your administrator to trigger a password reset from the Users page on your behalf.
+</Tip>
+
+### I Just Signed Up but Already Forgot My Password
+
+If you signed up but haven't verified your email yet, and already forgot your password:
+
+1. Click **Forgot password?** on the login page.
+2. Enter your email address and click **Send Reset Link**.
+3. Check your inbox for the password reset email (not the verification email).
+4. Click the reset link and set your new password.
+5. This also verifies your email address, so you can now log in.
+
+### Password Reset Link Didn't Arrive
+
+1. **Check spam folder** — The email might be filtered.
+2. **Confirm your email address** — Make sure you entered the email correctly.
+3. **Wait a few minutes** — Sometimes emails are delayed.
+4. **Request another link** — Click **Forgot password?** again and request a fresh link.
+5. **Contact your administrator** — If you've tried the above, ask them to reset your password from the Users page.
+
+## Two-Factor Authentication (2FA)
+
+<Info>
+  Two-factor authentication is coming soon to DuitPOS. When enabled, you will be able to secure your account with an authenticator app or SMS code in addition to your password.
+</Info>
 
 ## Error Messages Reference
 
 | Error Message | Cause | Fix |
 |--------------|-------|-----|
-| "Invalid email or password" | Wrong email address or wrong password | Check for typos; use Forgot Password to reset |
-| "Your account is inactive" | Account has been deactivated | Contact your administrator to reactivate the account |
-| "Too many login attempts — try again in X minutes" | Account temporarily locked after repeated failures | Wait the specified time, then try again |
-| "Account not found for this domain" | Wrong tenant URL | Confirm the URL includes the correct business domain name |
-| "Your session has expired" | You were logged in but the session timed out | Log in again — your work was not lost |
-| "Access denied" | You are logged in but do not have permission for that page | Ask your administrator to update your role permissions |
+| "Invalid email or password" | Wrong email address or wrong password entered | Check for typos; verify Caps Lock is off; use **Forgot Password** to reset |
+| "Email not verified" | You signed up but haven't clicked the verification link yet | Check your inbox for the verification email and click the link; or use **Forgot Password** to reset and verify at once |
+| "Your account is inactive" | Account has been deactivated by an administrator | Contact your administrator to reactivate the account |
+| "Account not found for this domain" | Email not registered on this tenant, or wrong tenant URL | Check you are on the correct business URL; or ask your administrator to create a User account for you |
+| "Too many login attempts — try again in X minutes" | Account temporarily locked after 5+ failed password attempts | Wait the specified time (usually 15 minutes), then try again with the correct password |
+| "Your session has expired" | You were logged in but the session timed out (after ~24 hours) | Log in again — your work was not lost |
+| "Access denied" | You are logged in but do not have permission for that page | Ask your administrator to grant you the required role or permission |
+| "Browser/cookie error" | Login page won't load or login doesn't proceed | Clear browser cookies and cache; try a different browser; disable ad-blockers |
 
-## Forgot Password
+## Account Status Issues
 
-Click **Forgot password?** on the login page. Enter your email address and check your inbox for a reset link. Check your spam folder if it does not arrive within a minute. The reset link expires after 1 hour — request a new one if it expires.
+### Your Account Is Inactive
 
-## Account Is Inactive
+If you see "Your account is inactive", your administrator has deactivated your account. This suspends access without deleting the account.
 
-If you see "Your account is inactive", contact your administrator. They can reactivate your account under **Users → Users → Edit → Active**. Inactive accounts are used to suspend access without deleting the account.
+**To fix**: Contact your administrator. They can reactivate your account under **Users → Users → Edit → Active**.
 
-## Wrong Tenant
+### Wrong Tenant URL
 
-The login page URL includes your tenant domain (e.g. `app.duitpos.com/my-business/login`). Make sure you are on the correct URL for your organisation. If you are unsure of your URL, ask your administrator.
+The login page URL includes your tenant domain (e.g. `app.duitpos.com/my-restaurant/login`). Each business has its own separate login page.
 
-## Locked Out After Too Many Attempts
+**To fix**: 
+- Check the URL in your browser address bar — it should match your business name.
+- If you are unsure of your correct URL, ask your administrator.
+- Make sure you are not bookmarking a generic or old URL.
 
-Wait the specified time shown in the error message (typically 15 minutes) and try again. If the problem persists after the lockout period, ask your administrator to reset your password from the Users page — this also clears any lockout.
+## Account Lockout (Too Many Attempts)
+
+After **5 failed login attempts**, your account is temporarily locked for **15 minutes** as a security measure.
+
+**To fix**:
+1. Wait the time shown in the error message (typically 15 minutes).
+2. Try logging in again with the correct password.
+3. If the lockout persists, ask your administrator to reset your password from the Users page — this also clears any lockout.
 
 <Tip>
-  If you use a password manager, make sure it has saved the correct password for the correct URL. Password managers sometimes save multiple entries for the same site and auto-fill the wrong one.
+  **Password Manager Tip**: If you use a password manager, make sure it has saved the correct password for the correct URL. Password managers sometimes save multiple entries for the same site and auto-fill the wrong one, causing repeated failed attempts.
 </Tip>
 
-## Browser Issues
+## Browser & Device Troubleshooting
 
-If none of the above apply, try these steps:
+If login still fails after checking credentials and password, the issue is likely with your browser, cookies, or cache. Try these steps in order:
 
-1. Clear your browser cache and cookies for the DuitPOS domain.
-2. Try an incognito or private browsing window.
-3. Try a different browser (Chrome, Edge, Firefox, Safari).
-4. Disable browser extensions, especially ad-blockers or privacy extensions that may block login scripts.
+### 1. Clear Browser Cookies and Cache
+
+**Chrome/Edge:**
+- Press `Ctrl+Shift+Delete` (Windows) or `Cmd+Shift+Delete` (Mac).
+- Select **All time** for time range.
+- Check **Cookies and other site data** and **Cached images and files**.
+- Click **Clear data**.
+- Close and reopen your browser.
+
+**Firefox:**
+- Press `Ctrl+Shift+Delete` (Windows) or `Cmd+Shift+Delete` (Mac).
+- Select **Everything** for time range.
+- Click **Clear Now**.
+- Close and reopen your browser.
+
+**Safari:**
+- Menu → **Settings → Privacy → Manage Website Data → Remove All**.
+- Then go to **Develop → Clear Caches** (if Develop menu is not visible, enable it in Preferences → Advanced).
+
+### 2. Try Private/Incognito Mode
+
+Open a **private browsing window** (Ctrl+Shift+N in Chrome, Ctrl+Shift+P in Firefox, Cmd+Shift+N on Mac) and try logging in. This bypasses any stored cookies or cached data. If login works in private mode, your browser cache is the issue — clear it as described above.
+
+### 3. Try a Different Browser
+
+Try logging in with a different browser (Chrome, Edge, Firefox, or Safari). If login works in a different browser, the issue is specific to your original browser — clear its cache and try again.
+
+### 4. Disable Browser Extensions
+
+Some ad-blockers, privacy extensions, or password managers can interfere with login. Try disabling them:
+
+- Click the extension icon in your browser toolbar.
+- Temporarily disable ad-blockers and privacy extensions.
+- Reload the login page and try again.
+
+If login works with extensions disabled, add DuitPOS to the whitelist in your ad-blocker or extension settings.
+
+### 5. Check JavaScript and Storage
+
+Make sure JavaScript is enabled (required for login to work):
+
+- Open Developer Tools: `F12` in Chrome/Edge, or right-click → **Inspect** in Firefox.
+- Look for any red errors in the **Console** tab.
+- Check that **localStorage** is enabled in your browser (some privacy settings disable it).
+
+### 6. Try on a Different Device
+
+If you have access to another device (phone, tablet, laptop), try logging in there. If it works on another device, the issue is specific to your computer or browser setup.
 
 ## Still Can't Log In?
 
-Contact your system administrator with:
-- Your email address.
-- The exact error message shown on screen.
-- The URL you are trying to access.
-- The browser and device you are using.
+If you've tried all the steps above and still cannot log in, contact your system administrator with the following information:
+
+- **Your email address** — so they can look up your account.
+- **The exact error message** shown on the login page.
+- **The URL you are trying to access** — copy from your browser address bar.
+- **Your browser and device** — e.g. "Chrome on Windows", "Safari on iPhone".
+- **When it last worked** (if applicable) — e.g. "worked yesterday", "never logged in before".
+- **Steps you've already tried** — e.g. "cleared cache", "tried different browser", etc.
+
+Your administrator can check your account status, reset your password, verify your email, or unlock your account from the DuitPOS dashboard.
 
 ## Frequently Asked Questions
 
 <AccordionGroup>
-  <Accordion title="I reset my password but the reset email is not arriving — what do I do?">
-    Check your spam or junk folder first. If it is not there after 5 minutes, ask your administrator to trigger a password reset from the Users page on your behalf. Also check that you entered the correct email address when requesting the reset.
+  <Accordion title="I did not receive the signup verification email — what do I do?">
+    Check your spam or junk folder first. If it is not there after 5 minutes, use **Forgot Password** on the login page instead — this sends a password reset link that also verifies your email. Alternatively, ask your administrator to resend the verification from the Users page.
   </Accordion>
-  <Accordion title="I changed my role and now I cannot access a page I could before — what happened?">
-    Permission changes take effect immediately. If your role was changed and a permission was removed, you will lose access to that page. Contact your administrator to restore the permission or assign a different role.
+  <Accordion title="I reset my password but the reset email is not arriving — what do I do?">
+    Check your spam or junk folder first. If it is not there after 5 minutes, ask your administrator to trigger a password reset from the Users page on your behalf. Also confirm you entered the correct email address when requesting the reset.
+  </Accordion>
+  <Accordion title="The password reset link says 'expired' or 'invalid' — what now?">
+    Password reset links expire after 1 hour. Request a new one by clicking **Forgot Password** again on the login page. If you still get an error, ask your administrator to reset your password directly from the Users page.
+  </Accordion>
+  <Accordion title="I changed my role and now I cannot access a page I could before — why?">
+    Permission changes take effect immediately. If a permission was removed with your role change, you will lose access to that page. Contact your administrator to restore the permission or assign a different role with the access you need.
   </Accordion>
   <Accordion title="Can I log in on multiple devices at the same time?">
-    Yes. DuitPOS supports concurrent sessions — you can be logged in on your laptop and your phone at the same time. Each session is independent.
+    Yes. DuitPOS supports concurrent sessions — you can be logged in on your laptop and your phone at the same time. Each session is independent, and logging out on one device does not log you out on the other.
   </Accordion>
   <Accordion title="I am a POS employee with a PIN — can I log in to the dashboard with my PIN?">
-    No. POS PIN login is only for the POS terminal app. Dashboard access requires an email and password from a User account. Ask your administrator to create a User account for you if you need dashboard access.
+    No. POS PIN login is only for the POS terminal app. Dashboard access requires an email and password from a User account. Ask your administrator to create a User account for you if you need dashboard access. See **Employees** for more on POS PIN setup.
+  </Accordion>
+  <Accordion title="My password works, but I get 'Access denied' — what does this mean?">
+    This means your account exists and your password is correct, but you don't have permission to access that page. This happens when your role or permissions don't include that feature. Contact your administrator to grant you the required role or permission.
+  </Accordion>
+  <Accordion title="I bookmarked the login URL but it doesn't work anymore — why?">
+    Each tenant (business) has a unique login URL that includes the business domain name (e.g. `app.duitpos.com/my-restaurant/login`). If the URL changed, you may have bookmarked an old or generic URL. Ask your administrator for the correct login URL for your business.
   </Accordion>
 </AccordionGroup>
 
 ## Related
 
 <CardGroup cols={2}>
-  <Card title="Users & Roles" icon="users" href="/setup/users-and-roles">Manage login accounts and roles</Card>
+  <Card title="Create an Account" icon="user-plus" href="/getting-started/create-account">Sign up for DuitPOS and verify your email</Card>
+  <Card title="First Login" icon="key" href="/getting-started/first-login">Get started — your first login and initial setup</Card>
+  <Card title="Users & Roles" icon="users" href="/setup/users-and-roles">Manage login accounts, roles, and permissions</Card>
   <Card title="Permissions" icon="shield-check" href="/setup/permissions">Understand what each role can access</Card>
-  <Card title="Employees" icon="user-check" href="/features/employees">Manage POS PIN login for staff</Card>
-  <Card title="First Login" icon="key" href="/getting-started/first-login">Get started with your account</Card>
+  <Card title="Employees" icon="user-check" href="/features/employees">Set up POS PIN login for staff</Card>
 </CardGroup>

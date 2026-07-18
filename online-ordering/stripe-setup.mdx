@@ -3,7 +3,7 @@ title: "Stripe Setup"
 description: "Connect Stripe to accept online payments through QR ordering."
 ---
 
-Stripe processes all online card payments for DuitPOS QR ordering. You need a Stripe account (free to create) and your API keys. Once configured, customers can pay securely from their phone and orders are automatically created in your dashboard.
+**Stripe** is a payment processor you attach to a Payment Type to accept online card payments for DuitPOS QR ordering. You need a Stripe account (free to create) and your API keys. Once configured, customers can pay securely from their phone and orders are automatically created in your dashboard.
 
 <Frame>
   <img src="/images/stripe-setup.png" alt="Stripe credentials entry form showing Secret Key and Webhook Secret fields" />
@@ -37,7 +37,7 @@ Stripe processes all online card payments for DuitPOS QR ordering. You need a St
     Click **Edit** on an existing online payment type, or create a new one (e.g. Code: `STRIPE`, Name: `Online Payment`).
   </Step>
   <Step title="Add the Stripe processor">
-    In the **Processors** section at the bottom of the edit form, select **Stripe** from the dropdown and click **Add**.
+    In the Processors section at the bottom of the edit form, click **Add processor** and select **Stripe** from the dropdown.
   </Step>
   <Step title="Enter your credentials">
     - **Secret Key** — paste your Stripe secret key here.
@@ -105,8 +105,9 @@ The webhook ensures orders are confirmed even if a customer closes their browser
 ## Related
 
 <CardGroup cols={2}>
+  <Card title="Payment Types" icon="credit-card" href="/features/payment-types">Manage all payment methods and processors</Card>
+  <Card title="Share Commerce Setup" icon="credit-card" href="/online-ordering/sharecommerce-setup">Alternative: integrate Share Commerce ePay</Card>
   <Card title="QR Code Setup" icon="qr-code" href="/online-ordering/qr-setup">Generate and place QR codes for your tables</Card>
-  <Card title="Payment Types" icon="credit-card" href="/features/payment-types">Manage all payment methods</Card>
+  <Card title="Settings" icon="gear" href="/features/settings">Configure general tenant and device settings</Card>
   <Card title="Payment Issues" icon="life-buoy" href="/troubleshooting/payment-issues">Troubleshoot failed payments</Card>
-  <Card title="Reports" icon="chart-bar" href="/reports/overview">View online payment revenue in reports</Card>
 </CardGroup>

@@ -1,35 +1,132 @@
 ---
 title: "Print Templates"
-description: "Customise what appears on receipts and kitchen dockets."
+description: "Design what appears on receipts, kitchen dockets, and labels."
 ---
 
-**Print Templates** define the layout and content of printed documents — customer receipts, kitchen order dockets, and other outputs. You can create multiple templates and assign them to different printers or routing rules.
+**Print Templates** define the layout and content of printed documents — customer receipts, kitchen order dockets, shipping labels, and more. You can create multiple templates and assign them to different printers via [Routing Rules](/features/printers#routing-rules). A template uses **control codes** (formatting) and **variables** (dynamic values) to create repeatable, data-driven output.
 
 <Frame>
   <img src="/images/print-templates.png" alt="Print Templates editor showing a receipt layout with header, line items, and footer sections" />
 </Frame>
 
-## Template Types
+## Template Types and Device Pairing
 
-| Type | Purpose |
-|------|---------|
-| **Receipt** | Customer-facing receipt printed after payment is completed |
-| **Kitchen** | Order docket sent to the kitchen or bar printer when an order is placed |
-| **Label** | Product label for label printers, if configured |
+Each template has a type that determines which printer device types can use it:
+
+| Type | Purpose | Compatible Device Types | Example |
+|------|---------|-------------------------|---------|
+| **Receipt** | Customer-facing receipt printed after payment or order confirmation | POS, Kiosk | Standard sales receipt, invoice copy, order summary |
+| **Kitchen** | Order docket sent to kitchen or bar when an order is placed | KDS | Kitchen ticket, bar chit, expo sheet |
+| **Label** | Product label or shipping label | Label Printer | Item sticker, barcode label |
+
+When you create a routing rule and select a printer device, only templates of the matching type appear in the template dropdown. For example, a KDS (kitchen display) printer can only use Kitchen templates.
 
 ## Template Fields
 
 | Field | Required | Description |
 |-------|----------|-------------|
-| **Name** | Yes | An internal label to identify this template, e.g. `Standard Receipt` or `Bar Docket` |
-| **Type** | Yes | Receipt, Kitchen, or Label — determines which routing rules can use this template |
-| **Header** | No | Text printed at the top (e.g. business name, address, tagline) |
-| **Line Items** | Auto | Product name, quantity, and price — automatically populated from the ticket |
-| **Footer** | No | Text printed at the bottom (e.g. "Thank you for your visit", WiFi password, return policy) |
-| **Default** | No | If toggled on, this template is used as the fallback for its type when no routing rule specifies a different one |
+| **Name** | Yes | Internal label, e.g. `Standard Receipt`, `Dine-In Kitchen Ticket`, `Delivery Label` |
+| **Type** | Yes | Receipt, Kitchen, or Label — determines which printer device types can use this template |
+| **Header** | No | Text printed at the top (business name, address, tagline, logo). Use control codes for formatting. |
+| **Line Items** | Auto | Product name, quantity, price. Automatically formatted and populated from the ticket. |
+| **Footer** | No | Text printed at the bottom (thank you message, WiFi password, return policy, QR code). Use control codes and variables. |
+| **Default** | No | If toggled on, this template is the fallback when a routing rule doesn't specify a template override |
+
+## Control Codes
+
+Control codes are special directives that format the output. Insert them directly into your header or footer text:
+
+| Code | Effect | Notes |
+|------|--------|-------|
+| `<C>` | Center the following text | Remains in effect until next alignment code. Use sparingly on narrow (58mm) paper. |
+| `<L>` | Left-align the following text | Default alignment. Use to reset after `<C>` or `<R>`. |
+| `<R>` | Right-align the following text | Useful for prices and totals. |
+| `<F>` | Alternate font (if printer supports it) | Usually switches to a serif or alternative font. Check printer manual. |
+| `<EB>` | Emphasis / Bold | Makes text bold. Not all thermal printers support bold; test on your device. |
+| `<DB>` | Double-width / Expanded | Increases character width. Useful for large headings and prices. Reduces characters per line. |
+| `<LOGO>` | Print business logo | Must be uploaded via Manage → Settings. Printer must support image printing. |
+| `<ITEM_HEADER>` | Print column headers for line items | Prints something like "Item  Qty  Price". Exact format depends on template context. |
+| `<QR>` | Print a QR code | Used in kitchen tickets or customer receipts to link to order status or reorder page. Backend inserts the URL. |
+| `<BR>` or line break | Line break / Blank line | Press Enter to create space in the output. Multiple line breaks create multiple blank lines. |
+
+### Control Code Example
+
+```
+<C><EB><DB>PIZZA PLACE</DB></EB></C>
+<C>123 Main Street</C>
+<C>Order #{{ticket_number}}</C>
+<L>
+Date: {{date}}
+<BR>
+<ITEM_HEADER>
+```
+
+Output (on 58mm paper):
+```
+        PIZZA PLACE
+     123 Main Street
+      Order #12345
+
+Date: 2025-07-18
+
+Item              Qty  Price
+```
 
 <Tip>
-  Use **template variables** in your header and footer text to automatically insert dynamic values. Common variables include `{{business_name}}`, `{{location_address}}`, `{{ticket_number}}`, `{{date}}`, and `{{cashier_name}}`. The full list of available variables is shown in the editor sidebar.
+  **Test on your actual printer.** Template previews in the editor use screen fonts; thermal printers have different character sets and line widths. What looks centered on screen may not center on the printer. Create a test order and use **Test Print** to verify the layout before deploying to production.
+</Tip>
+
+## Variables
+
+Variables are placeholders that the system replaces with actual data when printing. Insert them in double braces: `{{variable_name}}`.
+
+### Common Variables (All Templates)
+
+| Variable | Value | Example |
+|----------|-------|---------|
+| `{{ticket_number}}` | Unique order/ticket ID | `12345` |
+| `{{date}}` | Print date (YYYY-MM-DD format) | `2025-07-18` |
+| `{{time}}` | Print time (HH:MM:SS) | `14:30:45` |
+| `{{business_name}}` | Your business/restaurant name | `Pizza Palace` |
+| `{{location_name}}` | Location branch name | `Downtown` |
+| `{{location_address}}` | Full location address | `123 Main St, City` |
+| `{{total}}` | Order total (currency format) | `$25.50` |
+| `{{subtotal}}` | Subtotal before tax | `$23.50` |
+| `{{tax}}` | Total tax amount | `$2.00` |
+| `{{discount}}` | Total discount applied | `$5.00` |
+| `{{cashier_name}}` or `{{user}}` | Staff member who processed the order | `John` |
+
+### Receipt-Specific Variables
+
+| Variable | Value |
+|----------|-------|
+| `{{order_mode}}` | Type of order: Dine-In, Delivery, Pickup, etc. |
+| `{{payment_method}}` | Payment type used: Cash, Card, etc. |
+| `{{customer_name}}` | Customer name (if provided) |
+| `{{order_notes}}` | Special instructions or notes on the order |
+| `{{tax_breakdown}}` | Itemized tax if multiple tax rates applied |
+
+### Kitchen Ticket Variables
+
+| Variable | Value |
+|----------|-------|
+| `{{order_mode}}` | Dine-In, Delivery, Pickup, etc. |
+| `{{table_number}}` | Table ID (for dine-in orders) |
+| `{{prepared_by}}` | (Optional) Staff assigned to prepare this ticket |
+| `{{order_time}}` | When the order was placed |
+| `{{special_instructions}}` | Customer notes and dietary requirements |
+
+### Label-Specific Variables
+
+| Variable | Value |
+|----------|-------|
+| `{{product_name}}` | Item name |
+| `{{product_code}}` | SKU or internal product ID |
+| `{{quantity}}` | Units on this label |
+| `{{expiry_date}}` | Product expiry (if applicable) |
+
+<Tip>
+  Not all variables apply to all template types. For example, `{{table_number}}` is only available in Kitchen templates. The template editor sidebar shows available variables for your selected template type. If a variable is empty (e.g., no customer name was entered), it prints as blank.
 </Tip>
 
 ## Create a Template
@@ -39,53 +136,61 @@ description: "Customise what appears on receipts and kitchen dockets."
     Click **Print Templates** in the left sidebar.
   </Step>
   <Step title="Click New Template">
-    Select the template **Type** and give it a **Name**.
+    Select the template **Type** (Receipt, Kitchen, or Label) and give it a **Name**.
   </Step>
   <Step title="Design the layout">
-    Use the template editor to add header text, configure line item display, and write a footer. Use variables from the sidebar to insert dynamic content.
+    Use the editor to write header text, configure line item display, and add footer content. Use control codes for formatting and variables for dynamic data. The right sidebar shows available variables and control codes for your template type.
   </Step>
   <Step title="Set as default (optional)">
-    Toggle **Default** to make this template the fallback for its type when no routing rule specifies one.
+    Toggle **Default** to use this template as the fallback when no routing rule specifies an override.
   </Step>
   <Step title="Save">
     Click **Create**.
   </Step>
 </Steps>
 
-## Assign to Printers
+## Assign to Printers via Routing Rules
 
-Go to **Manage → Printers → Routing Rules** and assign a template to a routing rule to control which template prints on which printer. For example, you can use a compact template on the kitchen printer and a full-detail template on the customer receipt printer.
+Go to **Manage → Printers → Routing Rules** and assign a template to a routing rule. This controls which template prints on which printer, and for which items or order modes. For example:
+- Route all dine-in orders to a receipt printer with the "Dine-In Receipt" template.
+- Route all appetizers to the kitchen display with the "Appetizers Chit" template.
+- Route all beverages to a different display with the "Bar Ticket" template.
+
+Each rule can have a template override. If no override is set, the printer's default template (set when the printer was created) is used.
 
 <Warning>
-  If you delete a template that is currently assigned to a routing rule, that routing rule will fall back to the default template for that type. Check your routing rules after deleting any template to make sure the output is still correct.
+  If you delete a template that is currently assigned to a routing rule, that routing rule will fall back to the printer's default template for that type. Check your routing rules after deleting any template to verify the output is still correct.
 </Warning>
 
 ## Test Print
 
-On the template list, click the **Test Print** icon to send a sample output to your default printer. This lets you check the layout before it goes live.
+On the template list, hover over a template and click the **Test Print** icon to send a sample output to the printer assigned as your default for that template type. This is the best way to verify layout and formatting on your actual hardware before going live.
 
 ## Frequently Asked Questions
 
 <AccordionGroup>
   <Accordion title="How do I add my business logo to the receipt?">
-    Upload your logo under **Manage → Settings → Logo**. Once uploaded, use the `{{logo}}` variable in the template header section to include it on printed receipts. Logo printing requires a printer that supports image printing (most modern thermal printers do).
+    Upload your logo under **Manage → Settings → Logo**. Once uploaded, use the `<LOGO>` control code in the template header section to include it on printed receipts. Logo printing requires a printer that supports image printing (most modern thermal printers do). Test print to confirm your printer can render it.
   </Accordion>
   <Accordion title="Can I have a different receipt format for online orders vs dine-in?">
-    Yes. Create two receipt templates (e.g. `Online Receipt` and `Dine-In Receipt`) and set up separate routing rules — one targeting the online order mode and one targeting dine-in. Assign the appropriate template to each rule.
+    Yes. Create two receipt templates (e.g. `Online Order Receipt` and `Dine-In Receipt`) and set up separate routing rules in **Printers → Routing Rules** — one targeting Dine-In order mode and one targeting Delivery/Pickup. Assign the appropriate template to each rule. The same receipt printer device can use different templates based on the rule.
   </Accordion>
-  <Accordion title="What variables can I use in templates?">
-    Available variables include: `{{business_name}}`, `{{location_name}}`, `{{location_address}}`, `{{ticket_number}}`, `{{date}}`, `{{time}}`, `{{cashier_name}}`, `{{order_mode}}`, `{{table_number}}`, and `{{tax_breakdown}}`. The complete list is shown in the variable picker in the template editor sidebar.
+  <Accordion title="What's the difference between control codes and variables?">
+    **Control codes** (`<C>`, `<EB>`, `<DB>`, etc.) format the text itself — bold, centered, double-width, etc. **Variables** (`{{ticket_number}}`, `{{date}}`, etc.) are replaced with actual data at print time. You can use both together: `<C><EB>Order #{{ticket_number}}</EB></C>` creates a centered, bold order number.
   </Accordion>
   <Accordion title="My template looks fine in the editor but prints incorrectly — why?">
-    The editor preview uses your screen's font rendering, which differs from a thermal printer's character set. Test print to the actual device and adjust line widths or font sizes as needed. For 58mm paper, use shorter lines (typically 32 characters per line). For 80mm paper, you can fit approximately 48 characters per line.
+    The editor preview uses your screen's fonts; thermal printers have different character sets and line widths. What looks good on screen may wrap differently on paper. For 58mm paper, assume ~32–40 characters per line; for 80mm, ~48–54 characters. Use **Test Print** on your actual device and adjust line breaks or text length as needed. Also check: printer supports the font/control codes, paper width matches the template design.
+  </Accordion>
+  <Accordion title="Can I print a QR code in the template?">
+    Yes, use the `<QR>` control code. The system automatically generates a QR code (typically linking to order status or reorder URL) and prints it on the receipt or ticket. Your printer must support image printing. Test print to confirm the QR code scans correctly on your hardware.
   </Accordion>
 </AccordionGroup>
 
 ## Related
 
 <CardGroup cols={2}>
-  <Card title="Printers" icon="printer" href="/features/printers">Set up printer devices and routing rules</Card>
-  <Card title="Settings" icon="gear" href="/features/settings">Upload your business logo</Card>
-  <Card title="Locations" icon="map-pin" href="/features/locations">Configure address details that appear on receipts</Card>
-  <Card title="Printer Not Printing" icon="life-buoy" href="/troubleshooting/printer-not-printing">Diagnose printer issues</Card>
+  <Card title="Printers" icon="printer" href="/features/printers">Set up printer devices and routing rules that use these templates</Card>
+  <Card title="Settings" icon="gear" href="/features/settings">Upload your business logo and configure global settings</Card>
+  <Card title="Locations" icon="map-pin" href="/features/locations">Configure address details and other location info that variables pull from</Card>
+  <Card title="Printer Not Printing" icon="life-buoy" href="/troubleshooting/printer-not-printing">Diagnose and troubleshoot printer issues</Card>
 </CardGroup>

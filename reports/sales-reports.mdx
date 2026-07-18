@@ -1,0 +1,117 @@
+---
+title: "Sales Reports"
+description: "Six aggregate reports covering daily totals, top items, categories, payment types, order modes, and terminals."
+---
+
+**Sales Reports** are the six aggregate report tabs on the Reports screen — Sales Summary, By Item, By Category, By Payment, By Order Mode, and By Terminal. Every one of them groups and sums transaction data down to a handful of rows, and every one shares the same [filters and export behavior](/reports/overview#shared-filters) (date range, Location, Order Mode, CSV/XLSX export). If you're not sure which of the six you need, start at the [decision table on the Reports Overview page](/reports/overview#which-report-do-i-want) rather than guessing from the names.
+
+<Frame>
+  <img src="/images/reports-sales.png" alt="Sales Reports tab showing the Sales Summary table with daily totals" />
+</Frame>
+
+## Sales Summary
+
+One row per day. This is the top-level "how did we do" view — start here for a daily trend before drilling into any of the other five.
+
+| Field | Description |
+|-------|-------------|
+| **Date** | Business date the row covers |
+| **Orders** | Number of tickets closed that day |
+| **Subtotal** | Total sales before tax |
+| **Tax** | Total tax collected that day |
+| **Total** | Subtotal + Tax — gross revenue for the day |
+
+Use Sales Summary to spot day-to-day trends and to get a single reliable total for a date range before cross-checking it against any of the other reports below.
+
+## By Item
+
+One row per product, sorted by whatever column you click.
+
+| Field | Description |
+|-------|-------------|
+| **Item** | Product name |
+| **Qty Sold** | Total units sold across all tickets in range |
+| **Revenue** | Pre-tax sales value of the item |
+| **Total** | Revenue plus tax attributable to that item |
+
+<Warning>
+  By Item **deliberately excludes voided line items** — it reflects what actually sold, not what was rung up and later voided. This is the single most common reason By Item's totals don't match Sales Summary: if a line was voided, Sales Summary still reflects the ticket's final recorded state, but By Item simply doesn't count that line at all. If you need voided-item detail, use [Item Reason Summary](/reports/tickets-and-voids#item-reason-summary) instead — that's the report built specifically to answer "what did we lose to voids."
+</Warning>
+
+Use By Item to find your best (and worst) sellers for menu planning, promotions, or deciding what to 86 when a supplier runs short.
+
+## By Category
+
+Same shape as By Item, one level up — grouped by menu category instead of individual product.
+
+| Field | Description |
+|-------|-------------|
+| **Category** | Menu category name |
+| **Qty Sold** | Total units sold across all products in that category |
+| **Revenue** | Pre-tax sales value for the category |
+| **Total** | Revenue plus tax attributable to that category |
+
+Like By Item, By Category excludes voided lines for the same reason. Use it to see which sections of the menu (mains, drinks, desserts, etc.) are driving revenue, without needing to scroll through every individual product.
+
+## By Payment
+
+One row per tender type.
+
+| Field | Description |
+|-------|-------------|
+| **Payment Type** | Cash, Card, e-wallet, or any other configured [payment type](/features/payment-types) |
+| **Transaction Count** | Number of payments recorded against that tender type |
+| **Total Amount** | Sum of all payments of that type |
+
+By Payment answers "how did customers pay," not "what did they buy" — use it for cash drawer expectations and to reconcile card/e-wallet settlement totals against your processor statements. For till-level cash reconciliation specifically, see [Workday Reports](/reports/workday) instead — By Payment aggregates across the whole date range, not per shift.
+
+## By Order Mode
+
+One row per order mode.
+
+| Field | Description |
+|-------|-------------|
+| **Order Mode** | Dine In, Takeaway, Delivery, or any other configured [order mode](/features/order-modes) |
+| **Ticket Count** | Number of tickets placed through that channel |
+| **Total** | Gross revenue (including tax) from that channel |
+
+Use By Order Mode to see channel performance — for example, whether delivery is growing relative to dine-in, or to justify staffing decisions around your busiest channel.
+
+## By Terminal
+
+One row per POS device/register.
+
+| Field | Description |
+|-------|-------------|
+| **Terminal** | The POS device/register name (from [Setup](/features/setup)) |
+| **Ticket Count** | Number of tickets rung up on that terminal |
+| **Tax** | Tax collected on that terminal |
+| **Total** | Gross revenue (including tax) rung through that terminal |
+
+By Terminal is most useful for multi-till locations. It's the report to check when you suspect one register is ringing up unusually low or high volume compared to the others — a terminal with a much lower ticket count than its neighbors during the same shift is worth investigating, whether that's a hardware issue, a scheduling gap, or something less innocent.
+
+## Frequently Asked Questions
+
+<AccordionGroup>
+  <Accordion title="Why don't By Item and By Category totals add up to Sales Summary's total?">
+    Because voided line items are excluded from By Item and By Category but included in Sales Summary's ticket-level totals. This gap is expected — the size of the gap is itself useful information, and you can quantify it exactly with [Item Reason Summary](/reports/tickets-and-voids#item-reason-summary).
+  </Accordion>
+  <Accordion title="Does By Category roll up subcategories into the parent?">
+    By Category groups by the category directly assigned to each product. If your menu uses nested categories, each level that has products directly assigned to it appears as its own row.
+  </Accordion>
+  <Accordion title="Can I see cash vs card broken down by day, not just for the whole date range?">
+    Not in By Payment directly — it aggregates across the full selected range into one row per tender type. Narrow the date range to a single day and re-run the report, or use [Workday Reports](/reports/workday) for a per-shift payment breakdown.
+  </Accordion>
+  <Accordion title="Why does a terminal show tickets but zero tax?">
+    Tax-exempt order modes, zero-rated items, or a tax rule that doesn't apply to that terminal's location can all produce a real zero. Check the terminal's assigned Location and the [tax rules](/features/tax) that apply there before assuming it's a reporting error.
+  </Accordion>
+</AccordionGroup>
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Reports Overview" icon="chart-bar" href="/reports/overview">The "which report do I want" decision table and shared filter/export behavior</Card>
+  <Card title="Tickets & Voids" icon="receipt" href="/reports/tickets-and-voids">Look up a specific order or quantify losses to voids, comps, and gifts</Card>
+  <Card title="Workday Reports" icon="clock" href="/reports/workday">Per-shift sales and cash reconciliation</Card>
+  <Card title="Payment Types" icon="credit-card" href="/features/payment-types">Configure the tender types shown in By Payment</Card>
+</CardGroup>

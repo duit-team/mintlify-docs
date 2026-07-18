@@ -1,85 +1,124 @@
 ---
 title: "Workday Reports"
-description: "Shift and workday-level analytics for reconciliation."
+description: "Shift and till reconciliation, reflecting offline-synced tickets live."
 ---
 
-**Workday Reports** show sales and payments broken down by shift or business session — useful for end-of-day cash reconciliation and shift handovers. Unlike date-range reports, workday reports group data by when the shift was opened and closed, not by clock time.
+**Workday Reports** is architecturally a different system from the other eight reports on the Reports screen. Sales Summary, By Item, and the rest are aggregate queries against your transaction history; Workday Reports runs on a separate backend service specifically so it can reflect tickets synced from offline registers **live**, rather than waiting on a cache to catch up. That's why it has its own filter set (no shared date-range/Location/Order Mode bar) and its own set of seven tabs, covered below.
 
 <Frame>
-  <img src="/images/workday_report.png" alt="Workday Reports list showing shifts with open/close times, staff names, and cash totals" />
+  <img src="/images/workday_report.png" alt="Workday Reports Workdays tab showing a list of business dates with shift counts and sales totals" />
 </Frame>
 
-## What Is a Workday?
+## Workday vs Shift
 
-A **workday** (also called a shift) starts when a staff member opens the POS with an opening float and ends when they close it and count the cash drawer. A single calendar day may contain multiple workdays (e.g. morning and evening shifts) or one workday may span midnight.
+Two terms, and they mean different things:
 
-## What Is in a Workday Report
+- A **Workday** is one Location's business day as a whole — for example, "Tuesday at the Main Street branch." It's the container.
+- A **Shift** is one staff member or till session within that day — for example, "Sarah's morning shift" or "Register 2's evening shift." A Workday can contain several Shifts, and it only closes once **every** Shift inside it has closed.
 
-Each workday entry shows:
+Keep this distinction in mind while reading the tabs below — some views operate at the Workday level (one Location, one day), some at the Shift level (one person/till), and some compare across both.
+
+## Workdays
+
+The primary tab, and a three-level drill-down.
+
+**Level 1 — Workday list.** One row per Location per business date:
 
 | Field | Description |
 |-------|-------------|
-| **Open / Close Time** | When the shift started and ended |
-| **Opened by / Closed by** | Which staff member managed the shift |
-| **Total Sales** | Gross revenue (including tax) for the shift |
-| **Payment Breakdown** | How much was collected per payment type (Cash, Card, Online) |
-| **Void / Refund Total** | Total value of cancellations and refunds within the shift |
-| **Opening Float** | Cash placed in the drawer at the start of the shift |
-| **Expected Cash** | Calculated cash in drawer: Opening Float + Cash Sales − Cash Refunds |
-| **Actual Cash** | Cash counted by staff at close |
-| **Over / Short** | Difference between Expected and Actual cash |
+| **Status** | Open or Closed — Closed only once every Shift inside it has closed |
+| **Shift Count** | Number of Shifts opened within the workday |
+| **Sales** | Gross revenue for the whole workday |
+| **Tax** | Tax collected for the whole workday |
+| **Tickets** | Ticket count for the whole workday |
+| **Opened / Closed** | Timestamps for the first shift opened and the last shift closed |
 
-## View a Workday
+**Level 2 — Shifts within a workday.** Click **Open** on a workday row to see every Shift inside it:
 
-Click any row in the workday list to expand the full breakdown for that shift, including an itemised list of transactions.
+| Field | Description |
+|-------|-------------|
+| **Shift ID** | Unique identifier for the shift/till session |
+| **Status** | Open or Closed |
+| **Opened By** | Staff member who opened the till |
+| **Start / Duration** | When the shift began and how long it's run (or ran) |
+| **Sales** | Gross revenue for that shift |
+| **Tickets** | Ticket count for that shift |
 
-## Print the Report
+Alongside the shift list, this level also shows two workday-wide breakdowns: **By User** (sales attributed to each staff member across all shifts that day) and **By Terminal** (sales per register across all shifts that day).
 
-Click **Print** on an open workday row to print the shift summary for the physical cash drawer record or manager sign-off.
+**Level 3 — Per-shift detail.** Click into an individual shift to see its own **By User** breakdown — useful when a single till session was handled by more than one staff member (a handover mid-shift without formally closing the till, for example).
 
 <Tip>
-  Print and archive workday summaries daily. They provide a clear paper trail for audits and make it easy to reconcile discrepancies between the POS records and the actual cash in the drawer.
+  Because a Workday only closes once every Shift inside it closes, an open Shift left behind at the end of trading is the most common reason a Workday shows Status: Open the next morning. Check the **Open Now** tab below to catch this before it happens.
 </Tip>
 
-## Reconciliation Workflow
+## Shifts
+
+A flat, cross-workday view: a bar chart of shift durations plus a table listing every shift across all workdays in range. Use this when you want to compare shift lengths at a glance rather than drilling through workdays one at a time.
+
+## Daily
+
+An area chart plotting Sales and Tickets over time, with a supporting daily table underneath. This is the closest Workday Reports gets to the trend view Sales Summary gives you — the difference is that everything here is grouped by workday/business-date rather than calendar date, so it stays accurate for locations that trade past midnight.
+
+## By Location
+
+Compares Locations against each other — useful once you have more than one site and want to see which is trading strongest, or whether one location's shifts are consistently running long or short relative to the rest.
+
+## By User
+
+Compares staff shift performance against each other — sales per shift, shift duration, and ticket counts, side by side across your team.
+
+## Open Now
+
+A **live** list of every currently-open shift, across all Locations. There is no date filter here — it always shows the current moment — and it auto-refreshes every 60 seconds.
+
+<Warning>
+  Open Now shows a warning banner if any shift has been open for more than **8 hours**. In practice this almost always means someone forgot to close out their till at the end of a shift, rather than a genuinely 8-hour session — check the shift's Opened By and Start time and follow up with that staff member.
+</Warning>
+
+## Durations
+
+A scatter chart plotting Duration against Sales for every shift in range. This is the anomaly-spotting view: a shift that ran unusually long but produced unusually low sales stands out visually as an outlier from the rest of the cluster, which can indicate a forgotten open till, a very slow trading period, or a shift that should be looked into more closely — not necessarily a slow night.
+
+## Investigating a Long-Open Shift
 
 <Steps>
-  <Step title="Count the cash drawer">
-    At end of shift, count the actual cash in the drawer (including the opening float).
+  <Step title="Check Open Now">
+    Look for the warning banner and identify which shift(s) have been open more than 8 hours.
   </Step>
-  <Step title="Compare to Expected Cash">
-    Open the workday report and check the **Expected Cash** figure. Any difference between Expected and Actual is the over/short for the shift.
+  <Step title="Confirm it's not still legitimately trading">
+    Check the Location and Start time — an overnight venue may legitimately have a long-running shift; a lunch counter still "open" at midnight almost certainly isn't.
   </Step>
-  <Step title="Close the workday">
-    Click **Close Workday** and enter the actual cash counted. The over/short is recorded automatically.
+  <Step title="Contact the staff member">
+    Use the Opened By field to identify who needs to close out the till, or have a manager close it on their behalf if they're unreachable.
   </Step>
-  <Step title="Investigate discrepancies">
-    If the over/short is significant, review the individual transactions for that shift to identify any missed payments or errors.
+  <Step title="Review after closing">
+    Once closed, open the shift under the Workdays drill-down to confirm the sales and ticket totals look reasonable for the actual trading window, not the inflated open duration.
   </Step>
 </Steps>
 
 ## Frequently Asked Questions
 
 <AccordionGroup>
-  <Accordion title="What happens if a shift is not closed properly?">
-    If a shift is left open overnight, it will continue to accumulate new transactions until it is closed. The workday report will show a very long shift with inflated totals. To prevent this, close shifts at the end of each trading day as a policy.
+  <Accordion title="Why does a Workday still show Status: Open even though I closed my own till?">
+    A Workday only closes once every Shift inside it has closed — if another register or staff member's till is still open, the Workday stays Open. Drill into the Workday (Level 2) to see which shift is still outstanding.
   </Accordion>
-  <Accordion title="Can I see workday reports for a specific employee?">
-    Yes. Filter the workday list by the **Opened by** or **Closed by** employee name. This shows only the shifts that employee managed, useful for performance reviews or investigating discrepancies.
+  <Accordion title="Why do Workday Reports numbers update faster than the other reports after an offline register reconnects?">
+    Workday Reports runs on a separate backend service built specifically to reflect offline-synced tickets live, rather than from a cache. Tickets rung up while a register was offline appear here as soon as they sync, without waiting on the aggregation cycle the other eight reports use.
   </Accordion>
-  <Accordion title="Why does the Expected Cash not match the physical cash even when no errors were made?">
-    Common causes include: (1) Petty cash used from the drawer without being recorded. (2) Cash given back as change being miscounted. (3) Rounding on cash transactions. Track any petty cash withdrawals in a separate log and record them in the POS if your system supports it.
+  <Accordion title="A shift shows a long duration and low sales in the Durations chart — is that always a problem?">
+    Not always — a slow trading period can look the same on the chart as a forgotten open till. Cross-check with Open Now (was it flagged for being open too long?) and the shift's ticket count before assuming it's an error.
   </Accordion>
-  <Accordion title="Can I reopen a closed workday to make corrections?">
-    Closed workdays are locked to preserve data integrity. If you find an error in a closed shift, contact your administrator — corrections require a manual adjustment and are logged in the audit trail.
+  <Accordion title="Can I filter Workday Reports by date range like the other reports?">
+    Workdays, Shifts, Daily, By Location, and By User all support date filtering within their own tab. Open Now is the exception — it's always the current live state and has no date filter by design.
   </Accordion>
 </AccordionGroup>
 
 ## Related
 
 <CardGroup cols={2}>
-  <Card title="Reports Overview" icon="chart-bar" href="/reports/overview">Sales summaries by date range</Card>
-  <Card title="Employees" icon="users" href="/features/employees">Assign staff to shifts</Card>
-  <Card title="Payment Types" icon="credit-card" href="/features/payment-types">Understand how payments appear in the breakdown</Card>
-  <Card title="Import History" icon="upload" href="/reports/import-history">Review past data imports</Card>
+  <Card title="Reports Overview" icon="chart-bar" href="/reports/overview">The "which report do I want" decision table and shared filter/export behavior</Card>
+  <Card title="Sales Reports" icon="bar-chart-3" href="/reports/sales-reports">Date-range aggregate sales totals</Card>
+  <Card title="Tickets & Voids" icon="receipt" href="/reports/tickets-and-voids">Look up a specific order or investigate voids, comps, and gifts</Card>
+  <Card title="Employees" icon="users" href="/features/employees">Staff records referenced in Opened By / By User breakdowns</Card>
 </CardGroup>

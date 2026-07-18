@@ -1,26 +1,48 @@
 ---
 title: "Categories"
-description: "Organise your products into categories for the POS and online menu."
+description: "Organise your products into categories for the POS and online menu, with location and order mode overrides."
 ---
 
-**Categories** group products on the POS screen and the online ordering menu. Customers browse by category; kitchen routing rules can also filter by category to direct prints to different printers.
+**Categories** group products on the POS screen and the online ordering menu. Each category appears as a tab or section; customers browse by category, and your kitchen routing rules can filter by category to direct prints to specific printers. Unlike a single static list, DuitPOS lets you customise categories for specific locations or order modes—for example, hiding certain sections from delivery orders or renaming a category for a specific location.
 
 <Frame>
-  <img src="/images/categories.png" alt="Categories list showing menu sections like Burgers, Drinks, and Desserts with sort order handles" />
+  <img src="/images/categories.png" alt="Categories list showing menu sections like Burgers, Drinks, and Desserts with sort order handles, and a context selector bar at the top displaying Location and Order Mode dropdowns" />
 </Frame>
 
 ## Category Fields
 
 | Field | Required | Description |
 |-------|----------|-------------|
+| **Code** | Yes | Internal unique identifier, e.g. `BRG` or `COLD_DRINKS`. Used in imports and APIs |
 | **Name** | Yes | The label displayed on the POS category tabs and the online menu, e.g. `Burgers` or `Cold Drinks` |
+| **Description** | No | Optional notes for staff or internal use |
 | **Colour** | No | An optional highlight colour for the category button on the POS screen. Helps staff find categories faster |
 | **Image** | No | A photo shown on the online ordering page to represent the category |
-| **Active** | No | Toggle off to hide this category (and all products within it) from the POS and online menu |
-| **Sort Order** | Auto | Drag to reorder — controls the position of this category tab on the POS |
+| **Active** | No | Toggle off to hide this category (and all products within it) from the POS and online menu globally. To hide only in specific locations or order modes, use Context Overrides instead |
+| **Sort Order** | Auto | Drag to reorder — controls the position of this category tab on the POS and online menu |
 
 <Tip>
   Set the **Sort Order** so your most popular categories appear first. On a POS touchscreen, staff will tap the first category by default, so place your highest-volume section (e.g. Main Menu or Beverages) at the top of the list.
+</Tip>
+
+## Context Selector & Overrides
+
+The **Context Selector** bar at the top lets you preview and edit category behaviour for a specific **Location** and **Order Mode** combination. This is useful when your menu differs by channel—for example, a delivery order mode might not offer dine-in-only items, or a specific location might have a local item not sold elsewhere.
+
+### How to Use the Context Selector
+
+1. **Pick a Location** (optional) — select from your locations, or leave blank to apply to all locations.
+2. **Pick an Order Mode** (optional) — select Pickup, Dine In, Delivery, or Reservation, or leave blank to apply to all order modes.
+3. **Click Refresh** — the table reloads and displays a new **Context** column showing any overrides for the selected combination.
+4. **View Overrides** — each row now shows badges:
+   - A **green "Active in ctx"** or **red "Hidden in ctx"** badge (if the category's Active status is overridden in this context)
+   - A **blue name badge** (if the category's Name is overridden in this context)
+5. **Clear the Context** — click **Refresh** with both Location and Order Mode blank to return to the global view (no context).
+
+Overrides are **non-destructive**: they only affect the selected location and order mode combination. The global settings remain unchanged. If you hide a category in one location, it still appears in all others.
+
+<Tip>
+  Overrides are resolved using the same priority rules as products: a **Location + Order Mode** override beats a Location-only or Order Mode-only override, which beats the global setting. See [Products: Pricing & Availability](/features/products) for the full priority explanation.
 </Tip>
 
 ## Create a Category
@@ -30,16 +52,54 @@ description: "Organise your products into categories for the POS and online menu
     Categories can be managed directly from the **Menu Builder** page or via the Categories shortcut in the left sidebar.
   </Step>
   <Step title="Click New Category">
-    Fill in the Name field. Optionally pick a Colour and upload an Image.
+    Fill in the **Code** (internal ID) and **Name** fields. Optionally add a Description, Colour, and Image.
+  </Step>
+  <Step title="Set Active">
+    Toggle **Active** to show or hide this category globally (on by default).
   </Step>
   <Step title="Save">
     Click **Create**. The category appears immediately in the Menu Builder and on the POS.
   </Step>
 </Steps>
 
+## Bulk Edit in Context
+
+When a context is active (Location and/or Order Mode selected), you can quickly apply the same override to multiple categories at once.
+
+### How to Bulk Edit
+
+<Steps>
+  <Step title="Select a Context">
+    Use the **Context Selector** at the top to pick a Location and/or Order Mode.
+  </Step>
+  <Step title="Select Categories">
+    Check the boxes next to the categories you want to override.
+  </Step>
+  <Step title="Click 'Edit in Context'">
+    The bulk-edit dialog opens.
+  </Step>
+  <Step title="Set Active Override">
+    Choose **Active**, **Inactive**, or **Inherit (remove override)**. Selecting "Inherit" removes any Active override for those categories in the chosen context, reverting to the global setting.
+  </Step>
+  <Step title="Set Name Override (Optional)">
+    Enter a new name for the selected categories in this context only. Leave blank to keep the global name (or remove an existing name override).
+  </Step>
+  <Step title="Save">
+    Click **Save**. All selected categories are updated at once with the new overrides for the chosen Location + Order Mode.
+  </Step>
+</Steps>
+
+<Tip>
+  **Bulk Edit in Context** is perfect for hiding entire menu sections from a specific channel. Example: select all "Dine-in only" categories, set Location = All, Order Mode = Delivery, then click "Edit in context" → set to Inactive. Now those categories won't appear on delivery orders, but remain visible in dine-in and pickup.
+</Tip>
+
+<Warning>
+  **Active (global) vs. Hidden (in context)**: Turning a category off globally deactivates it everywhere, even if overrides say to show it in a specific context. Overrides only strengthen; they cannot force a globally-inactive category to appear. If you deactivate a category globally and then see no Context Overrides option for it, that's why.
+</Warning>
+
 ## Reorder Categories
 
-Drag rows by the sort handle (the six-dot icon) to change the order on the POS. The first active category is selected by default when the POS loads.
+Drag rows by the sort handle (the six-dot icon) to change the order on the POS. The first active category is selected by default when the POS loads. Reordering applies globally—if you need a different order for specific locations or order modes, you must use the Context Selector to create location/mode-specific name overrides that reflect the desired grouping, or split the categories into different products lists.
 
 ## Add Products to a Category
 
@@ -47,17 +107,27 @@ After creating a category, go to **Menu Builder → Products** and either:
 - Click **New Product** while the category is selected in the Menu Builder.
 - Edit an existing product and change its **Category** field.
 
+## Bulk Import & Export
+
+Use **Bulk Import** to add or update multiple categories at once from a CSV file. Use **Export CSV** to download all current categories (including override values if a context is active) for backup or editing offline.
+
 ## Frequently Asked Questions
 
 <AccordionGroup>
   <Accordion title="Why are a category's products not showing on the POS?">
-    Both the category and the individual products must be set to **Active**. If the category is active but a product is not, that product will be hidden. If the category itself is inactive, all products within it are hidden regardless of their own Active status.
+    Both the category and the individual products must be set to **Active** globally. If the category is active but a product is not, that product will be hidden. If the category itself is inactive, all products within it are hidden regardless of their own Active status. Additionally, check whether a Context Override is hiding the category for the currently logged-in location or order mode.
+  </Accordion>
+  <Accordion title="Can I hide a category from a specific Order Mode?">
+    Yes. Use the **Context Selector** to pick the Order Mode, then select the categories you want to hide and click **Edit in context** → set **Active** to **Inactive**. That category will now be hidden for that Order Mode only, while remaining visible in other channels.
+  </Accordion>
+  <Accordion title="What's the difference between deactivating a category and hiding it in a context?">
+    **Deactivating globally** turns the category off everywhere. **Hiding in a context** (via Context Overrides) affects only that specific Location + Order Mode combination. Use global deactivation for categories you no longer offer; use context overrides for channel-specific menus (e.g., no dine-in items on delivery).
   </Accordion>
   <Accordion title="Can I have products in multiple categories?">
     Each product belongs to one category at a time. If you need to show the same item in multiple sections, create a separate product entry for each category. You can use the same name and price for both.
   </Accordion>
   <Accordion title="Does the sort order in the Menu Builder affect the online ordering menu too?">
-    Yes. The category order set in the Menu Builder applies to both the POS screen and the customer-facing online ordering page.
+    Yes. The category order set in the Menu Builder applies to both the POS screen and the customer-facing online ordering page, subject to any Context Overrides in effect.
   </Accordion>
   <Accordion title="Can I use categories in printer routing rules?">
     Yes. Routing rules can match by category — for example, you can send all products in the `Hot Food` category to the kitchen printer and all products in the `Beverages` category to the bar printer. See [Printers](/features/printers) for details.
@@ -67,8 +137,8 @@ After creating a category, go to **Menu Builder → Products** and either:
 ## Related
 
 <CardGroup cols={2}>
-  <Card title="Products" icon="box" href="/features/products">Add items within your categories</Card>
-  <Card title="Menu Builder" icon="utensils" href="/features/menu-builder">Manage your full menu in one place</Card>
-  <Card title="Printers" icon="printer" href="/features/printers">Route kitchen prints by category</Card>
-  <Card title="Modifiers" icon="list" href="/features/modifiers">Add options to products in your categories</Card>
+  <Card title="Products" icon="box" href="/features/products">Add items within your categories; override prices and availability by location and order mode</Card>
+  <Card title="Bulk Pricing" icon="tag" href="/features/bulk-pricing">Manage category and product overrides across multiple locations and order modes at once</Card>
+  <Card title="Menu Builder" icon="utensils" href="/features/menu-builder">Manage your full menu in one place with drag-and-drop organization</Card>
+  <Card title="Printers" icon="printer" href="/features/printers">Route kitchen prints by category to different printers</Card>
 </CardGroup>

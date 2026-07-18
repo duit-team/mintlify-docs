@@ -23,28 +23,63 @@ The platform submits e-invoices to LHDN MyInvois as a registered **intermediary*
   If you're wondering why a tenant's E-Invoicing settings page doesn't ask for a Client ID or Client Secret — that's expected. Those credentials live here, at the platform level, and are shared across all tenants.
 </Tip>
 
+## Status Card
+
+The **LHDN Configuration Status** card at the top of the screen shows the current state of your e-invoicing setup:
+
+| Status | Meaning | Action |
+|--------|---------|--------|
+| **Credentials Configured** | Client ID, Client Secret, and Intermediary TIN are set | Green checkmark: ready for use |
+| **Credentials Missing** | One or more required fields are empty | Red × : complete the setup steps below |
+| **Environment: Sandbox** | Currently submitting test documents to LHDN's sandbox API | Green badge: safe for testing, tenants can experiment |
+| **Environment: Production** | Currently submitting live documents to LHDN's production API | Orange badge: submissions are legally binding, ensure certificate is present |
+| **Signing Certificate Present** | A .p12 certificate has been uploaded and is valid | Green checkmark: v1.1 XAdES signatures enabled |
+| **Signing Certificate Missing** | No certificate has been uploaded | Gray note: v1.0 unsigned documents only (Sandbox safe, Production risky) |
+| **Certificate Expiry Warning** | The signing certificate will expire soon | Yellow warning: renew the certificate before expiry |
+
+<Warning>
+  Before switching the Environment to **Production**, ensure: (1) the Signing Certificate is uploaded and valid, (2) all tenants have authorized the intermediary in their own MyInvois accounts, and (3) you have thoroughly tested submissions in Sandbox. Once Production is enabled, all documents become legally binding with no option to undo.
+</Warning>
+
 ## Intermediary Credential Fields
 
 | Field | Required | Description |
 |-------|----------|-------------|
-| **Client ID** | Yes | The intermediary's OAuth Client ID from the MyInvois developer portal |
-| **Client Secret** | Yes | The intermediary's OAuth Client Secret. Stored encrypted — never shown in full again after saving |
-| **Environment** | Yes | `Sandbox` (preprod-api.myinvois.hasil.gov.my) or `Production` (api.myinvois.hasil.gov.my) |
-| **Intermediary TIN** | Yes | The platform's own TIN, registered with LHDN as an intermediary |
+| **Client ID** | Yes | The intermediary's OAuth Client ID from the MyInvois developer portal. Stored encrypted using AES-256-GCM |
+| **Client Secret** | Yes | The intermediary's OAuth Client Secret. Stored encrypted using AES-256-GCM — never displayed in full after saving, only masked as `••••••••` for security |
+| **Environment** | Yes | `Sandbox` (preprod-api.myinvois.hasil.gov.my) or `Production` (api.myinvois.hasil.gov.my). Changing this affects all tenant submissions immediately |
+| **Intermediary TIN** | Yes | The platform's own TIN, registered with LHDN as an intermediary. This is the TIN that tenants must authorize in their MyInvois accounts |
 | **Intermediary BRN** | No | The platform's Business Registration Number |
-| **Intermediary Name** | No | Display name for the intermediary, shown in status checks |
+| **Intermediary Name** | No | Display name for the intermediary, shown in status checks and audit logs |
+
+**Encryption details**: All credentials (Client ID, Client Secret, and certificate passphrase) are encrypted at rest using AES-256-GCM with a platform encryption key stored in the `PROCESSOR_ENCRYPTION_KEY` environment variable. Only root administrators with direct database access can decrypt these values — the API and web UI never expose unencrypted credentials in responses or logs.
 
 ## Signing Certificate (for v1.1 / Production)
 
-Uploading a signing certificate switches every tenant's submissions from unsigned UBL v1.0 documents to digitally signed v1.1 documents (XAdES-RSA signature) — **required for production B2B submissions.** Without a certificate, documents are still submitted but as v1.0, which is acceptable for Sandbox testing only.
+Uploading a signing certificate switches every tenant's submissions from unsigned UBL **v1.0** documents to digitally signed **v1.1** documents with XAdES-RSA signatures. This certificate is **required for Production submissions** and **optional for Sandbox testing**.
+
+### Document Version Rules
+
+- **v1.0 (Unsigned)**: Acceptable for Sandbox testing only. These documents are submitted without a digital signature and cannot be used for legally binding B2B transactions in Production.
+- **v1.1 (XAdES-RSA Signed)**: Required for Production B2B submissions. Every invoice is digitally signed by the platform using the certificate configured here, proving authenticity and legal compliance.
+
+**Automatic switching**: Once a signing certificate is uploaded and the Environment is set to Production, all submissions automatically switch to v1.1 signed documents. There is no per-tenant toggle — the environment is platform-wide.
+
+### Certificate Upload Fields
 
 | Field | Required | Description |
 |-------|----------|-------------|
-| **Signing Certificate (.p12)** | No (required for Production) | The PKCS#12 certificate file issued for e-invoice signing |
-| **Passphrase** | Yes, if a certificate is uploaded | The password protecting the .p12 file. Stored encrypted |
+| **Signing Certificate (.p12)** | No (required for Production) | The PKCS#12 certificate file (also called PFX) issued by your certificate authority or LHDN. Contains the private key and certificate chain needed for XAdES-RSA signing |
+| **Passphrase** | Yes, if a certificate is uploaded | The password protecting the .p12 file. Stored encrypted using AES-256-GCM — never displayed after saving |
 
 <Warning>
-  Switch the Environment to **Production** only after the certificate is uploaded and you've fully tested in Sandbox. Production submissions are legally binding for every tenant on the platform — there is no "undo" once LHDN validates a document.
+  **Before switching to Production:**
+  1. Upload the signing certificate and verify it shows as valid
+  2. Test at least one document submission in Sandbox to confirm v1.1 signing works
+  3. Confirm all tenants have authorized the intermediary in their MyInvois accounts
+  4. Only then switch the Environment to Production
+  
+  Production submissions are legally binding for every tenant on the platform — there is no "undo" once LHDN validates a document.
 </Warning>
 
 ## Setup Steps
@@ -85,6 +120,44 @@ Configuring credentials here is not enough on its own. **Each tenant's MyInvois 
   Without this tenant-side authorization, submissions fail with `INTERMEDIARY_PERMISSION_DENIED` (403) or an async validation error like "authenticated TIN and documents TIN is not matching." This is the most common cause of a tenant's e-invoices failing in Production despite credentials being configured correctly here.
 </Warning>
 
+## Where to Get Credentials
+
+### OAuth Credentials (Client ID and Client Secret)
+
+1. Go to **LHDN MyInvois Developer Portal** (https://developer.myinvois.hasil.gov.my)
+2. Log in with the **intermediary's LHDN account credentials**
+3. Navigate to **Application Management** or **OAuth Credentials**
+4. Create a new OAuth application (or use an existing one) with the following scopes:
+   - `submit_document` — permission to submit e-invoices on behalf of tenants
+   - `poll_documents` — permission to check submission status
+5. Copy the **Client ID** and **Client Secret** and save them in the form above
+
+Keep these credentials safe — they grant full e-invoicing submission access across all tenants.
+
+### Signing Certificate (.p12)
+
+The signing certificate is issued by your **certificate authority** or provided by LHDN during intermediary registration:
+
+1. Contact your Certificate Authority or LHDN support to request a signing certificate in **PKCS#12 (.p12 or .pfx) format**
+2. The certificate must include:
+   - A valid RSA private key (minimum 2048-bit)
+   - The public certificate (signed by a trusted CA or LHDN)
+   - Full certificate chain
+3. You will receive a .p12 file and a passphrase to unlock it
+4. Upload both the file and passphrase in the form above
+
+**Note**: The private key remains on the platform and is never exported. Only the digital signature operation uses it — the key itself stays encrypted at rest.
+
+### Intermediary TIN
+
+The Intermediary TIN is your business's Tax Identification Number registered with LHDN:
+
+1. Obtain this from your **LHDN MyInvois Portal** account settings
+2. It must match the TIN that tenants will use to authorize the intermediary (see Prerequisite section above)
+3. This TIN is visible to other tenants and in all submission logs — it's not secret
+
+---
+
 ## Frequently Asked Questions
 
 <AccordionGroup>
@@ -100,13 +173,38 @@ Configuring credentials here is not enough on its own. **Each tenant's MyInvois 
   <Accordion title="Can different tenants use different environments (one Sandbox, one Production)?">
     The intermediary credentials and certificate configured here are platform-wide. Each tenant's own E-Invoicing config has its own environment setting, but submissions for tenants set to Production will only succeed once the platform-level certificate and Production-ready credentials are in place.
   </Accordion>
+  <Accordion title="Can I switch from Sandbox to Production without downtime?">
+    Yes. Simply update the Environment toggle from Sandbox to Production and click Save. All new submissions immediately use Production credentials. Existing documents in Sandbox remain there (they are not retroactively moved). Ensure the signing certificate is uploaded before making this switch.
+  </Accordion>
+  <Accordion title="Are the credentials stored securely?">
+    Yes. All credentials (Client ID, Client Secret, and certificate passphrase) are encrypted at rest using AES-256-GCM with a platform-level encryption key from the `PROCESSOR_ENCRYPTION_KEY` environment variable. The encrypted values are stored in the database, and the API never exposes unencrypted credentials in responses or logs — only masked as `••••••••` in the UI. Only direct database access by a root administrator with encryption key access can decrypt these values.
+  </Accordion>
+  <Accordion title="What happens if the signing certificate expires?">
+    If the certificate expires, new submissions will fail with a certificate validation error. The status card will show a warning a few weeks before expiry. Before expiry occurs, obtain a new certificate from your Certificate Authority and upload it to replace the expired one. Old invoices signed with the previous certificate remain valid.
+  </Accordion>
+  <Accordion title="Can I have multiple signing certificates?">
+    No, the platform stores only one certificate at a time. If you need to rotate certificates, upload the new one, then delete or disable the old one. This has no impact on previously signed documents — they remain valid.
+  </Accordion>
 </AccordionGroup>
 
 ## Related
 
-<CardGroup cols={2}>
-  <Card title="E-Invoicing" icon="file-text" href="/features/e-invoicing">Tenant-side TIN and location setup</Card>
+### Root Admin Configuration (Platform-Level)
+
+These three pages form the core platform configuration for root administrators:
+
+<CardGroup cols={3}>
+  <Card title="Root Users" icon="shield" href="/features/root-users">Manage who can access platform config</Card>
+  <Card title="Database Servers" icon="server" href="/features/db-servers">Manage PostgreSQL infrastructure for tenant provisioning</Card>
+  <Card title="LHDN Admin" icon="lock" href="/features/lhdn-admin">This page — e-invoicing credentials and certificates</Card>
+</CardGroup>
+
+### Tenant-Level Features (Use These Credentials)
+
+These features depend on the LHDN credentials configured above:
+
+<CardGroup cols={3}>
+  <Card title="E-Invoicing" icon="file-text" href="/features/e-invoicing">Tenant-side TIN and location setup for submissions</Card>
   <Card title="Tenants" icon="building" href="/features/tenants">Manage businesses on the platform</Card>
   <Card title="Locations" icon="map-pin" href="/features/locations">Configure TIN, BRN, and MSIC per location</Card>
-  <Card title="Root Users" icon="shield" href="/features/root-users">Manage who can access these credentials</Card>
 </CardGroup>

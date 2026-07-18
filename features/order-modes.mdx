@@ -1,9 +1,11 @@
 ---
 title: "Order Modes"
-description: "Define how orders are placed — dine-in, takeaway, delivery, and more."
+description: "Define service types and control how orders behave across your system."
 ---
 
-**Order Modes** describe the type of service for a transaction (e.g. *Dine In*, *Takeaway*, *Delivery*). They appear as a selection step when opening a new ticket on the POS, and can also be used in printer routing rules to direct kitchen orders to different printers based on the service type.
+**Order Modes** represent the channel or service type for an order — e.g. *Dine In*, *Takeaway*, *Delivery*, *Reservation*. Every ticket is tagged with an Order Mode when it opens, and that mode cascades through your entire system: it controls which printers receive the ticket, which tax rules apply, which products are available, and how orders appear in sales reports.
+
+In short, **Order Modes determine *how* orders behave**, not just what customers see.
 
 <Frame>
   <img src="/images/modes.png" alt="Order Modes list screen showing Dine In, Takeaway, and Delivery" />
@@ -13,12 +15,13 @@ description: "Define how orders are placed — dine-in, takeaway, delivery, and 
 
 | Field | Required | Description |
 |-------|----------|-------------|
-| **Code** | Yes | A short internal identifier, e.g. `DINE_IN`, `TAKEAWAY`, `DELIVERY`. Used in reports and routing rules |
+| **Code** | Yes | A short internal identifier, e.g. `DINE_IN`, `TAKEAWAY`, `DELIVERY`. Used in reports, routing rules, and tax logic |
 | **Name** | Yes | The display label shown to staff on the POS when selecting the order type |
+| **Type** | Yes | Service classification: `Pickup`, `Dine In`, `Delivery`, or `Reservation`. Drives downstream business logic (e.g. printer routing, tax rules, product restrictions) |
 | **Active** | No | Toggle off to hide this mode from the POS. The mode still appears in historical reports |
 
 <Tip>
-  Add only the modes your business actually uses. Too many options on the POS selection screen can slow down order entry. Start with Dine In and Takeaway, and add Delivery only when you are ready to handle it operationally.
+  Add only the modes your business actually uses. Too many options on the POS selection screen slow down staff. Start with Dine In and Takeaway, and add Delivery only when you are ready to handle it operationally. The **Type** field determines how the mode behaves in printer routing, tax rules, and product overrides — most setups use only 2–4 modes.
 </Tip>
 
 ## Create an Order Mode
@@ -68,7 +71,7 @@ Printer routing rules can filter by order mode — for example, you can send Del
 
 <CardGroup cols={2}>
   <Card title="Printers" icon="printer" href="/features/printers">Route print jobs by order mode</Card>
-  <Card title="Transaction Types" icon="list" href="/features/transaction-types">Understand how transactions are categorised</Card>
-  <Card title="Setup Checklist" icon="check-circle" href="/getting-started/setup-checklist">Configure order modes as part of initial setup</Card>
+  <Card title="Tax" icon="percent" href="/features/tax">Apply different tax rules per order mode</Card>
+  <Card title="Products" icon="utensils" href="/features/products">Restrict product availability by order mode</Card>
   <Card title="Reports" icon="chart-bar" href="/reports/overview">Filter sales reports by order mode</Card>
 </CardGroup>

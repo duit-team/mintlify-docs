@@ -3,7 +3,7 @@ title: "Products"
 description: "Add and manage the items sold at your POS and online."
 ---
 
-**Products** are the items customers can order. Each product belongs to a category and can have modifiers, a tax rate, and context-specific price overrides. Products appear on the POS order screen and on the customer-facing online ordering menu.
+**Products** are the items customers can order at your POS and online. Each product belongs to a category, can have modifiers and tax rates, and supports **context-specific overrides** — meaning you can set different prices, names, or availability for specific locations and order modes without changing the base product data. For example, a burger costs $12 normally, but $14 for delivery orders, or $10.99 at your downtown location. This keeps your base menu clean while giving you fine-grained control where you need it.
 
 <Frame>
   <img src="/images/products.png" alt="Products list showing items with names, prices, categories, and active status" />
@@ -15,7 +15,7 @@ description: "Add and manage the items sold at your POS and online."
 |-------|----------|-------------|
 | **Name** | Yes | The product name displayed on the POS, receipts, and online menu |
 | **Code / SKU** | No | An optional internal reference code for stock management or reporting |
-| **Price** | Yes | The base selling price, excluding tax unless tax-inclusive pricing is enabled |
+| **Price** | Yes | The base selling price (applies everywhere unless overridden). Excluding tax unless tax-inclusive pricing is enabled |
 | **Category** | Yes | Which category this product belongs to. Determines where it appears on the POS |
 | **Tax** | No | The tax rate to apply per sale. See [Tax](/features/tax) |
 | **Brand** | No | Optional grouping under a named brand. See [Brands](/features/brands) |
@@ -24,7 +24,7 @@ description: "Add and manage the items sold at your POS and online."
 | **Active** | No | Toggle off to hide the product from the POS and online menu without deleting it |
 
 <Tip>
-  Set your base **Price** as the standard selling price. If you need a different price for delivery, happy hour, or another context, use [Bulk Pricing](/features/bulk-pricing) to create an override — this keeps the base price clean for in-store use.
+  Set your base **Price** as the standard selling price. If you need a different price for delivery, a specific location, or another context, use the **Pricing & Availability** tab (below) to create an override — this keeps the base price clean for in-store use.
 </Tip>
 
 ## Create a Product
@@ -37,7 +37,7 @@ description: "Add and manage the items sold at your POS and online."
     Fill in the required fields: Name, Price, and Category.
   </Step>
   <Step title="Add modifiers (optional)">
-    In the **Modifiers** section, attach modifier groups (e.g. Size, Add-ons). See [Modifiers](/features/modifiers).
+    In the **Modifiers** tab, attach modifier groups (e.g. Size, Add-ons). See [Modifiers](/features/modifiers).
   </Step>
   <Step title="Save">
     Click **Create** (or **Save** on the edit page). The product is immediately available on the POS.
@@ -46,11 +46,71 @@ description: "Add and manage the items sold at your POS and online."
 
 ## Edit a Product
 
-Click the **Edit** icon on any product row. All fields are editable. Price changes take effect on the next order placed after saving.
+Click the **Edit** icon on any product row to open the product editor. The editor has four tabs:
 
-## Bulk Price Overrides
+- **Details** — Product name, price, category, tax, brand, barcode, image, and active status.
+- **Variants** — Link variant products (e.g. different sizes) if you've organized them as separate products.
+- **Modifiers** — Attach modifier groups (e.g. Size, Add-ons) and select which modifiers apply to this product.
+- **Pricing & Availability** — Set context-specific price, name, and availability overrides per location and/or order mode (see below).
 
-To set a different price for a specific context (e.g. delivery pricing), use [Bulk Pricing](/features/bulk-pricing) instead of editing the base price. This preserves the original price for in-store use.
+All fields are editable. Price changes take effect on the next order placed after saving.
+
+## Pricing & Availability Overrides
+
+The **Pricing & Availability** tab lets you override a product's base price, display name, and visibility for specific locations and/or order modes. This is useful for delivery surcharges, location-specific pricing, time-based promotions, or hiding products in certain contexts.
+
+### How Overrides Work
+
+An **override** is a row that specifies:
+- A **Location** (or blank for all locations)
+- An **Order Mode** (or blank for all order modes)
+- An **Override Price** (or blank to use the base price)
+- A **Display Name** (or blank to use the base name)
+- **Visibility** — Inherit (use base active status), Visible (show in this context), or Hidden (hide in this context)
+
+**The key rule: blank Location/Order Mode fields mean "applies everywhere," not "applies nowhere."** For example:
+- An override with Location = *Downtown* and Order Mode = *blank* applies to all order modes at Downtown.
+- An override with Location = *blank* and Order Mode = *Delivery* applies to delivery orders at all locations.
+- An override with both blank applies everywhere (this is the global default).
+
+### Override Priority
+
+When an order comes in, the system picks the most specific override that matches. **Each field (price, name, visibility) resolves independently** — meaning a single product's price can come from a location-only override while its name comes from an order-mode-only override.
+
+Priority order (highest to lowest):
+1. **Both Location and Order Mode specified** (Priority 1100) — most specific match.
+2. **Location only** (Priority 1000) — applies to that location across all order modes.
+3. **Order Mode only** (Priority 100) — applies to that order mode across all locations.
+4. **Both blank** (Priority 0) — global default, applies everywhere if no more specific override exists.
+
+If you set a row's Price, Display Name, and Visibility all to blank, the system automatically deletes that row when you save — it would have no effect anyway.
+
+### Using the Pricing & Availability Tab
+
+<Steps>
+  <Step title="Open the product and go to Pricing & Availability">
+    On an existing product, click **Edit**, then click the **Pricing & Availability** tab.
+  </Step>
+  <Step title="Click Add Override">
+    Choose the **Location** (or leave blank for all locations) and **Order Mode** (or leave blank for all order modes).
+  </Step>
+  <Step title="Enter override values">
+    Fill in the **Override Price** (or leave blank to inherit the base price), **Display Name** (or leave blank), and set **Visibility** (Inherit, Visible, or Hidden).
+  </Step>
+  <Step title="Save">
+    Click **Save**. The override takes effect immediately for new orders in that context.
+  </Step>
+</Steps>
+
+You can view and edit all overrides for a product in a table on this tab. Each row shows its calculated Priority (auto-computed, read-only) so you can see the order in which overrides are resolved. Use the **Edit** and **Delete** icons to modify or remove rows.
+
+<Tip>
+  Overrides are resolved independently per field. For example, you might set a location-specific price override but inherit the base display name and visibility. The system picks the most specific match available for each field separately.
+</Tip>
+
+<Warning>
+  Any override row where all three fields (Price, Display Name, Visibility) are blank gets automatically deleted when you save — it would do nothing anyway.
+</Warning>
 
 ## Delete a Product
 
@@ -64,13 +124,16 @@ Click **Delete** on the product row.
 
 <AccordionGroup>
   <Accordion title="Why is a product not showing on the POS?">
-    Check three things: (1) The product is set to **Active**. (2) The product's **Category** is set to Active. A product in an inactive category is hidden even if the product itself is active. (3) Reload the POS app — it caches the menu and may not show changes immediately.
+    Check four things: (1) The product is set to **Active**. (2) The product's **Category** is set to Active. (3) Check the **Pricing & Availability** tab — if the product has a Visibility override set to **Hidden** for the current location/order mode, it won't show even if the base product is Active. (4) Reload the POS app — it caches the menu and may not show changes immediately.
+  </Accordion>
+  <Accordion title="What's the difference between 'Hidden' visibility and deactivating the whole product?">
+    **Hidden** (visibility override) hides the product only in that specific context (location + order mode). The product still appears in other contexts and remains searchable. **Deactivating** the whole product hides it everywhere and takes it out of search. Use Hidden for temporary context-specific removal; use Deactivate if you're retiring a product.
   </Accordion>
   <Accordion title="How does barcode scanning work?">
-    Add one or more barcodes to a product in the **Barcode** field. When staff scan the barcode on a connected scanner, the product is automatically added to the current ticket. You can add multiple barcodes per product (e.g. to cover different packaging sizes of the same item).
+    Add one or more barcodes to a product in the **Barcode** field on the Details tab. When staff scan the barcode on a connected scanner, the product is automatically added to the current ticket. You can add multiple barcodes per product (e.g. to cover different packaging sizes of the same item).
   </Accordion>
   <Accordion title="Can I create product variants (e.g. Small / Medium / Large as separate products)?">
-    The recommended approach is to use **Modifiers** — create a Size modifier group with Small, Medium, and Large options, each with a price adjustment, and attach it to the product. This keeps your product list clean and groups variants together on the POS. Alternatively, you can create separate products for each variant.
+    The recommended approach is to use **Modifiers** — create a Size modifier group with Small, Medium, and Large options, each with a price adjustment, and attach it to the product. This keeps your product list clean and groups variants together on the POS. Alternatively, you can create separate products for each variant and link them in the **Variants** tab.
   </Accordion>
   <Accordion title="Can I import products in bulk instead of adding them one by one?">
     Yes. Use the **Import** button on the Products page to upload a CSV file. See [Import History](/reports/import-history) to review the result of any import.
@@ -80,8 +143,8 @@ Click **Delete** on the product row.
 ## Related
 
 <CardGroup cols={2}>
+  <Card title="Bulk Pricing" icon="tag" href="/features/bulk-pricing">Quickly override prices for multiple products in one context</Card>
   <Card title="Categories" icon="folder" href="/features/categories">Organise products into menu sections</Card>
   <Card title="Modifiers" icon="list" href="/features/modifiers">Add size, add-on, and customisation options</Card>
-  <Card title="Bulk Pricing" icon="tag" href="/features/bulk-pricing">Set different prices per context</Card>
   <Card title="Tax" icon="percent" href="/features/tax">Assign tax rates to products</Card>
 </CardGroup>

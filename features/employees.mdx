@@ -3,7 +3,22 @@ title: "Employees"
 description: "Manage staff records separate from system login accounts."
 ---
 
-**Employees** are staff records used for POS login (via PIN), sales attribution, and time tracking. They are separate from **Users** (dashboard login accounts) — an employee may or may not have a dashboard login. Most frontline staff only need an employee record with a PIN, not a full user account.
+## Employees vs Users: Key Distinction
+
+<Note>
+  **Employees** and **Users** are two separate systems often confused. Here's the difference:
+
+  - **Employees** are **POS terminal login accounts**: Staff log in using a PIN (4–6 digits) at the point of sale. Each employee is tied to a location. Use for frontline staff (cashiers, supervisors, waiters, kitchen staff).
+  
+  - **Users** are **admin dashboard login accounts**: Staff log in with email + password in a browser at `https://app.duitpos.com` to view reports, manage products, and control the account. Accessed from anywhere, not at the terminal.
+  
+  - **Relationship**: An employee *can* be linked to a user account via the "User Account" field (allowing the same person to log in both at the POS terminal AND the dashboard). But they don't have to be linked — most POS staff need only an employee record.
+  
+  - **Access rule**:
+    - A staff member working the POS needs an **Employee** profile (with PIN).
+    - A manager accessing the admin dashboard needs a **User** account.
+    - A staff member doing both needs **both** — an Employee linked to a User.
+</Note>
 
 <Frame>
   <img src="/images/employees.png" alt="Employees list showing staff names, roles, PIN status, and active toggles" />
@@ -13,13 +28,13 @@ description: "Manage staff records separate from system login accounts."
 
 | Field | Required | Description |
 |-------|----------|-------------|
-| **Name** | Yes | The employee's full name, shown on the POS login screen and in sales reports |
-| **Role** | Yes | The POS role that determines what this employee can do on the POS terminal (e.g. Cashier, Supervisor) |
-| **PIN** | Yes | A 4–6 digit number the employee uses to log in to the POS. Must be unique across all employees |
-| **Colour** | No | A highlight colour shown next to the employee's name on the POS login screen for quick identification |
-| **Location** | No | The primary location (branch) this employee works at. Used for location-based report filtering |
-| **User Account** | No | Link to a dashboard user account if this employee also needs dashboard access |
-| **Active** | No | Toggle off to prevent this employee from logging in to the POS |
+| **Full Name** | Yes | The employee's full name, shown on the POS login screen and in sales reports |
+| **POS Role** | Yes | The terminal-level role that determines what this employee can do on the POS (e.g. Cashier, Supervisor, Waiter, Kitchen, Manager). *Note: This is separate from dashboard-level Permissions.* |
+| **PIN** | Yes | A 4–6 digit number the employee uses to log in to the POS. Must be unique within the location. On create, enter the initial PIN; on edit, leave blank to keep the current PIN or enter a new one to reset. |
+| **Avatar Color** | No | A highlight colour shown next to the employee's name on the POS login screen for quick identification. Helps staff recognize their own account at a glance. |
+| **Location** | No | The primary location (branch) this employee works at. Used for location-based report filtering and sale attribution. |
+| **User Account** | No | *(Optional link to dashboard admin)* Link this employee to a dashboard user account if they also need access to the admin panel (reports, settings, etc.). When linked, this person can log in both at the POS (PIN) and the dashboard (email+password). |
+| **Active** | No | Toggle off to prevent this employee from logging in to the POS (e.g. on extended leave). Historical records are preserved. |
 
 <Tip>
   Use a PIN that is easy for the employee to remember but not obvious (avoid `1234` or `0000`). For higher-security environments, use 6-digit PINs and rotate them periodically.
@@ -39,9 +54,17 @@ description: "Manage staff records separate from system login accounts."
   </Step>
 </Steps>
 
-## Link to a User Account
+## Link to a User Account (Enable Dashboard Access)
 
-If this employee also needs dashboard access, open their record and link it to the corresponding **User** account under **Users → Users**. This enables sales and shift reports to be attributed to them by name.
+If this employee also needs admin dashboard access (to view reports, manage settings, etc.), open their employee record and use the **User Account** dropdown to link it to the corresponding **User** account (created in **Setup → Users & Roles**). 
+
+Once linked:
+- The same person can log in at the POS using their PIN
+- The same person can log in at the dashboard using their email + password
+- Sales, shifts, and reports are attributed to them by name in both systems
+- This person inherits the permissions assigned to their user role (e.g. "Manager" can view reports; "Cashier" cannot)
+
+**They remain independent login systems** — a POS PIN is not a dashboard password, and vice versa.
 
 ## Deactivate
 
@@ -55,24 +78,42 @@ Toggle **Active** off to mark an employee as inactive (e.g. when they leave or a
 
 <AccordionGroup>
   <Accordion title="An employee forgot their PIN — how do I reset it?">
-    Go to Staff → Employees, click **Edit** on the employee's record, and enter a new PIN in the PIN field. Save the change. The new PIN takes effect immediately on the POS.
+    Go to **Staff → Employees**, click **Edit** on the employee's record, and enter a new PIN in the PIN field. Save the change. The new PIN takes effect immediately on the POS.
   </Accordion>
   <Accordion title="An employee says they cannot clock in — what do I check?">
-    Check that the employee's record is set to **Active**. Also verify their PIN — ask them to re-enter it carefully (PINs are case-independent but must match the number exactly). If the POS still rejects the PIN, reset it in the employee record.
+    Check that the employee's record is set to **Active**. Also verify their PIN — ask them to re-enter it carefully (PINs are numeric only and must match exactly). If the POS still rejects the PIN, reset it in the employee record.
   </Accordion>
-  <Accordion title="What is the difference between a POS role and a dashboard user role?">
-    A **POS role** controls what an employee can do on the POS terminal (e.g. apply discounts, void items, open the cash drawer). A **dashboard user role** controls what a user can see and do in the web dashboard (e.g. run reports, manage products). These are separate systems — an employee can have both.
+  <Accordion title="What is the difference between 'POS Role' and 'Permissions' (from user roles)?">
+    These are two separate systems:
+    - **POS Role** (e.g. Cashier, Supervisor, Kitchen) controls what an employee can do *at the POS terminal* — void items, apply discounts, open drawers, etc. This is a simple terminal-level classification built into the POS application.
+    - **Permissions** (from user roles like Manager, Admin, Accountant) control what a *user* can do in the *admin dashboard* — view reports, manage products, change settings, etc. Permissions only apply if the employee is linked to a user account.
+    
+    An employee doesn't need a user account at all; they can work POS-only with just a POS role and PIN. If they are linked to a user account, they then inherit both their POS role *and* their dashboard permissions.
+  </Accordion>
+  <Accordion title="Can a staff member access both the POS and the admin dashboard?">
+    **Yes.** Create an employee record with a PIN (for POS login), then link it to a user account (for dashboard login). The same person can then log in at the POS using their PIN and access the admin dashboard at `https://app.duitpos.com` using their email + password. Use this for managers or supervisors who need both POS and reporting/settings access.
+  </Accordion>
+  <Accordion title="Can I delete an employee?">
+    Yes. Go to **Staff → Employees**, select the employee, and click **Delete**. Deactivating (via the **Active** toggle) is recommended first, as it prevents login while preserving historical sales, shifts, and reports tied to that employee. Hard deletion removes the employee record entirely but does not erase historical transactions.
   </Accordion>
   <Accordion title="Can two employees share the same PIN?">
-    No. PINs must be unique across all employees at the same location. The system will reject a PIN that is already in use when you try to save.
+    No. PINs must be unique within a location. The system will reject a PIN that is already in use when you try to save. If an employee leaves, deactivate them (rather than deleting) so their sales history is preserved under their name.
   </Accordion>
 </AccordionGroup>
 
 ## Related
 
 <CardGroup cols={2}>
-  <Card title="Users & Roles" icon="users" href="/setup/users-and-roles">Manage dashboard login accounts</Card>
-  <Card title="Permissions" icon="shield-check" href="/setup/permissions">Control what each role can access</Card>
-  <Card title="Locations" icon="map-pin" href="/features/locations">Assign employees to branches</Card>
-  <Card title="Reports" icon="chart-bar" href="/reports/overview">View sales attributed to each employee</Card>
+  <Card title="Users & Roles" icon="users" href="/setup/users-and-roles">
+    Manage **dashboard login accounts** (email + password). Link a user to an employee to grant dashboard access. See this page to understand the employee–user relationship better.
+  </Card>
+  <Card title="Permissions" icon="shield-check" href="/setup/permissions">
+    Control fine-grained dashboard access (what users can do in the admin panel). POS roles are separate — see the FAQ for clarification.
+  </Card>
+  <Card title="Locations" icon="map-pin" href="/features/locations">
+    Assign employees to branches. Location affects POS behavior and report filtering.
+  </Card>
+  <Card title="Reports" icon="chart-bar" href="/reports/overview">
+    View sales, shifts, and revenue attributed to each employee by name.
+  </Card>
 </CardGroup>

@@ -1,0 +1,215 @@
+---
+title: "Share Commerce Setup"
+description: "Integrate the Share Commerce ePay gateway for online QR ordering payments."
+---
+
+**Share Commerce ePay** is the online payment gateway that lets customers pay by card, e-wallet, and other methods when ordering through your QR code / online ordering page. This guide walks through setting up that integration.
+
+<Note>
+  Setting up a physical Share Commerce card terminal instead? That's a different processor called just **Share Commerce** (no "ePay") — see [Payment Types](/features/payment-types#two-share-commerce-processors) to add it. It just needs the terminal's IP address, port, and model — no online merchant account, and this guide won't apply to it.
+</Note>
+
+## What You'll Need
+
+- **Merchant Account**: Active Share Commerce merchant account with your business verified
+- **Merchant ID**: Available in your Share Commerce merchant dashboard
+- **Secret Key**: API credential used to sign and verify payment requests (treat like a password) — this same key is used for both the redirect callback and the webhook, there is no separate webhook secret to configure
+- **Environment**: Whether your Merchant ID and Secret Key were issued for Staging (testing) or Production (live) — DuitPOS needs to know which so it calls the right Share Commerce endpoint
+
+## Step 1: Get Your Credentials from Share Commerce
+
+<Steps>
+  <Step title="Log in to Share Commerce Dashboard">
+    Go to [Share Commerce Merchant Portal](https://merchant.sharecommerce.com) and log in with your credentials.
+  </Step>
+  <Step title="Find Your Merchant ID">
+    Navigate to **Settings → Merchant Account** and copy your **Merchant ID**.
+  </Step>
+  <Step title="Copy Your Secret Key">
+    Go to **Settings → API Keys** and copy your **API Secret Key** — use the staging key while testing, and the production key only when you switch the payment type to Production.
+  </Step>
+</Steps>
+
+## Step 2: Configure Share Commerce ePay in DuitPOS
+
+<Steps>
+  <Step title="Go to Manage → Payment Types">
+    Click **Payment Types** in the left sidebar under Manage.
+  </Step>
+  <Step title="Create or edit a payment type">
+    Create a new payment type with code `SC_EPAY` (or your preference) and name `Online Payment`, or edit an existing one. This should be a payment type dedicated to online/QR ordering — keep it separate from any payment type you use for the in-person Share Commerce terminal.
+  </Step>
+  <Step title="Add the Share Commerce ePay processor">
+    In the Processors section, click **Add processor**, then select **Share Commerce ePay** from the dropdown (it may be listed as "ShareCommerce E-Payment" — look for the one asking for a Merchant ID, not the one asking for a terminal IP address).
+  </Step>
+  <Step title="Enter your Merchant ID, Secret Key, and Environment">
+    Fill in:
+    - **Merchant ID**: From Step 1
+    - **Secret Key**: From Step 1
+    - **Environment**: `Staging` while testing, `Production` once you go live — this must match the credentials you pasted above
+  </Step>
+  <Step title="Save Processors">
+    Click **Save Processors**. Your secret key is encrypted with AES-256 before saving and never stored in plain text.
+  </Step>
+</Steps>
+
+<Tip>
+  For **production** use, make sure your Merchant ID and Secret Key were issued for **live** transactions, and that Environment is set to `Production` — pairing live credentials with `Staging` (or vice versa) will make every payment attempt fail.
+</Tip>
+
+## Step 3: Configure Redirect URL in Share Commerce (Optional but Recommended)
+
+For the fastest customer experience, configure the redirect URL so that Share Commerce sends customers back to your QR ordering page immediately after payment.
+
+<Steps>
+  <Step title="Go to Share Commerce Settings">
+    Log back into the Share Commerce Merchant Portal.
+  </Step>
+  <Step title="Navigate to Webhooks & Redirects">
+    Go to **Settings → Webhooks & Redirects** or **Checkout Configuration**.
+  </Step>
+  <Step title="Set the Redirect URL">
+    Enter the following URL:
+    ```
+    https://api.yourdomain.com/api/{tenantDomain}/qr/payment/sharecommerce/callback
+    ```
+    Replace `yourdomain.com` with your actual domain and `{tenantDomain}` with your tenant identifier (e.g., `default_tenant` for testing).
+
+    Example:
+    ```
+    https://api.example.com/api/default_tenant/qr/payment/sharecommerce/callback
+    ```
+  </Step>
+  <Step title="Save">
+    Save your redirect configuration. The redirect URL will now automatically be used after every payment.
+  </Step>
+</Steps>
+
+<Note>
+  If you don't configure a redirect URL, Share Commerce will not redirect customers back to your ordering page. Instead, the webhook path (see Step 4) becomes the only confirmation method.
+</Note>
+
+## Step 4: Configure Webhook (Optional but Recommended for Safety)
+
+For maximum reliability, Share Commerce can also send a server-to-server payment confirmation webhook to your API. This acts as a backup in case the customer's browser closes or the redirect fails.
+
+<Steps>
+  <Step title="Go to Share Commerce Webhooks">
+    In the Share Commerce Merchant Portal, go to **Settings → API & Webhooks**.
+  </Step>
+  <Step title="Add Webhook Endpoint">
+    Create a new webhook with:
+    - **Event**: `payment.completed` or similar
+    - **URL**: `https://api.yourdomain.com/api/payment-webhooks/sharecommerce`
+    - **Method**: `POST`
+  </Step>
+  <Step title="Enable Signature Verification">
+    Check the box to enable **HMAC Signature Verification** or **Secure Webhook Signature**. This is critical for security.
+  </Step>
+  <Step title="Test the Webhook">
+    Use the **Send Test Webhook** button in Share Commerce to verify the webhook reaches your server. Check your server logs for confirmation.
+  </Step>
+</Steps>
+
+<Warning>
+  The webhook URL is **public and domain-less** — it serves all tenants. Do NOT add your tenant domain to the webhook URL. DuitPOS resolves your tenant automatically from the payment intent (falling back to a Merchant ID lookup if the intent has already expired). There is no separate Webhook Secret to enter anywhere — the same Secret Key you set in Step 2 is used to verify the webhook's signature.
+</Warning>
+
+## How Share Commerce ePay Payments Work
+
+After setup, the payment flow is fully automatic:
+
+### QR Code Ordering (Guest Checkout)
+
+1. Customer scans QR code → opens ordering page
+2. Adds items, proceeds to checkout
+3. Selects the **Share Commerce ePay** payment type
+4. DuitPOS creates a payment intent and redirects to Share Commerce checkout
+5. Customer completes payment at Share Commerce
+6. Share Commerce redirects back to DuitPOS → ticket is created automatically
+7. Customer sees order confirmation with receipt
+
+### Dual-Path Reliability
+
+DuitPOS uses two independent confirmation methods:
+
+| Path | What Happens | Speed |
+|------|--------------|-------|
+| **PATH A (Redirect)** | After payment, Share Commerce redirects customer's browser back to your QR page. DuitPOS verifies the payment and creates the ticket immediately. | <500ms — instant |
+| **PATH B (Webhook)** | Share Commerce sends a server-to-server webhook with the payment confirmation. DuitPOS processes it in the background. | A few seconds — safety net |
+
+Both paths include **idempotency checks** — if the customer's browser refresh hits PATH A twice, or PATH A + PATH B race, DuitPOS ensures only one ticket is created.
+
+## Verifying Your Setup
+
+### Test Payment (Staging)
+
+<Steps>
+  <Step title="Use Share Commerce staging credentials">
+    In Share Commerce, use your **staging** Merchant ID and Secret Key.
+  </Step>
+  <Step title="Update the DuitPOS payment type">
+    Edit your Share Commerce ePay payment type and confirm the Merchant ID, Secret Key, and Environment (`Staging`) are all set correctly.
+  </Step>
+  <Step title="Test a QR order">
+    Scan a test QR code, add items, select Share Commerce ePay, and complete a test payment.
+  </Step>
+  <Step title="Check payment status">
+    After payment, verify that:
+    - The redirect returned you to the DuitPOS order summary page
+    - The ticket was created with status **PAID**
+    - The payment method shows **Share Commerce ePay** in the receipt
+  </Step>
+</Steps>
+
+### Production Deployment
+
+Once testing is successful:
+
+1. **Switch to live credentials**: Update your Share Commerce ePay payment type with your **production** Merchant ID and Secret Key, and set Environment to `Production`
+2. **Verify redirect URL**: Confirm the redirect URL in Share Commerce is set to your **production domain** (not localhost)
+3. **Test a live payment**: Complete a small test transaction with a real card or e-wallet to ensure everything works end-to-end
+4. **Monitor logs**: Check your server logs for any webhook errors during the first few days
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Payment shows as expired but I paid successfully">
+    This usually means the redirect URL is not configured in Share Commerce. The customer paid, but your server did not receive confirmation.
+
+    **Fix**: Go to Share Commerce Settings → Checkout Configuration and set your Redirect URL (see Step 3 above). The webhook (Step 4) will catch future payments as a backup.
+  </Accordion>
+  <Accordion title="'Invalid Share Commerce Signature' error">
+    Your Secret Key in DuitPOS does not match the Secret Key at Share Commerce, or the Environment doesn't match which key you're using.
+
+    **Fix**:
+    1. Log into Share Commerce and copy your **current** Secret Key again (make sure you're in the right environment — staging vs. production)
+    2. Paste it into DuitPOS (Manage → Payment Types → your Share Commerce ePay payment type → Processors → Share Commerce ePay → Secret Key)
+    3. Confirm Environment matches (Staging key → Staging, Production key → Production)
+    4. Click **Save Processors**
+  </Accordion>
+  <Accordion title="Webhook is not arriving">
+    Share Commerce may not have your correct webhook URL or the webhook signing verification is failing.
+
+    **Fix**:
+    1. Double-check the webhook URL in Share Commerce matches exactly: `https://api.yourdomain.com/api/payment-webhooks/sharecommerce` (no trailing slash, no tenant domain)
+    2. Make sure webhook signing is enabled in Share Commerce
+    3. Click **Send Test Webhook** in Share Commerce to manually trigger one and check your server logs
+    4. If you see `Invalid ShareCommerce signature`, verify your Secret Key is correct (see above)
+  </Accordion>
+  <Accordion title="How do I see past payments and their status?">
+    Go to **Manage → Tickets** and search for tickets with status **PAID** and payment type **Share Commerce ePay**. Click on a ticket to see full details including the payment method, amount, and gateway reference.
+  </Accordion>
+  <Accordion title="I selected 'Share Commerce' instead of 'Share Commerce ePay' — what happens?">
+    You'll get a config panel asking for a Terminal IP Address, Terminal Port, and Terminal Model instead of Merchant ID and Secret Key — that's the physical countertop terminal processor, and it won't process online payments. Remove it and add **Share Commerce ePay** instead. See [Two Share Commerce Processors](/features/payment-types#two-share-commerce-processors) for the full comparison.
+  </Accordion>
+</AccordionGroup>
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Payment Types" icon="credit-card" href="/features/payment-types">Manage all payment methods and processors</Card>
+  <Card title="Stripe Setup" icon="credit-card" href="/online-ordering/stripe-setup">Alternative: integrate Stripe</Card>
+  <Card title="QR Setup" icon="qr-code" href="/online-ordering/qr-setup">Configure QR code ordering</Card>
+  <Card title="Settings" icon="gear" href="/features/settings">Configure general tenant and device settings</Card>
+</CardGroup>
