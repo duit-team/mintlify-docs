@@ -1,0 +1,77 @@
+---
+title: "Parties"
+description: "One shared list for both your customers and your suppliers, with outstanding balance tracking."
+---
+
+A **Party** is anyone you buy from or sell to — customers and suppliers live in one shared list rather than two separate ones, because the same business can be both (e.g. a supplier who's also a walk-in customer). Two checkboxes — `Is Customer` and `Is Supplier` — control which document types a party can be used on: a Sales Invoice requires the party be a customer, a Purchase Order requires the party be a supplier.
+
+<Frame>
+  <img src="/images/retail-party.png" alt="Parties list showing customers and suppliers with role badges" />
+</Frame>
+
+## Party Fields
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| **Code** | Yes | Unique internal identifier, e.g. `CUST-0001` |
+| **Name** | Yes | Display name, e.g. `Acme Trading Sdn Bhd` |
+| **Is Customer** | No | Enable to allow this party on Sales Invoices |
+| **Is Supplier** | No | Enable to allow this party on Purchase Orders/Invoices |
+| **Email / Phone** | No | Contact details |
+| **Tax ID / Registration No.** | No | For invoicing and compliance records |
+| **Billing / Shipping Address** | No | Set via the party's edit page |
+| **Payment Terms (Days)** | No | Default due-date offset for invoices to/from this party, e.g. `30` for Net 30 |
+| **Credit Limit** | No | Maximum outstanding balance allowed for this party (0 = no limit). Informational — not currently enforced as a hard block |
+| **Opening Balance** | No | Starting balance owed by/to this party, for parties you're onboarding mid-relationship |
+| **Currency** | No | Default currency for this party's documents, if different from your base currency |
+
+<Tip>
+  A party can be **both** a customer and a supplier — turn both checkboxes on. Their outstanding receivable and payable balances are tracked independently.
+</Tip>
+
+## The Outstanding panel
+
+Every party's edit page shows a read-only **Outstanding** panel — total amount this party owes you (receivable, if they're a customer) and total you owe them (payable, if they're a supplier). This updates automatically as invoices and payments are recorded; you never edit it directly.
+
+## Create a Party
+
+<Steps>
+  <Step title="Go to Retail → Parties">
+    Under Retail — Masters.
+  </Step>
+  <Step title="Click New Party">
+    Enter a Code and Name.
+  </Step>
+  <Step title="Set the role">
+    Turn on Is Customer, Is Supplier, or both.
+  </Step>
+  <Step title="Fill in the rest (optional)">
+    Contact info, payment terms, credit limit — all optional, add later if needed.
+  </Step>
+  <Step title="Save">
+    The party is now selectable on any matching document type.
+  </Step>
+</Steps>
+
+## Frequently Asked Questions
+
+<AccordionGroup>
+  <Accordion title="A supplier isn't showing up when I try to create a Purchase Order — why?">
+    Check that `Is Supplier` is enabled on that party. Only parties marked as a supplier appear in the Purchase Order/Invoice party picker.
+  </Accordion>
+  <Accordion title="How do I see all open invoices for a party before recording a payment?">
+    The Payment form's allocation picker lists that party's submitted, unpaid invoices to allocate against — see [Payments](/retail/payments).
+  </Accordion>
+  <Accordion title="Can I bulk-import my customer/supplier list?">
+    Yes — see [Importing Data](/retail/importing-data). Note the CSV import currently covers the core fields (code, name, role, contact info, terms) — addresses are entered via the party's edit page after import.
+  </Accordion>
+</AccordionGroup>
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Purchase Orders" icon="clipboard-list" href="/retail/purchase-orders">Buy from a supplier party</Card>
+  <Card title="Sales Invoices" icon="file-output" href="/retail/sales-invoices">Sell to a customer party</Card>
+  <Card title="Payments" icon="wallet" href="/retail/payments">Settle a party's outstanding balance</Card>
+  <Card title="Overview" icon="layout-dashboard" href="/retail/overview">Back to the module overview</Card>
+</CardGroup>

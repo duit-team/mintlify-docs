@@ -1,0 +1,63 @@
+---
+title: "Units of Measure"
+description: "Define the units your stock is counted in — kilograms, pieces, boxes, and more."
+---
+
+A **Unit of Measure (UOM)** defines how a product's quantity is counted — `Kilogram`, `Piece`, `Box`, `Litre`, and so on. Every stock-tracked product needs a UOM assigned on its [Stock Profile](/retail/stock-profile), and every line on a Purchase Order, Goods Receipt, or Invoice records its quantity in a UOM. Get your core units set up once, before you start tracking stock.
+
+<Frame>
+  <img src="/images/retail-uom.png" alt="Units of Measure list showing Kilogram, Piece, and Box" />
+</Frame>
+
+## UOM Fields
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| **Code** | Yes | Short unique identifier, e.g. `KG`, `PCS`, `BOX`. Used in imports and internal references |
+| **Name** | Yes | Display name shown throughout the app, e.g. `Kilogram` |
+| **Allow Fraction** | No | Turn on for units that can be counted in decimals (e.g. `1.5 kg`). Turn off for units always counted as whole numbers (e.g. you can't sell `2.5 pieces`) |
+| **Active** | No | Inactive units are hidden from new document forms but existing documents that used them are unaffected |
+
+<Tip>
+  Keep your UOM list short and reusable — most businesses only need 3-5 (e.g. `Piece`, `Kilogram`, `Box`, `Litre`). You don't need a separate UOM per product.
+</Tip>
+
+## Create a UOM
+
+<Steps>
+  <Step title="Go to Retail → Units of Measure">
+    Under the Retail — Masters section in the sidebar.
+  </Step>
+  <Step title="Click New UOM">
+    Enter a Code and Name.
+  </Step>
+  <Step title="Set Allow Fraction">
+    Turn it on if this unit can be counted in fractions (weight-based units usually can; countable-item units usually can't).
+  </Step>
+  <Step title="Save">
+    The UOM is immediately available on every Stock Profile and document form.
+  </Step>
+</Steps>
+
+## Frequently Asked Questions
+
+<AccordionGroup>
+  <Accordion title="Can I have a 'purchase UOM' different from the 'stock UOM'?">
+    Yes — a product's Stock Profile has a separate `Purchase UOM` field with a `Conversion Factor`, so you can buy in cases but track/sell in individual pieces. See [Stock Profile](/retail/stock-profile) for details.
+  </Accordion>
+  <Accordion title="What happens if I delete a UOM that's in use?">
+    The system blocks deleting a UOM that's referenced by any Stock Profile or document — deactivate it instead (set Active to off) so it stops appearing for new documents without breaking historical records.
+  </Accordion>
+  <Accordion title="Can I bulk-import my UOM list?">
+    Yes — see [Importing Data](/retail/importing-data) for the generic CSV import flow, which UOM supports.
+  </Accordion>
+</AccordionGroup>
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Stock Profile" icon="boxes" href="/retail/stock-profile">Assign a UOM to each product</Card>
+  <Card title="Purchase Orders" icon="clipboard-list" href="/retail/purchase-orders">UOM appears on every purchase line</Card>
+  <Card title="Importing Data" icon="upload" href="/retail/importing-data">Bulk-import your UOM list</Card>
+  <Card title="Overview" icon="layout-dashboard" href="/retail/overview">Back to the module overview</Card>
+</CardGroup>

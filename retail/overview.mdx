@@ -1,0 +1,65 @@
+---
+title: "Retail & Inventory — Overview"
+description: "What the Retail & Inventory module does, who it's for, and how its pieces fit together."
+---
+
+The **Retail & Inventory module** turns DuitPOS from an order-taking system into a full stock-and-accounting system. It's for any business that needs to know **how much of something it has**, **what it cost**, and **where the money went** — not just restaurants selling prepared food, but retail shops, mini-marts, pharmacies, or any outlet that buys physical stock from suppliers and sells it to customers.
+
+It's an add-on module — if you don't see **Retail** in your sidebar, ask your account admin to enable it from **Settings → Features**. Every screen below only appears once it's turned on.
+
+<Frame>
+  <img src="/images/retail-overview.png" alt="Retail Dashboard hub page showing every module screen grouped by Masters, Purchasing, Sales, Stock Operations, and Accounting" />
+</Frame>
+
+## What's included
+
+### Masters — the building blocks
+
+Before you can buy or sell anything, a few basics need to exist: **[Units of Measure](/retail/uom)** (how you count stock — kilograms, boxes, pieces), **[Currencies](/retail/currency)** and **[Exchange Rates](/retail/exchange-rate)** (if you deal with foreign suppliers or customers), **[Parties](/retail/party)** (your customers and suppliers, in one shared list), and each product's **[Stock Profile](/retail/stock-profile)** (whether it's tracked, how it's costed, when to reorder). Getting these right once means every document afterward — a purchase order, an invoice — just works.
+
+### Accounting — every document posts itself
+
+Unlike a plain sales log, every retail document you create — a purchase, a sale, a stock adjustment — automatically creates a real, balanced **double-entry** posting to your **[Chart of Accounts](/retail/chart-of-accounts)**. You never have to manually journal a sale or a stock write-off; the system does it for you, correctly, every time. For the rare case you need a manual entry (an owner's capital injection, a correction), **[Journal Entries](/retail/journal-entries)** let you post directly.
+
+### Purchasing — the PO → GRN → Invoice chain
+
+Buying from a supplier is a 3-step chain, and each step means something different: a **[Purchase Order](/retail/purchase-orders)** is a commitment ("we intend to buy this"), a **[Goods Receipt](/retail/goods-receipts)** is what actually arrived at your door (and is the only step that moves your stock), and a **[Purchase Invoice](/retail/purchase-invoices)** is the supplier's bill (what you owe). Splitting these apart means a supplier's invoice can never silently create stock that nobody actually checked in — a very common source of inventory drift in simpler systems.
+
+### Sales — invoices, returns, and getting paid
+
+**[Sales Invoices](/retail/sales-invoices)** record what you sold, and support returns (a customer bringing something back). **[Payments](/retail/payments)** record money actually received or paid out, and can be split ("allocated") across more than one invoice — so a single bank transfer that covers three invoices is recorded as one payment, not three.
+
+### Stock Operations — keeping the numbers honest
+
+Real inventory drifts from what the system thinks — damage, theft, counting mistakes, moving stock between branches. **[Stock Adjustments](/retail/stock-adjustments)** correct the quantity on hand (up or down, with a reason). **[Stock Transfers](/retail/stock-transfers)** move stock from one location to another. **[Stock Counts](/retail/stock-counts)** are a structured, auditable way to physically count what's on the shelf and reconcile it against what the system thinks — a "generate → fill → submit" cycle rather than a free-for-all edit.
+
+### Stock Visibility — read-only views
+
+**[Stock Balances](/retail/stock-balances)** shows what you have right now, per product per location. **[Stock Ledger](/retail/stock-ledger)** is the full, permanent history of every single stock movement, in order — useful for tracing exactly what happened to a specific batch or product. **[Low Stock](/retail/low-stock)** flags anything that's dropped below its reorder point so you know what to buy next.
+
+## How it all connects — one flow, start to finish
+
+Here's a single real transaction traced end to end, so you can see how the pieces above work together:
+
+1. **Create a Party** — add "Acme Supplies" as a supplier (and, separately, "Jane Doe" as a customer).
+2. **Set a product's Stock Profile** — mark "Blue Widget" as stock-tracked, in units of Pieces, with a reorder level of 20.
+3. **Raise a Purchase Order** — order 100 Blue Widgets from Acme Supplies at $3.00 each.
+4. **Receive it via Goods Receipt** — 100 units arrive. Stock on hand goes up by 100. Behind the scenes, the accounting system posts to a temporary **GR/IR Clearing** account, because you've received goods but haven't been billed for them yet.
+5. **Get the supplier's Purchase Invoice** — Acme sends their bill for $300. The GR/IR Clearing account nets back to zero (goods received + goods billed now match), and **Accounts Payable** goes up by $300 — you now owe Acme money.
+6. **Pay it** — record a Payment of $300 to Acme, allocated against that invoice. Accounts Payable drops back to zero.
+7. **Sell the product** — a Sales Invoice to Jane Doe for 5 Blue Widgets. Stock on hand drops by 5, and **Sales Income** goes up.
+8. **Collect payment** — record a Payment received from Jane, allocated against her invoice.
+9. **Check the numbers** — [Stock Balances](/retail/stock-balances) shows 95 Blue Widgets left; the accounting reports (Trial Balance, Profit & Loss) reflect every step above automatically.
+
+No step in that chain required a manual spreadsheet or a manual journal entry — that's the point of the module.
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Units of Measure" icon="ruler" href="/retail/uom">Set up how you count stock</Card>
+  <Card title="Parties" icon="contact" href="/retail/party">Add your customers and suppliers</Card>
+  <Card title="Stock Profile" icon="boxes" href="/retail/stock-profile">Configure tracking per product</Card>
+  <Card title="Purchase Orders" icon="clipboard-list" href="/retail/purchase-orders">Start the buying chain</Card>
+  <Card title="Sales Invoices" icon="file-output" href="/retail/sales-invoices">Record a sale</Card>
+  <Card title="Stock Balances" icon="scan-eye" href="/retail/stock-balances">See what's on hand right now</Card>
+</CardGroup>

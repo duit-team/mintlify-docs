@@ -1,0 +1,102 @@
+---
+title: "Stock Profile"
+description: "Per-product settings that control whether and how a product's inventory is tracked."
+---
+
+A **Stock Profile** is what turns a regular menu/catalog product into a **stock-tracked** one — it decides whether the system counts how many units you have, how it's costed, when to reorder, and whether it can be bought, sold, or both. Every stock-tracked product needs exactly one Stock Profile. The easiest way to set one up is from the product's own **Stock** tab on its edit page (there's also a standalone list at Retail → Stock Profiles, mainly useful for a bird's-eye view across all products).
+
+<Frame>
+  <img src="/images/retail-stock-profile.png" alt="Product Stock Profiles list showing tracking badges and reorder levels" />
+</Frame>
+
+## Stock Profile Fields
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| **Track Stock** | No (default on) | Whether inventory quantity is tracked for this product at all. Turn off for products you don't want to count (e.g. a service charge) |
+| **UOM** | Yes | The unit this product's stock is counted in, e.g. `Piece`. See [Units of Measure](/retail/uom) |
+| **Purchase UOM** | No | If you buy in a different unit than you stock/sell in (e.g. buy by the case, sell by the piece), set this plus a Conversion Factor |
+| **Conversion Factor** | No | How many stock UOM units make up one purchase UOM unit, e.g. `24` pieces per case |
+| **Cost Price** | No | A starting/reference cost. Once real purchases come in, the system's own FIFO costing takes over as the source of truth for stock value |
+| **Reorder Level** | No | **The quantity at or below which this product shows up on the [Low Stock](/retail/low-stock) report.** Set it to roughly what you'd use during your typical supplier delivery lead time — e.g. if it takes 3 days to get more stock and you sell 10/day, set Reorder Level to `30` so you're alerted with enough buffer |
+| **Reorder Qty** | No | The suggested quantity to reorder when you're low. Purely informational — shown as a hint, not automatically ordered |
+| **Default Supplier** | No | Pre-fills the supplier when creating a Purchase Order for this product |
+| **Default Purchase/Sales Tax** | No | Pre-fills the tax on purchase/sales document lines for this product |
+| **Allow Negative Stock** | No | If off (default), the system blocks a sale that would take stock below zero. Turn on only if you deliberately sell before receiving (rare) |
+| **Track Batch** | No | See "Batch & Expiry Tracking" below |
+| **Track Expiry** | No | See "Batch & Expiry Tracking" below |
+| **HSN Code** | No | Harmonized tariff/tax classification code, if your tax reporting requires it |
+| **Is Sales Item** | No (default on) | Whether this product can appear on a Sales Invoice. See "Purpose flags" below |
+| **Is Purchase Item** | No (default on) | Whether this product can appear on a Purchase Invoice. See "Purpose flags" below |
+| **Sales Account Override** | No | Optional: post this product's sales to a specific GL account instead of the category/tenant default |
+| **Purchase Account Override** | No | Optional: post this product's non-stock purchases to a specific GL account instead of the default (stock items always post to Inventory, regardless of this field) |
+
+## Batch & Expiry Tracking
+
+Turn these on for products where **individual batches expire** — dairy, medicine, anything with a shelf life. Once enabled:
+
+- Every **Goods Receipt** line for this product **requires a batch number and expiry date**.
+- Every **sale** automatically consumes the oldest-expiring batch first — this is called **FEFO** (First-Expired, First-Out), and it's automatic, you never pick which batch to sell from.
+
+**Worked example**: You receive Batch A (expires Jan 15) on Monday, then Batch B (expires Feb 1) on Wednesday. A sale on Thursday for 5 units automatically pulls from Batch A first, even though Batch B arrived more recently — because Batch A expires sooner.
+
+<Tip>
+  Turn on `Track Batch`/`Track Expiry` only for products that genuinely need it. Every extra field is one more thing staff have to fill in at receiving time — don't enable it for shelf-stable items like canned goods.
+</Tip>
+
+## Purpose flags — Is Sales Item / Is Purchase Item
+
+These two flags describe what a product is *for*, and the system **enforces** them:
+
+- Turn **off `Is Purchase Item`** for something you only ever *sell* — a made-to-order dish, a service fee. The system will reject any attempt to put it on a Purchase Invoice.
+- Turn **off `Is Sales Item`** for something you only ever *buy* — a raw ingredient, packaging material you use internally but never sell directly. The system will reject any attempt to put it on a Sales Invoice.
+
+<Warning>
+  This is a real, enforced restriction, not just a label — trying to sell a purchase-only item (or buy a sales-only item) returns an error at the point of creating the invoice.
+</Warning>
+
+## Create a Stock Profile
+
+<Steps>
+  <Step title="Open the product's edit page">
+    Go to Catalog → Products, and open the product you want to track.
+  </Step>
+  <Step title="Go to the Stock tab">
+    Only visible if the Retail module is enabled for your account.
+  </Step>
+  <Step title="Fill in UOM at minimum">
+    UOM is the only truly required field to create the profile.
+  </Step>
+  <Step title="Set reorder level, batch/expiry, and purpose flags as needed">
+    All optional — configure what's relevant to this product.
+  </Step>
+  <Step title="Save">
+    Stock is now tracked for this product going forward.
+  </Step>
+</Steps>
+
+## Frequently Asked Questions
+
+<AccordionGroup>
+  <Accordion title="What is 'reorder level' actually for?">
+    It's the trigger point for the Low Stock report — nothing more. It doesn't block sales or auto-create a purchase order. Think of it as a "you should probably reorder soon" flag.
+  </Accordion>
+  <Accordion title="I don't understand batch/expiry — do I need it?">
+    Only if what you sell can physically expire and you need to know which specific batch a customer received (e.g. for a recall). If you sell non-perishable goods, leave both off — the product still gets normal stock tracking without the extra batch/expiry data entry.
+  </Accordion>
+  <Accordion title="Can a product be both a sales item and a purchase item?">
+    Yes — that's the default for every new profile. Most products (you buy it, you sell it) should leave both flags on. Turn one off only for the specific one-directional cases described above.
+  </Accordion>
+  <Accordion title="What happens if I don't create a Stock Profile for a product at all?">
+    The product behaves exactly as before — it's not stock-tracked, doesn't appear in Stock Balances/Ledger, and can be freely used on any document without stock restrictions. Retail features are entirely opt-in per product.
+  </Accordion>
+</AccordionGroup>
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Units of Measure" icon="ruler" href="/retail/uom">Required before creating a profile</Card>
+  <Card title="Goods Receipts" icon="package-check" href="/retail/goods-receipts">Where batch/expiry is entered</Card>
+  <Card title="Low Stock" icon="alert-triangle" href="/retail/low-stock">See reorder-level alerts in action</Card>
+  <Card title="Importing Data" icon="upload" href="/retail/importing-data">Set stock profiles in bulk via Product import</Card>
+</CardGroup>

@@ -1,0 +1,73 @@
+---
+title: "Importing Retail Data"
+description: "Bulk-import your master data — units, currencies, parties, stock profiles, and more — from a CSV file."
+---
+
+Instead of creating records one at a time, most Retail master-data screens support **bulk import** from a CSV file. It's the same generic flow used everywhere else in DuitPOS (Products, Tax, Categories, and more) — if you've imported one entity before, this'll feel identical.
+
+<Frame>
+  <img src="/images/retail-importing-data.png" alt="Bulk import dialog showing template download, upload, and preview steps" />
+</Frame>
+
+## The flow
+
+<Steps>
+  <Step title="Click Import on the list page">
+    Available on Units of Measure, Currencies, Exchange Rates, Parties, and Chart of Accounts.
+  </Step>
+  <Step title="Download the template">
+    A CSV with the correct column headers and one example row, so you know exactly what's expected.
+  </Step>
+  <Step title="Fill it in">
+    Add one row per record. Reference columns (like a parent account's code) must match an existing record's code exactly.
+  </Step>
+  <Step title="Upload it">
+    The system parses the file and shows a **preview** — every row marked valid or invalid, with the specific reason for anything invalid, before anything is actually saved.
+  </Step>
+  <Step title="Fix and re-upload, or confirm">
+    Fix any flagged rows in your CSV and re-upload, or confirm to import just the valid rows.
+  </Step>
+  <Step title="Check Import History">
+    Once confirmed, the import runs in the background — check Import History for the final count of created/updated/failed rows, with per-row error detail if anything failed.
+  </Step>
+</Steps>
+
+## What each entity's import supports
+
+| Entity | Matched by | Notes |
+|--------|-----------|-------|
+| [Units of Measure](/retail/uom) | Code | Straightforward — code, name, allow fraction |
+| [Currencies](/retail/currency) | Code | Code, name, symbol, decimal places |
+| [Exchange Rates](/retail/exchange-rate) | Not upserted — every row always creates a new rate | Since multiple rates over time are valid, re-importing doesn't overwrite an existing rate |
+| [Parties](/retail/party) | Code | Core fields only — addresses are entered via the party's edit page after import |
+| [Chart of Accounts](/retail/chart-of-accounts) | Code | Parent accounts must already exist (or appear earlier in the same file) |
+
+## Importing a product's stock settings alongside the product
+
+If your account has the Retail module enabled, the existing **Product import** (Catalog → Products → Import) automatically gains extra optional columns: `track_stock`, `uom_code`, `track_batch`, `track_expiry`, `reorder_level`, `reorder_qty`, `cost_price`, `is_sales_item`, `is_purchase_item`. Fill these in on the same row as the product itself, and its [Stock Profile](/retail/stock-profile) is created or updated automatically — no separate import step needed. Leave them blank for products you don't want to stock-track.
+
+<Tip>
+  These extra columns only appear in the template and preview if your tenant has Retail enabled — a non-retail tenant's Product import looks exactly as it always has.
+</Tip>
+
+## Frequently Asked Questions
+
+<AccordionGroup>
+  <Accordion title="What happens if I import a row that references something that doesn't exist, e.g. a UOM code that's a typo?">
+    That row is marked invalid at the preview stage with a clear message (e.g. `"XYZ" not found in uom_code`) — it won't be imported, but the rest of the file still can be.
+  </Accordion>
+  <Accordion title="Does importing overwrite existing records?">
+    Yes, for entities matched by a unique code (UOM, Currency, Party, Chart of Accounts) — if a row's code already exists, it updates that record instead of creating a duplicate. Exchange Rates are the exception (always inserted fresh, since multiple rates over time are expected).
+  </Accordion>
+  <Accordion title="Can I import documents like Purchase Orders or Sales Invoices this way?">
+    No — bulk import is for master data only. Transactional documents (POs, invoices, stock movements) have their own draft → submit lifecycle and aren't a good fit for a flat CSV row.
+  </Accordion>
+</AccordionGroup>
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Units of Measure" icon="ruler" href="/retail/uom">Try the import flow here first — simplest entity</Card>
+  <Card title="Stock Profile" icon="boxes" href="/retail/stock-profile">Set stock settings via the Product import</Card>
+  <Card title="Overview" icon="layout-dashboard" href="/retail/overview">Back to the module overview</Card>
+</CardGroup>

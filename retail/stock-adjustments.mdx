@@ -1,0 +1,69 @@
+---
+title: "Stock Adjustments"
+description: "Correct the quantity on hand for damage, loss, found stock, or opening balances."
+---
+
+Real inventory drifts from what the system thinks — breakage, theft, counting mistakes, or stock you're entering for the first time. A **Stock Adjustment** corrects the quantity of a product at a location, up or down, with a recorded reason. It's the go-to tool for one-off corrections; for a full, structured recount of everything on a shelf, use a [Stock Count](/retail/stock-counts) instead.
+
+<Frame>
+  <img src="/images/retail-stock-adjustments.png" alt="Stock Adjustment detail page showing a damage write-off" />
+</Frame>
+
+## Stock Adjustment Fields
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| **Location** | Yes | Which branch/location this adjustment applies to |
+| **Adjustment Type** | Yes | `Opening` (initial stock entry), `Write Off` (damage/loss), `Damage`, `Found` (discovered extra stock), or `Correction` (general fix) |
+| **Reason** | No | A note on why this adjustment was made — useful for audit trails |
+| **Posting Date** | Yes | The date this adjustment took effect |
+| **Items** | Yes (at least 1) | Product and quantity change per line |
+
+### Item Fields
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| **Product** | Yes | The product being adjusted |
+| **Qty Change** | Yes | **Signed** — a positive number increases stock (e.g. `+20` for found stock), a negative number decreases it (e.g. `-5` for damage) |
+| **Rate** | Required for positive adjustments only | The value to record this stock at. Not needed for negative adjustments — the system uses your existing FIFO cost to value what's leaving |
+
+<Tip>
+  Use `Found` for stock you discover you have more of than the system thinks (e.g. an old miscounted delivery), and `Damage`/`Write Off` for stock that's gone. `Opening` is specifically for entering your very first stock balance when you start using the system.
+</Tip>
+
+## Create a Stock Adjustment
+
+<Steps>
+  <Step title="Go to Retail → Stock Adjustments">
+    Under Retail — Stock Operations.
+  </Step>
+  <Step title="Click New Adjustment">
+    Choose the Location and Adjustment Type.
+  </Step>
+  <Step title="Add items with signed quantity changes">
+    Positive to increase, negative to decrease. Add a Rate for positive changes.
+  </Step>
+  <Step title="Submit">
+    Stock on hand updates immediately, and the adjustment's value posts to the Stock Adjustment expense account.
+  </Step>
+</Steps>
+
+## Frequently Asked Questions
+
+<AccordionGroup>
+  <Accordion title="Do I need a Rate for every adjustment?">
+    Only for positive (increasing) adjustments, since the system needs to know what value to add. Negative (decreasing) adjustments use your existing FIFO cost automatically — you don't set a rate.
+  </Accordion>
+  <Accordion title="What's the difference between an Adjustment and a Stock Count?">
+    An Adjustment is a quick, one-line correction you make when you already know what's wrong. A [Stock Count](/retail/stock-counts) is a structured process — you generate a count sheet, physically count everything, and the system calculates the variance and posts the correcting adjustments for you automatically.
+  </Accordion>
+</AccordionGroup>
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Stock Counts" icon="clipboard-check" href="/retail/stock-counts">For a full physical recount instead</Card>
+  <Card title="Stock Transfers" icon="repeat" href="/retail/stock-transfers">Move stock between locations instead of adjusting</Card>
+  <Card title="Stock Ledger" icon="history" href="/retail/stock-ledger">See every adjustment's history</Card>
+  <Card title="Overview" icon="layout-dashboard" href="/retail/overview">Back to the module overview</Card>
+</CardGroup>

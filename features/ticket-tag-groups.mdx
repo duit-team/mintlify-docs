@@ -1,0 +1,90 @@
+---
+title: "Ticket Tags"
+description: "Prompt staff to pick a value on a ticket at a specific point in the order flow — e.g. a table number or delivery rider."
+---
+
+A **Ticket Tag Group** defines a prompt shown to staff at a specific point while handling an order — "pick a value from this list (or type one in) before you can continue." A group holds one or more individual **tags** (the actual values staff can pick). Common uses: tagging an order with a delivery rider's name, a table/seat reference, or a customer note category.
+
+<Frame>
+  <img src="/images/ticket-tag-groups.png" alt="Ticket Tag Group list showing display type and request position" />
+</Frame>
+
+## Ticket Tag Group Fields
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| **Name** | Yes | Display name for this group, e.g. `Delivery Rider` |
+| **Display Type** | No | `Grid` (tappable buttons — good for a short, fixed list like "Dine In" / "Takeaway") or `Search` (a searchable list — good for a long list like rider names) |
+| **Tag Type** | No | `Numeric` or `Alphanumeric` — only relevant when `Is Open Tag` is on, controls what kind of free text staff can type |
+| **Is Open Tag** | No | If on, staff can **type a free value** instead of picking from the preset tag list — e.g. for a table number or an order reference that changes every time |
+| **Is Save Tag** | No | Whether the picked tag is saved/remembered for reuse |
+| **Is Mandatory** | No | If on, staff **cannot proceed** past the configured request position until a tag is picked |
+| **Request Positions** | No | When staff get prompted — one or more of: **Before Order** (right when starting a new order), **Before Close Order**, **Before Payment**, **After Payment** |
+| **Channels** | No | Which order sources this applies to: **POS**, **Kiosk**, **Online** |
+
+<Tip>
+  Use `Grid` for a short, stable list of choices and `Search` once you have more than ~10 options — a grid of 30 buttons is harder to scan than a searchable list.
+</Tip>
+
+## Ticket Tag Fields
+
+Individual values within a group (skipped entirely if the group is an Open Tag, since staff type their own value instead):
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| **Value** | Yes | The text shown to staff for this option, e.g. `Ahmad (Rider #3)` |
+
+## Create a Tag Group
+
+<Steps>
+  <Step title="Go to Restaurant → Ticket Tags">
+    In the left sidebar.
+  </Step>
+  <Step title="Click New Tag Group">
+    Enter a Name, pick a Display Type, and set Request Positions.
+  </Step>
+  <Step title="Decide Open Tag vs preset list">
+    Turn on Is Open Tag if staff should type a free value; leave it off if they should pick from a fixed list.
+  </Step>
+  <Step title="Save">
+    The group is created — add tags to it next (skip if it's an Open Tag).
+  </Step>
+</Steps>
+
+## Add Tags to a Group
+
+<Steps>
+  <Step title="Open the group's edit page">
+    Click into any non-open-tag group.
+  </Step>
+  <Step title="Click Add Tag">
+    Enter the Value staff will see.
+  </Step>
+  <Step title="Repeat for every option">
+    Add as many as needed.
+  </Step>
+  <Step title="Save">
+    Staff will now see this option the next time the group's Request Position comes up.
+  </Step>
+</Steps>
+
+## Frequently Asked Questions
+
+<AccordionGroup>
+  <Accordion title="What's the difference between 'Is Open Tag' on and off?">
+    **Off**: staff pick from a fixed list of tags you define (grid or searchable). **On**: staff type a free value instead — there's no preset list, so you don't add individual Tags to an Open Tag group.
+  </Accordion>
+  <Accordion title="What happens if a mandatory tag isn't set and staff try to proceed?">
+    They're blocked from moving past that request position (e.g. can't close the order) until a value is picked or typed.
+  </Accordion>
+  <Accordion title="Can the same group apply to POS but not online orders?">
+    Yes — the Channels field controls exactly that. Leave only the channels you want it to apply to selected.
+  </Accordion>
+</AccordionGroup>
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Tables" icon="layout-grid" href="/features/tables">Another restaurant-workflow configuration screen</Card>
+  <Card title="Reasons" icon="list" href="/features/reasons">A simpler, single-purpose picklist for cancellations/refunds</Card>
+</CardGroup>

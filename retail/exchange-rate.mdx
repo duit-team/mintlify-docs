@@ -1,0 +1,61 @@
+---
+title: "Exchange Rates"
+description: "Set how many units of one currency equal one unit of another, as of a specific date."
+---
+
+An **Exchange Rate** says "1 unit of *From Currency* is worth this many units of *To Currency*, as of this date." When you create a document in a foreign currency (e.g. a Purchase Invoice in USD, but your base currency is MYR), the system looks up the most recent applicable rate and **locks it in at submit time** — so the amount posted to your accounting books is fixed and never silently changes later, even if you add a newer rate afterward.
+
+<Frame>
+  <img src="/images/retail-exchange-rate.png" alt="Exchange Rates list showing USD to MYR at 4.70" />
+</Frame>
+
+## Exchange Rate Fields
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| **From Currency** | Yes | The currency being converted from, e.g. `USD` |
+| **To Currency** | Yes | The currency being converted to, e.g. `MYR` |
+| **Rate** | Yes | How many units of *To Currency* equal 1 unit of *From Currency*, e.g. `4.70` |
+| **As Of Date** | Yes | The date this rate takes effect |
+
+<Warning>
+  Rates are **not automatically inverted**. Adding `USD → MYR` at `4.70` does **not** mean the system can figure out `MYR → USD` on its own (that would be `1 / 4.70`). If you ever create documents in both directions, add both rate rows explicitly.
+</Warning>
+
+<Tip>
+  When a document needs a rate, the system uses the **most recent rate on or before the document's posting date** — not necessarily the newest one in the list. Keep your rates up to date if you transact in foreign currency regularly, e.g. update weekly or daily.
+</Tip>
+
+## Create an Exchange Rate
+
+<Steps>
+  <Step title="Go to Retail → Exchange Rates">
+    Under Retail — Masters.
+  </Step>
+  <Step title="Click New Rate">
+    Choose From Currency, To Currency, the Rate, and the date it takes effect.
+  </Step>
+  <Step title="Save">
+    The rate is now available to any document posted on or after this date, until a newer rate is added.
+  </Step>
+</Steps>
+
+## Frequently Asked Questions
+
+<AccordionGroup>
+  <Accordion title="What happens to a document's rate if I later add a newer exchange rate?">
+    Nothing — the rate is locked into the document at the moment it's submitted. Adding a new rate afterward only affects documents submitted after that point.
+  </Accordion>
+  <Accordion title="Where does the currency gain/loss on payment show up?">
+    If a payment is made on a different date (and therefore a different rate) than the original invoice, the difference posts automatically to the **FX Gain/Loss** account — you don't need to calculate or post it manually. See [Payments](/retail/payments).
+  </Accordion>
+</AccordionGroup>
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Currencies" icon="coins" href="/retail/currency">Register the currency first</Card>
+  <Card title="Purchase Invoices" icon="file-input" href="/retail/purchase-invoices">Create a foreign-currency invoice</Card>
+  <Card title="Payments" icon="wallet" href="/retail/payments">See FX gain/loss on settlement</Card>
+  <Card title="Overview" icon="layout-dashboard" href="/retail/overview">Back to the module overview</Card>
+</CardGroup>

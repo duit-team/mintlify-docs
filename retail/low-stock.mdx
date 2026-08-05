@@ -1,0 +1,43 @@
+---
+title: "Low Stock"
+description: "Products currently at or below their reorder level, so you know what to buy next."
+---
+
+**Low Stock** lists every product whose current quantity on hand has dropped to or below its **Reorder Level** (set on the product's [Stock Profile](/retail/stock-profile)) — a ready-made shopping list for your next round of purchasing.
+
+<Frame>
+  <img src="/images/retail-low-stock.png" alt="Low Stock report showing products below reorder level with their supplier" />
+</Frame>
+
+## Columns
+
+| Column | Description |
+|--------|-------------|
+| **Product** | The product below its reorder point |
+| **Location** | Which branch/location is low |
+| **Qty On Hand** | Current quantity |
+| **Reorder Level** | The threshold that triggered this alert |
+| **Supplier** | The product's default supplier, if one is set — makes it quick to start a Purchase Order |
+
+<Tip>
+  This report is only as useful as your Reorder Level settings — if a product never shows up here even when you're clearly running low, double-check its Reorder Level on the [Stock Profile](/retail/stock-profile) tab.
+</Tip>
+
+## Frequently Asked Questions
+
+<AccordionGroup>
+  <Accordion title="Does this automatically create a Purchase Order?">
+    No — it's a read-only alert list. Use it as a checklist when manually creating your next [Purchase Order](/retail/purchase-orders).
+  </Accordion>
+  <Accordion title="A product I know is low isn't showing here — why?">
+    Either its Reorder Level is set to `0` (meaning "never alert"), or it doesn't have a Stock Profile / isn't stock-tracked at all.
+  </Accordion>
+</AccordionGroup>
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Stock Profile" icon="boxes" href="/retail/stock-profile">Set the Reorder Level that drives this report</Card>
+  <Card title="Purchase Orders" icon="clipboard-list" href="/retail/purchase-orders">Reorder what's listed here</Card>
+  <Card title="Overview" icon="layout-dashboard" href="/retail/overview">Back to the module overview</Card>
+</CardGroup>

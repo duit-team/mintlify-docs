@@ -1,0 +1,46 @@
+---
+title: "Stock Balances"
+description: "How much of each product you have right now, per location."
+---
+
+**Stock Balances** is a read-only, real-time view of exactly how much of each stock-tracked product you have, per location, and what it's worth. Every purchase, sale, adjustment, transfer, and count updates this instantly — there's nothing to configure here, it's purely a report.
+
+<Frame>
+  <img src="/images/retail-stock-balances.png" alt="Stock Balances table showing quantity on hand, stock value, and average rate per product and location" />
+</Frame>
+
+## Columns
+
+| Column | Description |
+|--------|-------------|
+| **Product** | The stock-tracked product |
+| **Location** | Which branch/location this balance is for — the same product has a separate row per location |
+| **Qty On Hand** | Current quantity in stock |
+| **Stock Value** | Total value of the quantity on hand, at cost |
+| **Avg Rate** | Average cost per unit (Stock Value ÷ Qty On Hand) |
+
+<Tip>
+  Filter and search to narrow this down to a specific product or location — useful when checking "do we have enough of X at Branch 2 right now?" before promising it to a customer.
+</Tip>
+
+## Frequently Asked Questions
+
+<AccordionGroup>
+  <Accordion title="Why doesn't a product show up here at all?">
+    Only products with a [Stock Profile](/retail/stock-profile) that has `Track Stock` enabled appear here. Untracked products aren't counted.
+  </Accordion>
+  <Accordion title="How is the cost/value calculated?">
+    Using FIFO (first-in, first-out) costing — the value reflects what you actually paid for the specific units still on hand, based on your purchase history, not a manually-set price.
+  </Accordion>
+  <Accordion title="Where can I see the full history of how a balance got to its current number?">
+    [Stock Ledger](/retail/stock-ledger) — the complete, append-only movement history behind every balance shown here.
+  </Accordion>
+</AccordionGroup>
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Stock Ledger" icon="history" href="/retail/stock-ledger">Full movement history behind these numbers</Card>
+  <Card title="Low Stock" icon="alert-triangle" href="/retail/low-stock">See what's below reorder level</Card>
+  <Card title="Overview" icon="layout-dashboard" href="/retail/overview">Back to the module overview</Card>
+</CardGroup>

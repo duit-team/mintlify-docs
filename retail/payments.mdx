@@ -1,0 +1,73 @@
+---
+title: "Payments"
+description: "Record money actually received or paid out, and allocate it across one or more invoices."
+---
+
+A **Payment** records money that actually changed hands — separate from the invoice that created the obligation. This matters because payments don't always line up 1-to-1 with invoices: one bank transfer might cover three invoices, or one invoice might be paid in two instalments. A Payment's **allocations** handle exactly that.
+
+<Frame>
+  <img src="/images/retail-payments.png" alt="Payment detail page with allocations against multiple invoices" />
+</Frame>
+
+## Payment Fields
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| **Party** | Yes | The customer (if receiving) or supplier (if paying) |
+| **Payment Type** | Yes | `Receive` (money coming in, from a customer) or `Pay` (money going out, to a supplier) |
+| **Posting Date** | Yes | The date the payment happened |
+| **Amount** | Yes | The total payment amount |
+| **Payment Mode** | Yes | Which cash/bank account this posts against, e.g. `Cash`, `Bank Transfer` |
+| **Reference No.** | No | Cheque number, transaction reference, etc. |
+| **Currency** | No | Defaults to base currency; set to match the party's currency if paying/receiving in a foreign currency |
+
+### Allocation Fields (optional, one row per invoice this payment settles)
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| **Invoice** | Yes | Which Sales/Purchase Invoice this portion settles |
+| **Allocated Amount** | Yes | How much of the total payment goes toward this specific invoice |
+
+<Tip>
+  A payment doesn't have to be fully allocated at creation time — but any allocated amount can't exceed the invoice's remaining balance, and the system checks this at submit time.
+</Tip>
+
+## Create a Payment
+
+<Steps>
+  <Step title="Go to Retail → Payments">
+    Under Retail — Sales & Payments.
+  </Step>
+  <Step title="Click New Payment">
+    Choose the Party, Payment Type (Receive or Pay), and Amount.
+  </Step>
+  <Step title="Add allocations (optional)">
+    Pick the invoice(s) this payment settles, and how much goes to each.
+  </Step>
+  <Step title="Submit">
+    The party's outstanding balance drops by the allocated amount(s).
+  </Step>
+</Steps>
+
+## Frequently Asked Questions
+
+<AccordionGroup>
+  <Accordion title="What happens if I record a payment without allocating it to any invoice?">
+    It's still recorded (money moved), but it won't reduce any specific invoice's outstanding balance until you allocate it — useful for advance payments/deposits you'll allocate later.
+  </Accordion>
+  <Accordion title="What's FX Gain/Loss and when does it show up?">
+    If a payment is settled on a different date (and therefore a different exchange rate) than when the original invoice was submitted, the difference between the two rates posts automatically to the FX Gain/Loss account — you don't calculate or post this manually.
+  </Accordion>
+  <Accordion title="Can I see how much a party still owes before recording a payment?">
+    Yes — the party's edit page has an Outstanding panel, and the payment form's allocation picker shows their open invoices.
+  </Accordion>
+</AccordionGroup>
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Sales Invoices" icon="file-output" href="/retail/sales-invoices">What a customer payment settles</Card>
+  <Card title="Purchase Invoices" icon="file-input" href="/retail/purchase-invoices">What a supplier payment settles</Card>
+  <Card title="Parties" icon="contact" href="/retail/party">See a party's outstanding balance</Card>
+  <Card title="Overview" icon="layout-dashboard" href="/retail/overview">Back to the module overview</Card>
+</CardGroup>

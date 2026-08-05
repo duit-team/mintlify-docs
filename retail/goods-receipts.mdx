@@ -1,0 +1,65 @@
+---
+title: "Goods Receipts"
+description: "What actually arrived at your door — the only step in purchasing that moves stock."
+---
+
+A **Goods Receipt (GRN)** records what physically arrived from a supplier. It's the middle step of the buying chain (**[Purchase Order](/retail/purchase-orders) → Goods Receipt → [Purchase Invoice](/retail/purchase-invoices)**), and it's the **only** one of the three that actually increases your stock on hand. This separation matters: a supplier's invoice arriving in your inbox doesn't mean the goods are on your shelf — only a Goods Receipt confirms that, so stock can never be silently created just because a bill showed up.
+
+<Frame>
+  <img src="/images/retail-goods-receipts.png" alt="Goods Receipt detail page showing items received against a Purchase Order" />
+</Frame>
+
+## Goods Receipt Fields
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| **Purchase Order** | No | Link to the PO this receipt fulfils, if any — enables "Create from PO" prefilling |
+| **Party (Supplier)** | Yes | The supplier goods were received from |
+| **Location** | Yes | Which branch/location received the stock |
+| **Posting Date** | Yes | The date goods physically arrived |
+| **Items** | Yes (at least 1) | Product, quantity received, rate, and (if the product tracks batch/expiry) batch number and expiry date |
+
+<Warning>
+  If a product's [Stock Profile](/retail/stock-profile) has `Track Batch` and/or `Track Expiry` enabled, those fields become **required** on this receipt's line for that product — you can't submit without them.
+</Warning>
+
+## Two ways to create one
+
+**From a Purchase Order** (most common): open a submitted PO and click "Create Goods Receipt" — it prefills the supplier, location, and items with the remaining un-received quantities. **Standalone**: create a Goods Receipt directly without a PO, for stock that arrived without a formal order (less common, but supported).
+
+## Create a Goods Receipt
+
+<Steps>
+  <Step title="From a submitted Purchase Order, click 'Create Goods Receipt'">
+    Or go to Retail → Goods Receipts and create one standalone.
+  </Step>
+  <Step title="Confirm or adjust the quantities received">
+    Defaults to the remaining un-received quantity per line, but you can receive less (or more, if applicable) than what was ordered.
+  </Step>
+  <Step title="Fill in batch/expiry if required">
+    Only shown for products where the Stock Profile has batch or expiry tracking on.
+  </Step>
+  <Step title="Submit">
+    Stock on hand increases immediately. The linked Purchase Order's received-% updates too.
+  </Step>
+</Steps>
+
+## Frequently Asked Questions
+
+<AccordionGroup>
+  <Accordion title="Can I cancel a Goods Receipt after submitting it?">
+    Yes, with a reason — unless a submitted Purchase Invoice already references it, in which case you'll need to handle that invoice first. The error message will tell you exactly what's blocking the cancellation.
+  </Accordion>
+  <Accordion title="What if the supplier's invoice quantity doesn't match what I received?">
+    That's expected and fine — the Goods Receipt records what physically arrived, and the [Purchase Invoice](/retail/purchase-invoices) records what you're billed for. If they differ, it'll show up as a non-zero balance in the GR/IR Clearing account, which is exactly the point — it flags the mismatch for you to investigate.
+  </Accordion>
+</AccordionGroup>
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Purchase Orders" icon="clipboard-list" href="/retail/purchase-orders">The commitment this receipt fulfils</Card>
+  <Card title="Purchase Invoices" icon="file-input" href="/retail/purchase-invoices">The supplier's bill, next in the chain</Card>
+  <Card title="Stock Profile" icon="boxes" href="/retail/stock-profile">Set up batch/expiry tracking</Card>
+  <Card title="Overview" icon="layout-dashboard" href="/retail/overview">Back to the module overview</Card>
+</CardGroup>

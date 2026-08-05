@@ -46,12 +46,14 @@ description: "Add and manage the items sold at your POS and online."
 
 ## Edit a Product
 
-Click the **Edit** icon on any product row to open the product editor. The editor has four tabs:
+Click the **Edit** icon on any product row to open the product editor. The editor has four tabs — plus two more, **Stock** and **Linked Entries**, if your account has the **Retail & Inventory** module enabled:
 
 - **Details** — Product name, price, category, tax, brand, barcode, image, and active status.
 - **Variants** — Link variant products (e.g. different sizes) if you've organized them as separate products.
 - **Modifiers** — Attach modifier groups (e.g. Size, Add-ons) and select which modifiers apply to this product.
 - **Pricing & Availability** — Set context-specific price, name, and availability overrides per location and/or order mode (see below).
+- **Stock** *(Retail only)* — Inventory tracking settings for this product. See below.
+- **Linked Entries** *(Retail only)* — Every purchase/sales document that references this product. See below.
 
 All fields are editable. Price changes take effect on the next order placed after saving.
 
@@ -112,6 +114,22 @@ You can view and edit all overrides for a product in a table on this tab. Each r
   Any override row where all three fields (Price, Display Name, Visibility) are blank gets automatically deleted when you save — it would do nothing anyway.
 </Warning>
 
+## Stock tab
+
+<Note>
+  Only visible if your account has the **Retail & Inventory** module enabled — see [Retail Overview](/retail/overview).
+</Note>
+
+The Stock tab is where you turn on inventory tracking for this specific product and configure how it's tracked, costed, and reordered. It's the same [Stock Profile](/retail/stock-profile) settings covered in detail on that page — UOM, reorder level, batch/expiry tracking, and the sales/purchase "purpose" flags — surfaced directly on the product so you don't need to jump to a separate screen for the common case of setting up one product at a time.
+
+## Linked Entries tab
+
+<Note>
+  Only visible if your account has the **Retail & Inventory** module enabled.
+</Note>
+
+The Linked Entries tab shows every [Purchase Order](/retail/purchase-orders), [Goods Receipt](/retail/goods-receipts), [Purchase Invoice](/retail/purchase-invoices), and [Sales Invoice](/retail/sales-invoices) that references this product, grouped by document type. Click through any entry to open that document directly — useful for answering "when did we last sell this?" or "which supplier invoice included this item?" without leaving the product page.
+
 ## Delete a Product
 
 Click **Delete** on the product row.
@@ -136,7 +154,7 @@ Click **Delete** on the product row.
     The recommended approach is to use **Modifiers** — create a Size modifier group with Small, Medium, and Large options, each with a price adjustment, and attach it to the product. This keeps your product list clean and groups variants together on the POS. Alternatively, you can create separate products for each variant and link them in the **Variants** tab.
   </Accordion>
   <Accordion title="Can I import products in bulk instead of adding them one by one?">
-    Yes. Use the **Import** button on the Products page to upload a CSV file. See [Import History](/reports/import-history) to review the result of any import.
+    Yes. Use the **Import** button on the Products page to upload a CSV file. See [Import History](/reports/import-history) to review the result of any import. If your account has the Retail module enabled, the template automatically includes extra optional columns (UOM, reorder level, batch/expiry tracking, and more) so a product's stock settings can be imported on the same row — see [Importing Retail Data](/retail/importing-data).
   </Accordion>
 </AccordionGroup>
 
@@ -147,4 +165,6 @@ Click **Delete** on the product row.
   <Card title="Categories" icon="folder" href="/features/categories">Organise products into menu sections</Card>
   <Card title="Modifiers" icon="list" href="/features/modifiers">Add size, add-on, and customisation options</Card>
   <Card title="Tax" icon="percent" href="/features/tax">Assign tax rates to products</Card>
+  <Card title="Stock Profile" icon="boxes" href="/retail/stock-profile">Full field reference for the Stock tab</Card>
+  <Card title="Retail Overview" icon="layout-dashboard" href="/retail/overview">What the Retail module adds to Products</Card>
 </CardGroup>

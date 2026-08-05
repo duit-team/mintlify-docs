@@ -1,0 +1,45 @@
+---
+title: "Stock Ledger"
+description: "The complete, permanent, append-only history of every stock movement."
+---
+
+The **Stock Ledger** is the full audit trail behind every number in [Stock Balances](/retail/stock-balances) — every single stock movement, ever, in order, and it's never edited or deleted, only added to. If you ever need to answer "what exactly happened to this product's stock over time," this is where you look.
+
+<Frame>
+  <img src="/images/retail-stock-ledger.png" alt="Stock Ledger table showing a running history of stock movements with running balance" />
+</Frame>
+
+## Columns
+
+| Column | Description |
+|--------|-------------|
+| **Product** | The product this movement affected |
+| **Location** | Which branch/location |
+| **Posting Date** | When the movement happened |
+| **Voucher Type / No.** | Which document caused this movement — e.g. `Goods Receipt GRN-0012`, `Sales Invoice SINV-0034` — click through to see the source document |
+| **Qty Change** | Signed quantity change from this single movement |
+| **Value Change** | Signed value change from this single movement |
+| **Running Qty / Value** | The running balance immediately after this movement — this is what builds up to the number shown in Stock Balances |
+
+<Tip>
+  Filter by product and location to trace a specific item's full history — useful when a balance looks wrong and you need to find exactly which document caused the discrepancy.
+</Tip>
+
+## Frequently Asked Questions
+
+<AccordionGroup>
+  <Accordion title="Can I edit or delete a ledger entry?">
+    No — the ledger is append-only by design, so it's always a trustworthy audit trail. To correct a mistake, cancel the document that caused the wrong entry (which posts a reversing entry) rather than trying to edit history.
+  </Accordion>
+  <Accordion title="Every document type shows up here?">
+    Yes — Goods Receipts, Purchase/Sales Invoices, Stock Adjustments, Stock Transfers, and Stock Count variances all post here, since they're all ways stock quantity can change.
+  </Accordion>
+</AccordionGroup>
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Stock Balances" icon="scan-eye" href="/retail/stock-balances">The current snapshot this ledger builds up to</Card>
+  <Card title="Stock Adjustments" icon="sliders-horizontal" href="/retail/stock-adjustments">One of the document types that posts here</Card>
+  <Card title="Overview" icon="layout-dashboard" href="/retail/overview">Back to the module overview</Card>
+</CardGroup>

@@ -1,0 +1,71 @@
+---
+title: "Purchase Orders"
+description: "The first step of buying from a supplier — a commitment, not yet a stock movement."
+---
+
+A **Purchase Order (PO)** is a commitment to buy — "we intend to buy these items from this supplier." Creating a PO doesn't move any stock and doesn't create any bill; it's the starting point of the buying chain: **PO → [Goods Receipt](/retail/goods-receipts) → [Purchase Invoice](/retail/purchase-invoices)**. Splitting these three apart means what you *ordered*, what actually *arrived*, and what you were *billed* for can all be tracked and compared independently — they don't have to match exactly, and the system tells you when they don't.
+
+<Frame>
+  <img src="/images/retail-purchase-orders.png" alt="Purchase Orders list showing status and received percentage" />
+</Frame>
+
+## Purchase Order Fields
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| **Party (Supplier)** | Yes | Must be a party marked `Is Supplier` — see [Parties](/retail/party) |
+| **Location** | Yes | Which branch/location this stock is being ordered for |
+| **Posting Date** | Yes | The date this order was raised |
+| **Expected Date** | No | When you expect the goods to arrive — informational |
+| **Items** | Yes (at least 1) | Product, quantity ordered, UOM, rate, discount, tax per line |
+
+## Status lifecycle
+
+A PO starts as **Draft** (freely editable), moves to **Submitted** once you submit it, and then automatically tracks **Partially Received** or **Fully Received** as Goods Receipts are created against it — you don't set these statuses manually, they're a rollup of how much of each line has actually arrived.
+
+<Tip>
+  The list page shows a received-% progress bar per row, so you can see at a glance which orders are still outstanding.
+</Tip>
+
+## Create a Purchase Order
+
+<Steps>
+  <Step title="Go to Retail → Purchase Orders">
+    Under Retail — Purchasing.
+  </Step>
+  <Step title="Click New Purchase Order">
+    Choose the Supplier, Location, and Posting Date.
+  </Step>
+  <Step title="Add line items">
+    Product, quantity, UOM, and rate for each item you're ordering.
+  </Step>
+  <Step title="Save as draft, then Submit">
+    Once submitted, the PO is locked for editing and ready to be received against.
+  </Step>
+  <Step title="Create a Goods Receipt from it">
+    Once goods arrive, use the "Create Goods Receipt" action on the submitted PO — it prefills the party, location, and remaining quantities.
+  </Step>
+</Steps>
+
+## Frequently Asked Questions
+
+<AccordionGroup>
+  <Accordion title="Does creating a PO reserve or move any stock?">
+    No. A PO is purely a commitment — stock only changes when a [Goods Receipt](/retail/goods-receipts) is submitted against it.
+  </Accordion>
+  <Accordion title="Can I receive less than what I ordered?">
+    Yes — a Goods Receipt's quantity can be less than (or, with appropriate approval, more than) the PO line's ordered quantity. The PO's status becomes "Partially Received" until the remaining quantity is received in a later Goods Receipt, or you decide not to receive the rest.
+  </Accordion>
+  <Accordion title="Can I cancel a Purchase Order?">
+    Yes, while it hasn't been fully received — cancelling requires a reason, and is blocked if a Goods Receipt already exists against it (cancel or handle the receipt first).
+  </Accordion>
+</AccordionGroup>
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Goods Receipts" icon="package-check" href="/retail/goods-receipts">The next step — what actually arrived</Card>
+  <Card title="Purchase Invoices" icon="file-input" href="/retail/purchase-invoices">The supplier's bill</Card>
+  <Card title="Parties" icon="contact" href="/retail/party">Set up your suppliers</Card>
+  <Card title="Overview" icon="layout-dashboard" href="/retail/overview">Back to the module overview</Card>
+</CardGroup>

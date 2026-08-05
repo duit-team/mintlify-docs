@@ -1,0 +1,82 @@
+---
+title: "Stock Counts"
+description: "A structured, auditable physical count — generate a count sheet, fill it in, and let the system calculate the variance."
+---
+
+A **Stock Count** is a formal, structured process for physically counting what's actually on the shelf and reconciling it against what the system thinks you have — the auditable alternative to eyeballing a discrepancy and fixing it with a quick [Stock Adjustment](/retail/stock-adjustments). It has a distinct three-step lifecycle: **Generate → Fill → Submit**.
+
+<Frame>
+  <img src="/images/retail-stock-counts.png" alt="Stock Count fill screen showing counted quantities and variance" />
+</Frame>
+
+## The lifecycle
+
+### 1. Generate
+
+Create a new count sheet for a location — the system snapshots the current "system quantity" for every product included, so it's locked in at the moment counting starts (not changing under you while you count).
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| **Location** | Yes | Which branch/location is being counted |
+| **Count Type** | No | `Full` (every tracked product) or `Cycle` (a subset — useful for counting a section at a time) |
+| **Blind** | No | See "Blind counting" below |
+| **Products** | No | For a Cycle count, which specific products to include. Leave blank for Full |
+
+### 2. Fill
+
+Enter the actual counted quantity for each item, as you physically go through the shelf. You can save progress and come back — filling doesn't have to happen in one sitting.
+
+### 3. Submit
+
+Once every item has a counted quantity, submit. The system calculates the **variance** (counted minus system quantity) per item and automatically posts the correcting stock adjustments — you don't create separate adjustments yourself.
+
+## Blind counting
+
+If **Blind** is turned on, the person doing the physical count **cannot see the system's expected quantity** while entering counts — they only see product names and an input field. This prevents unconscious bias (counting to match what you expect to see, rather than what's actually there), which is standard practice for a trustworthy physical count.
+
+<Tip>
+  Turn Blind on for counts where accuracy matters most (e.g. periodic full audits) and off for quick, informal spot-checks where speed matters more than rigor.
+</Tip>
+
+## Understanding variance
+
+Once submitted, each item shows its **variance** — the difference between counted and system quantity, color-coded so you can scan it quickly: **over** (you have more than expected — usually good, but worth investigating why), **under** (you have less — potential loss/damage/theft), or **exact match**.
+
+## Create a Stock Count
+
+<Steps>
+  <Step title="Go to Retail → Stock Counts">
+    Under Retail — Stock Operations.
+  </Step>
+  <Step title="Click Generate (not 'New')">
+    Choose the Location, Count Type, and whether it's Blind.
+  </Step>
+  <Step title="Fill in counted quantities">
+    Go through the shelf and enter what you actually count for each item. Save and resume as needed.
+  </Step>
+  <Step title="Submit">
+    The system calculates variance per item and posts the correcting adjustments automatically.
+  </Step>
+</Steps>
+
+## Frequently Asked Questions
+
+<AccordionGroup>
+  <Accordion title="What happens to stock levels during the Fill stage, before I submit?">
+    Nothing changes yet — stock only updates when you Submit the completed count. You can safely take your time filling it in.
+  </Accordion>
+  <Accordion title="Can I re-count and fix a mistake before submitting?">
+    Yes — the Fill stage can be saved and edited repeatedly until you submit.
+  </Accordion>
+  <Accordion title="What's the difference between this and a Stock Adjustment?">
+    A Stock Adjustment is a quick, manual, one-line correction for when you already know exactly what changed. A Stock Count is the structured, blind-capable, audit-friendly process for a genuine physical recount of many items at once — and it calculates and posts the variance for you rather than you doing the math.
+  </Accordion>
+</AccordionGroup>
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Stock Adjustments" icon="sliders-horizontal" href="/retail/stock-adjustments">For quick one-off corrections instead</Card>
+  <Card title="Stock Balances" icon="scan-eye" href="/retail/stock-balances">Check current quantities before counting</Card>
+  <Card title="Overview" icon="layout-dashboard" href="/retail/overview">Back to the module overview</Card>
+</CardGroup>

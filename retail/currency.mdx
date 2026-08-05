@@ -1,0 +1,56 @@
+---
+title: "Currencies"
+description: "Register the currencies your business transacts in, alongside your base currency."
+---
+
+Every tenant has one **base currency** — the currency your accounting reports (Trial Balance, Profit & Loss) are always shown in. A **Currency** record registers any *other* currency you might deal with — a foreign supplier who bills in USD, for example. You only need this if you actually transact in more than one currency; if everything you buy and sell is in your local currency, you can skip this page entirely.
+
+<Frame>
+  <img src="/images/retail-currency.png" alt="Currencies list showing MYR and USD" />
+</Frame>
+
+## Currency Fields
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| **Code** | Yes | The ISO currency code, e.g. `USD`, `MYR`, `SGD` |
+| **Name** | Yes | Display name, e.g. `US Dollar` |
+| **Symbol** | Yes | Shown next to amounts, e.g. `$` |
+| **Decimal Places** | No | How many decimal places to round/display to — `2` for most currencies |
+
+## Create a Currency
+
+<Steps>
+  <Step title="Go to Retail → Currencies">
+    Under Retail — Masters.
+  </Step>
+  <Step title="Click New Currency">
+    Enter the Code, Name, Symbol, and Decimal Places.
+  </Step>
+  <Step title="Save">
+    The currency is now selectable on Parties, Purchase/Sales Invoices, and Payments.
+  </Step>
+  <Step title="Add an Exchange Rate">
+    A currency alone doesn't let documents convert amounts — you also need at least one [Exchange Rate](/retail/exchange-rate) between it and your base currency.
+  </Step>
+</Steps>
+
+## Frequently Asked Questions
+
+<AccordionGroup>
+  <Accordion title="Do I need to register my own base currency here?">
+    No — your base currency is set once in your tenant's accounting settings and doesn't need a Currency record of its own. Only register *foreign* currencies.
+  </Accordion>
+  <Accordion title="What happens if I create a document in a currency with no exchange rate set?">
+    The document will fail to submit — you'll need to add an [Exchange Rate](/retail/exchange-rate) for that currency (as of that document's date) first.
+  </Accordion>
+</AccordionGroup>
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Exchange Rates" icon="trending-up-down" href="/retail/exchange-rate">Set the conversion rate for this currency</Card>
+  <Card title="Party" icon="contact" href="/retail/party">Assign a default currency per supplier/customer</Card>
+  <Card title="Purchase Invoices" icon="file-input" href="/retail/purchase-invoices">Create a foreign-currency invoice</Card>
+  <Card title="Overview" icon="layout-dashboard" href="/retail/overview">Back to the module overview</Card>
+</CardGroup>

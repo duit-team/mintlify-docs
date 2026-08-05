@@ -1,0 +1,63 @@
+---
+title: "Stock Transfers"
+description: "Move stock from one location to another without a sale or purchase."
+---
+
+A **Stock Transfer** moves stock from one location (branch) to another — no sale, no purchase, just relocation. Stock decreases at the source location and increases at the destination, at the same value.
+
+<Frame>
+  <img src="/images/retail-stock-transfers.png" alt="Stock Transfer detail page showing source and destination locations" />
+</Frame>
+
+## Stock Transfer Fields
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| **From Location** | Yes | Where the stock is leaving from |
+| **To Location** | Yes | Where the stock is going to |
+| **Posting Date** | Yes | The date the transfer took effect |
+| **Items** | Yes (at least 1) | Product and quantity per line |
+
+### Item Fields
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| **Product** | Yes | The product being moved |
+| **Qty Change** | Yes | Positive quantity being moved |
+| **Rate** | Yes | The value the receiving location records this stock at |
+
+## Create a Stock Transfer
+
+<Steps>
+  <Step title="Go to Retail → Stock Transfers">
+    Under Retail — Stock Operations.
+  </Step>
+  <Step title="Click New Transfer">
+    Choose the From Location and To Location.
+  </Step>
+  <Step title="Add items">
+    Product and quantity to move.
+  </Step>
+  <Step title="Submit">
+    Stock decreases at the source and increases at the destination immediately.
+  </Step>
+</Steps>
+
+## Frequently Asked Questions
+
+<AccordionGroup>
+  <Accordion title="Can I see how much stock arrived at the destination afterward?">
+    Yes — check [Stock Balances](/retail/stock-balances) filtered to the destination location, or trace the exact movement in [Stock Ledger](/retail/stock-ledger).
+  </Accordion>
+  <Accordion title="Does a transfer affect my overall inventory value?">
+    No — the total value of stock across all your locations combined stays the same; it just moves from one location's balance to another's.
+  </Accordion>
+</AccordionGroup>
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Stock Balances" icon="scan-eye" href="/retail/stock-balances">See stock per location after a transfer</Card>
+  <Card title="Stock Adjustments" icon="sliders-horizontal" href="/retail/stock-adjustments">For corrections rather than relocations</Card>
+  <Card title="Overview" icon="layout-dashboard" href="/retail/overview">Back to the module overview</Card>
+</CardGroup>

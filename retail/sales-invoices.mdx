@@ -1,0 +1,70 @@
+---
+title: "Sales Invoices"
+description: "Record what you sold, including returns, and see it reflected in stock and accounting immediately."
+---
+
+A **Sales Invoice** records a sale to a customer — submitting one decreases stock on hand and increases **Sales Income**. It also supports **returns**, where a customer brings something back and it's linked to the original invoice it's returning against.
+
+<Frame>
+  <img src="/images/retail-sales-invoices.png" alt="Sales Invoice detail page with items and totals" />
+</Frame>
+
+## Sales Invoice Fields
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| **Party (Customer)** | Yes | Must be a party marked `Is Customer` — see [Parties](/retail/party) |
+| **Location** | Yes | Which branch/location this sale happened at |
+| **Posting Date** | Yes | The sale date |
+| **Currency** | No | Defaults to your base currency; set to a foreign currency if this customer pays in one |
+| **Is Return** | No | Turn on to record a return |
+| **Return Against** | Required if Is Return is on | The original Sales Invoice this return relates to |
+| **Items** | Yes (at least 1) | Product, quantity, rate, tax per line |
+
+## Returns
+
+To record a customer return, create a new Sales Invoice with `Is Return` turned on and `Return Against` set to the original invoice. The items on a return are entered as positive quantities (the system handles the sign internally) — submitting it adds the stock back and reverses the appropriate portion of Sales Income.
+
+<Tip>
+  If you're also tracking stock on hand for a product, the invoice's line items show a quick "in stock: X" hint so you can catch an oversell before it happens, rather than only finding out when the server rejects it.
+</Tip>
+
+## Create a Sales Invoice
+
+<Steps>
+  <Step title="Go to Retail → Sales Invoices">
+    Under Retail — Sales & Payments.
+  </Step>
+  <Step title="Click New Sales Invoice">
+    Choose the Customer, Location, and Posting Date.
+  </Step>
+  <Step title="Add line items">
+    Product, quantity, and rate for each item sold.
+  </Step>
+  <Step title="Submit">
+    Stock decreases, Sales Income increases, and the invoice is ready to be paid.
+  </Step>
+</Steps>
+
+## Frequently Asked Questions
+
+<AccordionGroup>
+  <Accordion title="Can I sell a product that isn't marked as a sales item?">
+    No — if a product's Stock Profile has `Is Sales Item` turned off, the system rejects any attempt to add it to a Sales Invoice. See [Stock Profile](/retail/stock-profile).
+  </Accordion>
+  <Accordion title="Does submitting a Sales Invoice automatically record payment?">
+    No — a Sales Invoice records the sale and what's owed; a separate [Payment](/retail/payments) records money actually received.
+  </Accordion>
+  <Accordion title="How is the cost of goods sold calculated?">
+    Automatically, using FIFO (first-in, first-out) costing from your actual purchase history — you don't enter a cost manually on a sale.
+  </Accordion>
+</AccordionGroup>
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Payments" icon="wallet" href="/retail/payments">Collect payment for this invoice</Card>
+  <Card title="Parties" icon="contact" href="/retail/party">Set up your customers</Card>
+  <Card title="Stock Balances" icon="scan-eye" href="/retail/stock-balances">See stock drop after a sale</Card>
+  <Card title="Overview" icon="layout-dashboard" href="/retail/overview">Back to the module overview</Card>
+</CardGroup>

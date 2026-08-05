@@ -73,7 +73,64 @@
         "group": "Restaurant",
         "icon": "layout-grid",
         "pages": [
-          "features/tables"
+          "features/tables",
+          "features/ticket-tag-groups"
+        ]
+      },
+      {
+        "group": "Retail — Masters",
+        "icon": "boxes",
+        "pages": [
+          "retail/overview",
+          "retail/uom",
+          "retail/currency",
+          "retail/exchange-rate",
+          "retail/party",
+          "retail/stock-profile"
+        ]
+      },
+      {
+        "group": "Retail — Accounting",
+        "icon": "book-open-text",
+        "pages": [
+          "retail/chart-of-accounts",
+          "retail/journal-entries"
+        ]
+      },
+      {
+        "group": "Retail — Purchasing",
+        "icon": "clipboard-list",
+        "pages": [
+          "retail/purchase-orders",
+          "retail/goods-receipts",
+          "retail/purchase-invoices"
+        ]
+      },
+      {
+        "group": "Retail — Sales & Payments",
+        "icon": "file-output",
+        "pages": [
+          "retail/sales-invoices",
+          "retail/payments"
+        ]
+      },
+      {
+        "group": "Retail — Stock Operations",
+        "icon": "repeat",
+        "pages": [
+          "retail/stock-adjustments",
+          "retail/stock-transfers",
+          "retail/stock-counts"
+        ]
+      },
+      {
+        "group": "Retail — Stock Visibility",
+        "icon": "scan-eye",
+        "pages": [
+          "retail/stock-balances",
+          "retail/stock-ledger",
+          "retail/low-stock",
+          "retail/importing-data"
         ]
       },
       {

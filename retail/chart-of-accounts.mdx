@@ -1,0 +1,65 @@
+---
+title: "Chart of Accounts"
+description: "The ledger structure every retail document posts to, automatically."
+---
+
+The **Chart of Accounts** is the list of every account your business's money and stock movements can be posted to — Cash, Inventory, Accounts Payable, Sales Income, and so on. Every retail document (a sale, a purchase, a stock adjustment) posts to two or more of these accounts automatically, in a balanced double-entry — you don't write these postings yourself. A default chart is already set up for you; this page is mainly for adding a new account or understanding what's already there.
+
+<Frame>
+  <img src="/images/retail-chart-of-accounts.png" alt="Chart of Accounts list showing accounts grouped by type with codes" />
+</Frame>
+
+## Account Fields
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| **Code** | Yes | Unique numeric/alphanumeric code, conventionally banded by type: `1000`s Assets, `2000`s Liabilities, `3000`s Equity, `4000`s Income, `5000`s+ Expenses |
+| **Name** | Yes | Display name, e.g. `Accounts Payable` |
+| **Account Type** | Yes | One of `Asset`, `Liability`, `Equity`, `Income`, `Expense` — determines which financial statement it appears on |
+| **Normal Balance** | Yes | `Debit` or `Credit` — whether a debit or a credit *increases* this account. Assets/Expenses are normally Debit; Liabilities/Equity/Income are normally Credit |
+| **Is Group** | No | Group accounts organize the tree (e.g. "Current Assets" as a parent) but can't be posted to directly — only leaf accounts can |
+| **Parent Account** | No | Nests this account under a group account, for a tree structure in reports |
+
+<Warning>
+  System accounts (the ones auto-created when your tenant was set up, e.g. Inventory Asset, GR/IR Clearing) can't be deleted — they're load-bearing for the automatic postings every document relies on. You can still add your own accounts alongside them.
+</Warning>
+
+## Create an Account
+
+<Steps>
+  <Step title="Go to Retail → Chart of Accounts">
+    Under Retail — Accounting.
+  </Step>
+  <Step title="Click New Account">
+    Enter a Code, Name, Account Type, and Normal Balance.
+  </Step>
+  <Step title="Optionally nest it under a parent">
+    Pick a Parent Account if this belongs under an existing group.
+  </Step>
+  <Step title="Save">
+    The account is now selectable anywhere a GL account is chosen (e.g. a product's Sales Account override, a Journal Entry line).
+  </Step>
+</Steps>
+
+## Frequently Asked Questions
+
+<AccordionGroup>
+  <Accordion title="Do I need to set this up before using the rest of the module?">
+    No — a default chart of accounts is created automatically for every tenant. You only need this page if you want to add a custom account (e.g. a specific expense category) or override where a particular product/category posts.
+  </Accordion>
+  <Accordion title="What is GR/IR Clearing?">
+    A temporary holding account used between receiving goods and being billed for them — see [Purchase Invoices](/retail/purchase-invoices) for a full explanation.
+  </Accordion>
+  <Accordion title="Can I bulk-import a custom chart of accounts?">
+    Yes — see [Importing Data](/retail/importing-data). Parent accounts must already exist (or appear earlier in the same file) before a child account referencing them can be imported.
+  </Accordion>
+</AccordionGroup>
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Journal Entries" icon="notebook-pen" href="/retail/journal-entries">Post directly to any account</Card>
+  <Card title="Purchase Invoices" icon="file-input" href="/retail/purchase-invoices">See GR/IR Clearing in action</Card>
+  <Card title="Stock Profile" icon="boxes" href="/retail/stock-profile">Override a product's sales/purchase account</Card>
+  <Card title="Overview" icon="layout-dashboard" href="/retail/overview">Back to the module overview</Card>
+</CardGroup>

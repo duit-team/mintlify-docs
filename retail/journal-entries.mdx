@@ -1,0 +1,69 @@
+---
+title: "Journal Entries"
+description: "Manual double-entry postings for the rare cases the automatic documents don't cover."
+---
+
+Every retail document (a sale, a purchase, a stock adjustment) posts to your accounts automatically — you'll rarely need to touch this page. A **Journal Entry** is for the exceptions: an owner's capital injection, a correction, an accountant's year-end adjustment. Like every other posting in the system, it must be **balanced** — total debits must equal total credits — before it can be submitted.
+
+<Frame>
+  <img src="/images/retail-journal-entries.png" alt="Journal Entries list showing draft and submitted entries" />
+</Frame>
+
+## Journal Entry Fields
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| **Posting Date** | Yes | The accounting date this entry takes effect |
+| **Narration** | No | A description of what this entry is for, e.g. `Owner capital injection` — shown in reports, helps anyone reviewing the books later |
+
+### Line Fields (each entry needs at least 2)
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| **Account** | Yes | Which account this line posts to |
+| **Debit** | No | Amount debited on this line (leave 0 if this line is a credit) |
+| **Credit** | No | Amount credited on this line (leave 0 if this line is a debit) |
+| **Party** | No | Optionally link this line to a customer/supplier, if relevant |
+| **Remarks** | No | Line-level note |
+
+<Warning>
+  Total debits across all lines must equal total credits, or the entry will be rejected at submit time. The form shows you the running totals so you can catch a mismatch before submitting.
+</Warning>
+
+## Create a Journal Entry
+
+<Steps>
+  <Step title="Go to Retail → Journal Entries">
+    Under Retail — Accounting.
+  </Step>
+  <Step title="Click New Entry">
+    Set the Posting Date and an optional Narration.
+  </Step>
+  <Step title="Add at least two lines">
+    E.g. Debit `Cash` $5,000, Credit `Owner's Capital` $5,000.
+  </Step>
+  <Step title="Save as draft">
+    You can keep editing a draft entry freely.
+  </Step>
+  <Step title="Submit">
+    Once debits equal credits, submit to post it permanently to the ledger.
+  </Step>
+</Steps>
+
+## Frequently Asked Questions
+
+<AccordionGroup>
+  <Accordion title="When would I actually use this instead of a normal document?">
+    Almost never for day-to-day operations — sales, purchases, and stock movements should always go through their own document types (Sales Invoice, Purchase Invoice, Stock Adjustment) so the stock quantities stay in sync with the accounting. Use a Journal Entry only for pure accounting entries that have no stock component, like a capital injection or a bank fee.
+  </Accordion>
+  <Accordion title="Can I edit a submitted Journal Entry?">
+    No — submitted entries are locked. Cancel it (with a reason) and create a new one instead, same as every other document in the module.
+  </Accordion>
+</AccordionGroup>
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Chart of Accounts" icon="book-open-text" href="/retail/chart-of-accounts">See every account you can post to</Card>
+  <Card title="Overview" icon="layout-dashboard" href="/retail/overview">Back to the module overview</Card>
+</CardGroup>

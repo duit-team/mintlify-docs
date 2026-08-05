@@ -1,0 +1,76 @@
+---
+title: "Purchase Invoices"
+description: "The supplier's bill — what you owe, and how it reconciles against what you received."
+---
+
+A **Purchase Invoice** records the supplier's bill — the final step of the buying chain (**[Purchase Order](/retail/purchase-orders) → [Goods Receipt](/retail/goods-receipts) → Purchase Invoice**). It's what actually creates your obligation to pay: submitting one increases **Accounts Payable**. It can be created standalone, or linked to a Goods Receipt so the two reconcile automatically.
+
+<Frame>
+  <img src="/images/retail-purchase-invoices.png" alt="Purchase Invoice detail page linked to a Goods Receipt" />
+</Frame>
+
+## Purchase Invoice Fields
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| **Party (Supplier)** | Yes | The supplier billing you |
+| **Location** | Yes | Which branch/location this invoice belongs to |
+| **Posting Date** | Yes | The invoice date |
+| **Goods Receipt** | No | Link to the GRN this invoice bills for — if set, this invoice doesn't move stock again (it already moved at receipt time) |
+| **External Ref No. / Date** | No | The supplier's own invoice number and date, for your records |
+| **Due Date** | No | When payment is due, often defaulted from the party's Payment Terms |
+| **Other Charges** | No | Freight, duty, or other landed costs — apportioned across the line items' stock value on a standalone (non-GRN-linked) invoice |
+| **Items** | Yes (at least 1) | Product, quantity, rate, tax per line — plus batch/expiry if the product requires it |
+
+## Understanding GR/IR Clearing
+
+**GR/IR Clearing** (Goods Received / Invoice Received) is a temporary holding account that exists purely to catch the gap between "goods arrived" and "we got billed for them." Here's how it works in plain terms:
+
+1. When a Goods Receipt is submitted, stock goes up and the value is temporarily parked in GR/IR Clearing (not yet in Accounts Payable, because you haven't been billed yet).
+2. When the matching Purchase Invoice is submitted, GR/IR Clearing is cleared back out, and the real **Accounts Payable** goes up instead.
+
+If GR/IR Clearing shows a **non-zero balance** on your reports, it means one of two things: goods have arrived but you haven't recorded the supplier's invoice yet, or (less commonly) you've recorded an invoice that references a receipt that doesn't fully match. Either way, it's a useful early-warning signal, not an error.
+
+<Tip>
+  A standalone Purchase Invoice (no linked Goods Receipt) moves stock directly — useful for smaller purchases where you don't need the extra PO/GRN ceremony.
+</Tip>
+
+## Create a Purchase Invoice
+
+<Steps>
+  <Step title="From a submitted Goods Receipt, click 'Create Invoice'">
+    Or go to Retail → Purchase Invoices and create one standalone.
+  </Step>
+  <Step title="Enter the supplier's invoice number and date">
+    Under External Ref No. / Date, for your own record-keeping.
+  </Step>
+  <Step title="Confirm the items and amounts">
+    Prefilled from the Goods Receipt if linked; entered manually if standalone.
+  </Step>
+  <Step title="Submit">
+    Accounts Payable increases by the invoice total, ready to be settled with a Payment.
+  </Step>
+</Steps>
+
+## Frequently Asked Questions
+
+<AccordionGroup>
+  <Accordion title="Can I invoice a product that isn't marked as a purchase item?">
+    No — if a product's Stock Profile has `Is Purchase Item` turned off, the system rejects any attempt to add it to a Purchase Invoice. See [Stock Profile](/retail/stock-profile).
+  </Accordion>
+  <Accordion title="What happens to stock if I create a standalone invoice with no Goods Receipt?">
+    Stock moves at the point this invoice is submitted, exactly like a Goods Receipt would — a standalone Purchase Invoice is essentially "receipt and bill in one step."
+  </Accordion>
+  <Accordion title="How do I pay off a Purchase Invoice?">
+    Record a [Payment](/retail/payments) with `Payment Type = Pay`, and allocate it against this invoice.
+  </Accordion>
+</AccordionGroup>
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Goods Receipts" icon="package-check" href="/retail/goods-receipts">Link an invoice to what arrived</Card>
+  <Card title="Chart of Accounts" icon="book-open-text" href="/retail/chart-of-accounts">See the GR/IR Clearing account</Card>
+  <Card title="Payments" icon="wallet" href="/retail/payments">Settle what you owe</Card>
+  <Card title="Overview" icon="layout-dashboard" href="/retail/overview">Back to the module overview</Card>
+</CardGroup>
