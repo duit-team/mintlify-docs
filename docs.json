@@ -24,178 +24,274 @@
       "href": "https://app.duitpos.com"
     }
   },
+  
   "navigation": {
-    "groups": [
+     "global": {
+    "anchors": [
       {
-        "group": "Getting Started",
-        "icon": "rocket",
-        "pages": [
-          "introduction",
-          "getting-started/create-account",
-          "getting-started/first-login",
-          "getting-started/setup-checklist",
-          "getting-started/dashboard-overview"
+        "anchor": "Home",
+        "icon": "house",
+        "href": "/introduction"
+      }
+    ]
+  },
+  
+    "tabs": [
+      {
+        
+        "tab": "Admin & Cloud",
+        "groups": [
+          {
+            "group": "Getting Started",
+            "icon": "rocket",
+            "pages": [
+              
+              
+              "getting-started/create-account",
+              "getting-started/first-login",
+              "getting-started/setup-checklist",
+              "getting-started/dashboard-overview"
+            ]
+          },
+          {
+            "group": "Account Setup",
+            "icon": "shield-check",
+            "pages": [
+              "setup/users-and-roles",
+              "setup/permissions"
+            ]
+          },
+          {
+            "group": "Setup & Config",
+            "icon": "settings",
+            "pages": [
+              "features/brands",
+              "features/locations",
+              "features/order-modes",
+              "features/printers",
+              "features/print-templates",
+              "features/setup",
+              "features/settings"
+            ]
+          },
+          {
+            "group": "Catalog",
+            "icon": "utensils",
+            "pages": [
+              "features/menu-builder",
+              "features/categories",
+              "features/products",
+              "features/modifiers",
+              "features/bulk-pricing"
+            ]
+          },
+          {
+            "group": "Restaurant",
+            "icon": "layout-grid",
+            "pages": [
+              "features/tables",
+              "features/ticket-tag-groups"
+            ]
+          },
+          {
+            "group": "Retail — Masters",
+            "icon": "boxes",
+            "pages": [
+              "retail/overview",
+              "retail/uom",
+              "retail/currency",
+              "retail/exchange-rate",
+              "retail/party",
+              "retail/stock-profile"
+            ]
+          },
+          {
+            "group": "Retail — Accounting",
+            "icon": "book-open-text",
+            "pages": [
+              "retail/chart-of-accounts",
+              "retail/journal-entries"
+            ]
+          },
+          {
+            "group": "Retail — Purchasing",
+            "icon": "clipboard-list",
+            "pages": [
+              "retail/purchase-orders",
+              "retail/goods-receipts",
+              "retail/purchase-invoices"
+            ]
+          },
+          {
+            "group": "Retail — Sales & Payments",
+            "icon": "file-output",
+            "pages": [
+              "retail/sales-invoices",
+              "retail/payments"
+            ]
+          },
+          {
+            "group": "Retail — Stock Operations",
+            "icon": "repeat",
+            "pages": [
+              "retail/stock-adjustments",
+              "retail/stock-transfers",
+              "retail/stock-counts"
+            ]
+          },
+          {
+            "group": "Retail — Stock Visibility",
+            "icon": "scan-eye",
+            "pages": [
+              "retail/stock-balances",
+              "retail/stock-ledger",
+              "retail/low-stock",
+              "retail/importing-data"
+            ]
+          },
+          {
+            "group": "Operations",
+            "icon": "percent",
+            "pages": [
+              "features/payment-types",
+              "features/tax",
+              "features/transaction-types",
+              "features/reasons"
+            ]
+          },
+          {
+            "group": "Staff",
+            "icon": "users",
+            "pages": [
+              "features/employees"
+            ]
+          },
+          {
+            "group": "Reports",
+            "icon": "chart-bar",
+            "pages": [
+              "reports/overview",
+              "reports/sales-reports",
+              "reports/tickets-and-voids",
+              "reports/workday",
+              "reports/import-history"
+            ]
+          },
+          {
+            "group": "Online Ordering",
+            "icon": "qr-code",
+            "pages": [
+              "online-ordering/qr-setup",
+              "online-ordering/stripe-setup",
+              "online-ordering/sharecommerce-setup"
+            ]
+          },
+          {
+            "group": "E-Invoicing",
+            "icon": "file-text",
+            "pages": [
+              "features/e-invoicing",
+              "features/submit-invoice"
+            ]
+          },
+          {
+            "group": "Platform Admin",
+            "icon": "server",
+            "pages": [
+              "features/tenants",
+              "features/tenant-operations",
+              "features/db-servers",
+              "features/root-users",
+              "features/lhdn-admin"
+            ]
+          },
+          {
+            "group": "Troubleshooting",
+            "icon": "life-buoy",
+            "pages": [
+              "troubleshooting/payment-issues",
+              "troubleshooting/printer-not-printing",
+              "troubleshooting/login-problems"
+            ]
+          }
         ]
       },
       {
-        "group": "Account Setup",
-        "icon": "shield-check",
-        "pages": [
-          "setup/users-and-roles",
-          "setup/permissions"
-        ]
-      },
-      {
-        "group": "Setup & Config",
-        "icon": "settings",
-        "pages": [
-          "features/brands",
-          "features/locations",
-          "features/order-modes",
-          "features/printers",
-          "features/print-templates",
-          "features/setup",
-          "features/settings"
-        ]
-      },
-      {
-        "group": "Catalog",
-        "icon": "utensils",
-        "pages": [
-          "features/menu-builder",
-          "features/categories",
-          "features/products",
-          "features/modifiers",
-          "features/bulk-pricing"
-        ]
-      },
-      {
-        "group": "Restaurant",
-        "icon": "layout-grid",
-        "pages": [
-          "features/tables",
-          "features/ticket-tag-groups"
-        ]
-      },
-      {
-        "group": "Retail — Masters",
-        "icon": "boxes",
-        "pages": [
-          "retail/overview",
-          "retail/uom",
-          "retail/currency",
-          "retail/exchange-rate",
-          "retail/party",
-          "retail/stock-profile"
-        ]
-      },
-      {
-        "group": "Retail — Accounting",
-        "icon": "book-open-text",
-        "pages": [
-          "retail/chart-of-accounts",
-          "retail/journal-entries"
-        ]
-      },
-      {
-        "group": "Retail — Purchasing",
-        "icon": "clipboard-list",
-        "pages": [
-          "retail/purchase-orders",
-          "retail/goods-receipts",
-          "retail/purchase-invoices"
-        ]
-      },
-      {
-        "group": "Retail — Sales & Payments",
-        "icon": "file-output",
-        "pages": [
-          "retail/sales-invoices",
-          "retail/payments"
-        ]
-      },
-      {
-        "group": "Retail — Stock Operations",
-        "icon": "repeat",
-        "pages": [
-          "retail/stock-adjustments",
-          "retail/stock-transfers",
-          "retail/stock-counts"
-        ]
-      },
-      {
-        "group": "Retail — Stock Visibility",
-        "icon": "scan-eye",
-        "pages": [
-          "retail/stock-balances",
-          "retail/stock-ledger",
-          "retail/low-stock",
-          "retail/importing-data"
-        ]
-      },
-      {
-        "group": "Operations",
-        "icon": "percent",
-        "pages": [
-          "features/payment-types",
-          "features/tax",
-          "features/transaction-types",
-          "features/reasons"
-        ]
-      },
-      {
-        "group": "Staff",
-        "icon": "users",
-        "pages": [
-          "features/employees"
-        ]
-      },
-      {
-        "group": "Reports",
-        "icon": "chart-bar",
-        "pages": [
-          "reports/overview",
-          "reports/sales-reports",
-          "reports/tickets-and-voids",
-          "reports/workday",
-          "reports/import-history"
-        ]
-      },
-      {
-        "group": "Online Ordering",
-        "icon": "qr-code",
-        "pages": [
-          "online-ordering/qr-setup",
-          "online-ordering/stripe-setup",
-          "online-ordering/sharecommerce-setup"
-        ]
-      },
-      {
-        "group": "E-Invoicing",
-        "icon": "file-text",
-        "pages": [
-          "features/e-invoicing",
-          "features/submit-invoice"
-        ]
-      },
-      {
-        "group": "Platform Admin",
-        "icon": "server",
-        "pages": [
-          "features/tenants",
-          "features/tenant-operations",
-          "features/db-servers",
-          "features/root-users",
-          "features/lhdn-admin"
-        ]
-      },
-      {
-        "group": "Troubleshooting",
-        "icon": "life-buoy",
-        "pages": [
-          "troubleshooting/payment-issues",
-          "troubleshooting/printer-not-printing",
-          "troubleshooting/login-problems"
+        "tab": "POS App",
+        "groups": [
+          {
+            "group": "Getting Started",
+            "icon": "door-open",
+              "pages": [
+             
+    "pos-app/index",
+    "pos-app/getting-started/logging-in",
+    "pos-app/getting-started/app-layout",
+    "pos-app/getting-started/order-modes",
+    "pos-app/getting-started/barcode-scanning"
+  ]
+          },
+          {
+            "group": "Floor Plan & Tables",
+            "icon": "chair",
+            "pages": [
+              "pos-app/floor-plan/tables-overview",
+              "pos-app/floor-plan/opening-a-table",
+              "pos-app/floor-plan/moving-and-merging-tables",
+              "pos-app/floor-plan/splitting-a-bill"
+            ]
+          },
+          {
+            "group": "Taking Orders",
+            "icon": "clipboard-list",
+            "pages": [
+              "pos-app/orders/taking-an-order",
+              "pos-app/orders/variants-and-modifiers",
+              "pos-app/orders/force-price-and-quantity",
+              "pos-app/orders/void-comp-and-gift"
+            ]
+          },
+          {
+  "group": "Settings",
+  "icon": "settings",
+  "pages": [
+    "pos-app/settings/settings-overview",
+    "pos-app/settings/printers",
+    "pos-app/settings/card-terminal",
+    "pos-app/settings/customer-display"
+  ]
+},
+          {
+            "group": "Payments",
+            "icon": "credit-card",
+            "pages": [
+              "pos-app/payments/settling-a-bill",
+              "pos-app/payments/order-history",
+              "pos-app/payments/refunds-and-payment-changes"
+            ]
+          },
+          {
+            "group": "Kitchen Display",
+            "icon": "chef-hat",
+            "pages": [
+              "pos-app/kitchen-display/using-the-kds"
+            ]
+          },
+          {
+            "group": "Multiple Devices",
+            "icon": "tablet-smartphone",
+            "pages": [
+              "pos-app/multi-device/master-and-slave-setup",
+              "pos-app/multi-device/kiosk-and-kds-devices"
+            ]
+          },
+          {
+            "group": "Help",
+            "icon": "life-buoy",
+            "pages": [
+              "pos-app/troubleshooting/common-issues"
+            ]
+          }
         ]
       }
     ]

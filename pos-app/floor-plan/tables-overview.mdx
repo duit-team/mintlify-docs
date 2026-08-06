@@ -1,0 +1,41 @@
+---
+title: "Tables Overview"
+description: "Understanding table statuses and the floor plan"
+---
+
+## Table statuses
+
+Every table on your floor plan shows one of these statuses:
+
+<CardGroup cols={2}>
+  <Card title="Available" icon="circle">
+    Free and ready for a new guest. Tap it to start a new order.
+  </Card>
+  <Card title="Occupied" icon="circle-check" color="#22c55e">
+    In use — shows current guest count and how long they've been seated.
+  </Card>
+  <Card title="Reserved" icon="circle-half-stroke" color="#f97316">
+    Held for a booking. Tap to view reservation details.
+  </Card>
+  <Card title="Bill Requested" icon="circle-exclamation" color="#ef4444">
+    The guest has asked for their check — prioritize settling this table.
+  </Card>
+</CardGroup>
+
+## Reading a table card
+
+Each table card shows:
+
+- **Table number and name** (e.g. "1 · SE-T1")
+- **Seating capacity** (e.g. "Cap: 4")
+- **Guest count** once occupied (e.g. "2/4")
+- **Time seated**
+- **Bill reference number**, if a bill has been opened
+
+## Switching areas
+
+If your restaurant has multiple floors or sections, use the tabs at the top of the floor plan (e.g. **Ground Floor**, **Terrace**, **All Areas**) to switch between them.
+
+## Capacity warnings
+
+If you try to seat more guests than a table's capacity allows, DuitPOS will show a warning — but you can still proceed if extra seating is available. This is a heads-up, not a hard block.

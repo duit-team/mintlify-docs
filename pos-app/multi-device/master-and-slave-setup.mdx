@@ -1,0 +1,44 @@
+---
+title: "Master & Slave POS Setup"
+description: "Running more than one POS device in the same location"
+---
+
+## Why use multiple POS devices
+
+If your location has more than one cashier station or a mobile POS for tableside ordering, DuitPOS supports connecting multiple devices so they all share the same tables, orders, and kitchen tickets in real time.
+
+## Setting up the Master device
+
+The **Master** device hosts the connection that other devices connect to — usually your main counter POS.
+
+1. During setup, select **Master POS**.
+2. Go to **Settings → Connection & Terminals** to find your device's connection details (a local network address and QR code, if supported).
+3. Make sure this device stays connected to your restaurant's Wi-Fi.
+
+## Setting up a Slave device
+
+1. On the second device, select **POS**, then **Slave**.
+2. Enter the Master device's connection address shown on its Connection & Terminals screen.
+3. Confirm — once connected, you'll see the same floor plan and tables as the Master device.
+
+## Checking connected devices
+
+On the Master device, go to **Settings → Connection & Terminals** to see all currently connected POS, KDS, and Kiosk devices, along with their connection status.
+
+<Tip>
+  Both devices must be on the same Wi-Fi network to connect.
+</Tip>
+
+## What syncs automatically
+
+Once connected, the following stay in sync across devices in real time:
+
+- Table status and guest counts
+- Orders, item additions, and modifications
+- Void, comp, and gift actions
+- Bill settlement — a table settled on one device frees up on the other automatically
+- Order history
+
+<Note>
+  If a device briefly loses connection, it automatically catches up on any missed changes once it reconnects.
+</Note>

@@ -1,0 +1,88 @@
+---
+title: "Settings"
+description: "Configure printers, connections, sync, and device preferences"
+---
+
+The **Settings** screen is where you manage everything specific to this device — printers, connections, display preferences, and data sync. Tap **Setting** in the side menu to open it.
+
+## Printers
+
+Configure receipt and kitchen printers, paper sizes, and print templates.
+
+1. Tap **Printers**.
+2. Add, edit, or remove printers connected to this device.
+3. Assign which printer handles receipts versus kitchen tickets.
+
+See device-specific printer setup for connection details (USB, network, or Bluetooth depending on your hardware).
+
+## Connection & Terminals
+
+Shows this device's WebSocket server info and every connected terminal — POS, KDS, and Kiosk devices.
+
+1. Tap **Connection & Terminals**.
+2. View the connection address other devices use to connect to this one (if this is the Master device).
+3. See a live list of connected terminals and their status.
+
+See [Master & Slave POS Setup](/pos-app/multi-device/master-and-slave-setup) for connecting additional devices.
+
+## Card Terminal
+
+Select and configure the card payment terminal connected to this device, if your location accepts card payments.
+
+## Customer Display
+
+Launch a second screen showing order details to the customer — useful with a connected monitor or external display facing the guest.
+
+## Support Logs
+
+View and export diagnostic logs. If you're troubleshooting an issue with support, they may ask you to export logs from here and share them.
+
+## Backup & Recovery
+
+Take local backups of your data, and restore from a backup if something goes wrong.
+
+<Warning>
+  Restoring a backup replaces the current local data on this device. Only restore if instructed by your manager or support.
+</Warning>
+
+## Data Sync — Re-sync Data
+
+<Info>
+  **This is one of the most important settings to know.** Anything changed in the cloud dashboard — menu items, prices, taxes, payment types, order modes, printer configuration — does **not** automatically appear on this device right away. You need to **Resync** to pull those changes down.
+</Info>
+
+**When to Resync:**
+
+- After adding, editing, or removing a product, category, or modifier in the cloud dashboard
+- After changing prices, taxes, or payment types
+- After updating printer or order mode configuration
+- If something you just changed in the cloud isn't showing up on this device
+
+**How to Resync:**
+
+1. Go to **Setting**.
+2. Under **Data Sync**, tap **Resync**.
+3. Wait for the sync to complete — this pulls the latest catalog, payment types, taxes, order modes, and setup configuration from the server.
+
+<Tip>
+  Resync only pulls catalog/configuration data from the cloud. It does **not** affect tables, active orders, or anything specific to another connected device — those sync automatically in real time instead. See [Master & Slave POS Setup](/pos-app/multi-device/master-and-slave-setup) for how device-to-device sync works.
+</Tip>
+
+## Display
+
+- **Fullscreen Mode** — expand the app to fill the entire screen.
+- **Language** — set the display language for this device (English, 中文, தமிழ்).
+- **Printer Language** — set the language used for printed receipts and tickets, independently of the display language.
+- **Navigation Sidebar** — show or hide the settings navigation sidebar.
+
+## Danger Zone — Clear All Data
+
+<Danger>
+  **Clear All Data** permanently wipes this device's local data, including cached catalog info and any unsynced local records. This cannot be undone. Only use this if instructed by support — for example, when troubleshooting a corrupted local database.
+</Danger>
+
+1. Go to **Setting → Danger Zone**.
+2. Tap **Clear Data**.
+3. Confirm.
+
+After clearing data, the app will need to fully resync everything from the cloud on next login.

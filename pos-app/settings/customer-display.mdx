@@ -1,0 +1,39 @@
+---
+title: "Customer Display"
+description: "Show order details to guests on a second screen"
+---
+
+Go to **Setting → Customer Display** to configure a second screen that shows guests their order details as items are added.
+
+## Display modes
+
+<CardGroup cols={2}>
+  <Card title="Same Device" icon="desktop">
+    Opens on a secondary monitor connected directly to this machine (e.g. a dual-monitor counter setup).
+  </Card>
+  <Card title="External Device" icon="tablet-smartphone">
+    Uses a separate tablet or screen, connected over WebSocket — useful when the guest-facing screen is a different physical device.
+  </Card>
+</CardGroup>
+
+## Setting up Same Device mode
+
+1. Select **Same Device**.
+2. Under **Monitor**, choose which connected display to use — **Auto-detect (secondary monitor)** works for most setups, or manually select a specific monitor if you have more than two connected.
+3. Tap **Launch Display**.
+
+The customer-facing screen opens on the selected monitor, showing live order details as you add items.
+
+## Setting up External Device mode
+
+1. Select **External Device**.
+2. On the *other* device (the one facing the customer), connect it as a customer display terminal using this device's connection details — check **Connection & Terminals** for the address to use.
+3. Once connected, order details push to that device automatically in real time.
+
+<Tip>
+  External Device mode is useful for tableside ordering setups, or when your checkout counter doesn't have room for a second physical monitor.
+</Tip>
+
+<Note>
+  The customer display is read-only for guests — they see the order and total but can't make changes from that screen.
+</Note>

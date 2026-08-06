@@ -1,0 +1,36 @@
+---
+title: "Card Terminal"
+description: "Connect this device to a card payment terminal"
+---
+
+Go to **Setting → Card Terminal** to choose and test the card payment terminal this device connects to.
+
+## Choosing a terminal provider
+
+1. Tap **Setting → Card Terminal**.
+2. Select your **Terminal Provider** from the dropdown (e.g. PayHere Direct (ECR)).
+3. Tap **Save Settings**.
+
+<Info>
+  The terminal's **IP, port, and API key** are configured separately in the **Admin Portal**, under **Payment Types** — not on this device. This screen only selects which provider this device uses and lets you test the connection.
+</Info>
+
+## Testing the connection
+
+1. Under **Test Connection**, tap **Test Connection**.
+2. The app pings the terminal configured in the Admin Portal to confirm it's reachable.
+3. The result (success or failure) shows below the button.
+
+<Tip>
+  If the test fails, confirm the terminal is powered on and connected to the same network, and double-check the IP/port/API key configured in the Admin Portal under Payment Types.
+</Tip>
+
+## How it works
+
+DuitPOS connects directly to the card terminal over your local network — no separate bridge app is needed for supported providers.
+
+**Supported actions** (varies by provider): Card (Seamless) payments, DuitNow QR, Void, Settlement, and Reprint.
+
+<Note>
+  Once connected, card payments taken during [Settling a Bill](/pos-app/payments/settling-a-bill) route through this terminal automatically — no extra steps needed at checkout.
+</Note>

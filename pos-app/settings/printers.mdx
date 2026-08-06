@@ -1,0 +1,73 @@
+---
+title: "Printers"
+description: "Set up receipt and kitchen printers"
+---
+
+Go to **Setting → Printers** to add and manage every printer this device sends print jobs to.
+
+## Connection types
+
+When adding a printer, choose how it connects:
+
+<CardGroup cols={3}>
+  <Card title="Network" icon="wifi">
+    Ethernet / Wi-Fi (IP) — most common for kitchen printers.
+  </Card>
+  <Card title="System" icon="desktop">
+    Uses the OS printer driver already installed on this device.
+  </Card>
+  <Card title="Bluetooth" icon="bluetooth">
+    A paired Bluetooth device.
+  </Card>
+  <Card title="USB" icon="usb">
+    Direct USB connection.
+  </Card>
+  <Card title="Built-in" icon="microchip">
+    A printer built into the device itself (e.g. some handheld POS terminals).
+  </Card>
+</CardGroup>
+
+## Adding a Network printer
+
+<Steps>
+  <Step title="Go to Printers → Add / Edit">
+    Tap **Setting → Printers**, then the **Add / Edit** tab.
+  </Step>
+  <Step title="Choose Network">
+    Select **Network** as the connection type.
+  </Step>
+  <Step title="Name the station">
+    Enter a **Printer Station Name** — e.g. "Kitchen Printer" or "Receipt Printer." This name is what you'll pick from later when assigning tickets to a station.
+  </Step>
+  <Step title="Enter the IP address and port">
+    Enter the printer's **IP Address** (e.g. `192.168.1.100`) and **Port** (usually `9100` for most thermal printers).
+  </Step>
+  <Step title="Choose paper size">
+    Select **58mm** (32 characters per line) or **80mm** (48 characters per line), matching your printer's paper roll.
+  </Step>
+  <Step title="Adjust characters per line if needed">
+    If receipts look cut off or have odd spacing, override the **Characters Per Line** value.
+  </Step>
+  <Step title="Set Active">
+    Toggle **Active** on — print jobs will only be sent to printers marked active.
+  </Step>
+  <Step title="Tap Add Printer">
+    Confirm to save it to the list.
+  </Step>
+</Steps>
+
+<Tip>
+  Find your printer's IP address from the printer's own settings menu or a self-test print — most network thermal printers can print a test page showing their current IP.
+</Tip>
+
+## Editing or removing a printer
+
+Go to the **Printers** tab (not Add/Edit) to see your saved printers. Tap one to edit its settings, or remove it if it's no longer in use.
+
+## Assigning print destinations
+
+Once printers are added, assign which one handles receipts versus kitchen tickets in your product/category or order-mode configuration — check with your manager if you're unsure which printer a specific ticket type should route to.
+
+<Warning>
+  If a printer shows **Active** but nothing prints, double-check the IP address hasn't changed (common after a router restart) and that the printer is powered on and connected to the same network.
+</Warning>
