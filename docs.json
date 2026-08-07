@@ -4,10 +4,10 @@
   "name": "DuitPOS Help Center",
   "description": "Setup guides and feature documentation for DuitPOS.",
   "colors": {
-    "primary": "#000000",
-    "light": "#000000",
-    "dark": "#FFFFFF"
-  },
+  "primary": "#000000",
+  "light": "#FFFFFF",
+  "dark": "#000000"
+},
   "favicon": "/favicon.ico",
   "icons": {
     "library": "lucide"
