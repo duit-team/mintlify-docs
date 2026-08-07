@@ -14,7 +14,8 @@
   },
   "logo": {
     "light": "/logo/duit_logo_black.png",
-    "dark": "/logo/duit_logo_white.png"
+    "dark": "/logo/duit_logo_white.png",
+    "href": "/introduction"
   },
   "navbar": {
     "links": [],
