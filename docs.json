@@ -17,6 +17,12 @@
     "dark": "/logo/duit_logo_white.png",
     "href": "/introduction"
   },
+  "redirects": [
+  {
+    "source": "/",
+    "destination": "/introduction"
+  }
+],
   "navbar": {
     "links": [],
     "primary": {
