@@ -39,7 +39,7 @@ A **Payment Type** represents one payment method your business accepts — Cash,
 
 ## Attach a Processor
 
-Processors handle the actual transaction for non-cash payment types. The **Add processor** dropdown on the edit screen is populated dynamically from the backend — it lists whatever processor types are enabled for your account, so the exact set you see may differ from another tenant's. Commonly available processors include **Stripe**, **Share Commerce**, and **Share Commerce ePay** — see [Two Share Commerce Processors](#two-share-commerce-processors) below before picking between the latter two.
+Processors handle the actual transaction for non-cash payment types. The **Add processor** dropdown on the edit screen is populated dynamically from the backend — it lists whatever processor types are enabled for your account, so the exact set you see may differ from another tenant's. Commonly available processors include **Stripe**, **Share Commerce**, **Share Commerce ePay**, and **GKash** — see [Two Share Commerce Processors](#two-share-commerce-processors) below before picking between the middle two.
 
 Each processor you add gets its own configuration panel with whatever fields that processor needs — a mix of text inputs, checkboxes, and dropdowns supplied by the backend. Some processors need no configuration at all, in which case the panel simply reads **"No configuration required."**
 
@@ -55,6 +55,7 @@ Each processor you add gets its own configuration panel with whatever fields tha
     - **Stripe**: **Secret Key** and **Webhook Secret**
     - **Share Commerce**: **Terminal IP Address**, **Terminal Port** (default `8890`), and **Terminal Model** (`A90 Pro` or `MF919 Pro`)
     - **Share Commerce ePay**: **Merchant ID**, **Secret Key**, and **Environment** (staging or production)
+    - **GKash**: **Merchant ID (CID)**, **Signature Key**, **Terminal ID** (optional), **Base URL**, and **Default Terminal Payment Method**
 
     All credentials are encrypted with AES-256 before saving — they are never stored in plain text.
   </Step>
@@ -110,6 +111,7 @@ The "Add processor" dropdown lists **Share Commerce** and **Share Commerce ePay*
     - **Stripe**: Credit/debit cards via Stripe Checkout, for online ordering
     - **Share Commerce**: Physical countertop card terminal, for in-person POS payments
     - **Share Commerce ePay**: Online payment gateway, for QR/web ordering
+    - **GKash**: Online payment gateway for QR/web ordering today; SoftPOS terminal payments (tap-to-phone, DuitNow QR, etc.) are supported on the backend, with POS app support coming soon
 
     Contact your account manager if you need a processor that isn't in your dropdown.
   </Accordion>
@@ -131,6 +133,11 @@ The "Add processor" dropdown lists **Share Commerce** and **Share Commerce ePay*
     2. Your merchant account is active and verified at Share Commerce
     3. Your payment type is set to Active
 
+    **For GKash:**
+    1. Your Merchant ID (CID) and Signature Key are correct for the Base URL you've set (staging vs. production)
+    2. Your merchant account is active and verified at GKash
+    3. Your payment type is set to Active
+
     See [Payment Issues](/troubleshooting/payment-issues) for more help.
   </Accordion>
   <Accordion title="What is the difference between Cash and Card in the POS?">
@@ -149,6 +156,7 @@ The "Add processor" dropdown lists **Share Commerce** and **Share Commerce ePay*
 <CardGroup cols={2}>
   <Card title="Stripe Setup" icon="credit-card" href="/online-ordering/stripe-setup">Connect Stripe for online payments</Card>
   <Card title="Share Commerce Setup" icon="credit-card" href="/online-ordering/sharecommerce-setup">Connect Share Commerce ePay for QR/online ordering</Card>
+  <Card title="GKash Setup" icon="credit-card" href="/online-ordering/gkash-setup">Connect GKash for QR/online ordering</Card>
   <Card title="Settings" icon="gear" href="/features/settings">Configure general tenant and device settings</Card>
   <Card title="Payment Issues" icon="life-buoy" href="/troubleshooting/payment-issues">Troubleshoot payment problems</Card>
 </CardGroup>

@@ -191,7 +191,8 @@
             "pages": [
               "online-ordering/qr-setup",
               "online-ordering/stripe-setup",
-              "online-ordering/sharecommerce-setup"
+              "online-ordering/sharecommerce-setup",
+              "online-ordering/gkash-setup"
             ]
           },
           {

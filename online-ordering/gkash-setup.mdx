@@ -1,0 +1,147 @@
+---
+title: "GKash Setup"
+description: "Integrate GKash for online QR ordering payments and SoftPOS terminal payments."
+---
+
+**GKash** is a payment gateway that lets customers pay by card, e-wallet, and QR-based methods (DuitNow, GrabPay, Touch'N Go, and more) both when ordering through your QR code / online ordering page, and — coming soon to the POS app — when tapping a card on a GKash SoftPOS terminal. This guide walks through setting up the integration.
+
+<Note>
+  The **SoftPOS terminal payment flow** (tap-to-phone / card at the counter) is fully built on the backend, but not yet available in the DuitPOS POS app UI — that part is still in progress. Everything in this guide about **online/QR ordering** is live today.
+</Note>
+
+## What You'll Need
+
+- **Merchant Account**: Active GKash merchant account with your business verified
+- **CID (Merchant ID)**: Available from GKash, e.g. `M161-U-999`
+- **Signature Key**: API credential used to sign and verify payment requests (treat like a password) — the same key is used for both the checkout request and the callback, there is no separate webhook secret
+- **Base URL**: The GKash API host — `https://api-staging.pay.asia` for testing. GKash has not published a production host as of this writing; use whatever URL GKash gives you when they issue live credentials
+
+## Step 1: Get Your Credentials from GKash
+
+<Steps>
+  <Step title="Contact GKash">
+    GKash issues merchant credentials directly rather than through a self-serve dashboard — contact your GKash account manager to get set up.
+  </Step>
+  <Step title="Collect your CID and Signature Key">
+    GKash will provide your **CID** and **Signature Key**. Use the staging credentials while testing.
+  </Step>
+  <Step title="Confirm your Base URL">
+    Confirm which API host to use — `https://api-staging.pay.asia` for staging. GKash will tell you the production host when you're ready to go live.
+  </Step>
+</Steps>
+
+## Step 2: Configure GKash in DuitPOS
+
+<Steps>
+  <Step title="Go to Manage → Payment Types">
+    Click **Payment Types** in the left sidebar under Manage.
+  </Step>
+  <Step title="Create or edit a payment type">
+    Create a new payment type with code `GKASH` (or your preference) and name `GKash`, or edit an existing one.
+  </Step>
+  <Step title="Add the GKash processor">
+    In the Processors section, click **Add processor**, then select **GKash** from the dropdown.
+  </Step>
+  <Step title="Fill in the config panel">
+    - **Merchant ID (CID)**: From Step 1
+    - **Signature Key**: From Step 1
+    - **Terminal ID**: Optional — only needed if GKash gave you one specifically for web checkout (separate from any SoftPOS device terminal ID). Leave blank if unsure.
+    - **GKash Base URL**: `https://api-staging.pay.asia` while testing — paste the live host GKash gives you once you go to production. This is a plain URL field, not a toggle, since GKash hasn't published a fixed production host
+    - **Default Terminal Payment Method**: Which of GKash's 16 payment methods (Tap-to-Phone, DuitNow QR, GrabPay QR, etc.) to use by default for SoftPOS terminal payments when the POS doesn't specify one. Only relevant once SoftPOS terminal payments ship in the POS app — has no effect on online/QR ordering.
+  </Step>
+  <Step title="Save Processors">
+    Click **Save Processors**. Your signature key is encrypted with AES-256 before saving and never stored in plain text.
+  </Step>
+</Steps>
+
+<Tip>
+  For **production** use, make sure your CID and Signature Key were issued for **live** transactions, and that Base URL points at GKash's production host — pairing live credentials with the staging URL (or vice versa) will make every payment attempt fail.
+</Tip>
+
+## How GKash Online Payments Work
+
+After setup, the payment flow is fully automatic:
+
+1. Customer scans QR code → opens ordering page
+2. Adds items, proceeds to checkout
+3. Selects the **GKash** payment type
+4. DuitPOS creates a payment intent and hands off to GKash's hosted payment page (either a redirect or an auto-submitting form, depending on the payment method GKash selects)
+5. Customer completes payment at GKash
+6. GKash sends the customer back to DuitPOS → ticket is created automatically
+7. Customer sees order confirmation with receipt
+
+### Dual-Path Reliability
+
+DuitPOS uses two independent confirmation methods, same as its other payment gateways:
+
+| Path | What Happens | Speed |
+|------|--------------|-------|
+| **PATH A (Return redirect)** | After payment, GKash redirects the customer's browser back to your QR page. DuitPOS verifies the signature and creates the ticket immediately. | Fast — instant |
+| **PATH B (Server callback)** | GKash sends a server-to-server callback with the payment result. DuitPOS processes it in the background. | A few seconds — safety net |
+
+Both paths include **idempotency checks** — if the customer's browser refresh hits PATH A twice, or PATH A + PATH B race, DuitPOS ensures only one ticket is created.
+
+<Warning>
+  DuitPOS builds GKash's callback and return URLs automatically from your own domain when creating each payment — there's nothing to configure in a GKash dashboard for this (unlike some other gateways). GKash does validate that these URLs are a real public HTTPS host, so testing from `localhost` without a tunnel (e.g. ngrok) will fail with an "Invalid callbackurl" error from GKash — this only affects local development, not production.
+</Warning>
+
+## Verifying Your Setup
+
+<Steps>
+  <Step title="Use GKash staging credentials">
+    Confirm your payment type has the **staging** CID, Signature Key, and Base URL (`https://api-staging.pay.asia`).
+  </Step>
+  <Step title="Test a QR order">
+    Scan a test QR code, add items, select GKash, and complete a test payment.
+  </Step>
+  <Step title="Check payment status">
+    After payment, verify that:
+    - You were returned to the DuitPOS order summary page
+    - The ticket was created with status **PAID**
+    - The payment method shows **GKash** in the receipt
+  </Step>
+</Steps>
+
+### Production Deployment
+
+Once testing is successful:
+
+1. **Switch to live credentials**: Update your GKash payment type with your **production** CID and Signature Key, and set Base URL to GKash's production host
+2. **Test a live payment**: Complete a small test transaction to ensure everything works end-to-end
+3. **Monitor logs**: Check your server logs for any errors during the first few days
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="'Invalid GKash Signature' error">
+    Your Signature Key in DuitPOS does not match the one GKash issued, or the Base URL points at the wrong environment for the credentials you're using.
+
+    **Fix**:
+    1. Confirm your Signature Key with GKash directly
+    2. Paste it into DuitPOS (Manage → Payment Types → your GKash payment type → Processors → GKash → Signature Key)
+    3. Confirm Base URL matches the environment your credentials were issued for
+    4. Click **Save Processors**
+  </Accordion>
+  <Accordion title="'Invalid callbackurl' error from GKash">
+    GKash rejects callback/return URLs that aren't a real public HTTPS host — this happens when testing from `localhost` without a tunnel.
+
+    **Fix**: Test through a public URL (a deployed staging environment, or a tunnel like ngrok pointed at your local server) instead of `localhost` directly.
+  </Accordion>
+  <Accordion title="Payment shows as pending and never resolves">
+    GKash has not provided a status-query API for online payments, so DuitPOS cannot poll GKash to check what happened if both the return redirect and the callback are lost (rare, but possible on flaky connections).
+
+    **Fix**: Check with GKash support for the transaction status using your Reference Number (visible in the ticket's payment details), and settle the ticket manually if the payment did go through.
+  </Accordion>
+  <Accordion title="How do I see past payments and their status?">
+    Go to **Manage → Tickets** and search for tickets with status **PAID** and payment type **GKash**. Click on a ticket to see full details including the payment method, amount, and gateway reference.
+  </Accordion>
+</AccordionGroup>
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Payment Types" icon="credit-card" href="/features/payment-types">Manage all payment methods and processors</Card>
+  <Card title="Stripe Setup" icon="credit-card" href="/online-ordering/stripe-setup">Alternative: integrate Stripe</Card>
+  <Card title="Share Commerce Setup" icon="credit-card" href="/online-ordering/sharecommerce-setup">Alternative: integrate Share Commerce ePay</Card>
+  <Card title="QR Setup" icon="qr-code" href="/online-ordering/qr-setup">Configure QR code ordering</Card>
+</CardGroup>
