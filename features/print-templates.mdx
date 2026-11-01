@@ -1,188 +1,179 @@
 ---
 title: "Print Templates"
-description: "Design what appears on receipts, kitchen dockets, and labels."
+description: "Design what appears on receipts, kitchen tickets and pay-at-counter tickets, with a live preview of the printed result."
 ---
 
-**Print Templates** define the layout and content of printed documents — customer receipts, kitchen order dockets, shipping labels, and more. You can create multiple templates and assign them to different printers via [Routing Rules](/features/printers#routing-rules). A template uses **control codes** (formatting) and **variables** (dynamic values) to create repeatable, data-driven output.
+**Print Templates** define what a printed document looks like: customer receipts, kitchen tickets and kiosk pay-at-counter tickets. Create as many as you need and assign them to printers with [Routing Rules](/features/printers#routing-rules).
 
-<Frame>
-  <img src="/images/print-templates.png" alt="Print Templates editor showing a receipt layout with header, line items, and footer sections" />
-</Frame>
+A template is plain text. **Tags** such as `<C>` format a line, and **values** such as `{ticket_number}` are replaced with real data when the ticket prints.
 
-## Template Types and Device Pairing
+## The designer
 
-Each template has a type that determines which printer device types can use it:
+Open **Setup & Config → Print Templates** and create or edit a template. The page has three parts:
 
-| Type | Purpose | Compatible Device Types | Example |
-|------|---------|-------------------------|---------|
-| **Receipt** | Customer-facing receipt printed after payment or order confirmation | POS, Kiosk | Standard sales receipt, invoice copy, order summary |
-| **Kitchen** | Order docket sent to kitchen or bar when an order is placed | KDS | Kitchen ticket, bar chit, expo sheet |
-| **Label** | Product label or shipping label | Label Printer | Item sticker, barcode label |
+| Part | What it does |
+|------|--------------|
+| **Editor** (left) | Colours tags and values as you type, suggests tags after `<` and values after `{`, and underlines mistakes (an unknown tag, a misspelled value, a row too wide for the paper). Press **Tab** or **Enter** to accept a suggestion. |
+| **Preview** (middle) | Shows the receipt the way the POS will print it, using a sample ticket. Switch between **80 mm** (48 characters per line) and **58 mm** (32 characters per line). Click a line to jump to it in the editor. A blue bar on the left of a line means it prints as an image (large or accented text). |
+| **Values and tags** (right) | A searchable list of everything you can use, with a sample of each value. Click a value to add it at your cursor. Click a tag to add a ready-made line. |
 
-When you create a routing rule and select a printer device, only templates of the matching type appear in the template dropdown. For example, a KDS (kitchen display) printer can only use Kitchen templates.
+Above the editor, the **line toolbar** formats the line your cursor is on, so you never need to remember tag codes: **Align** (left, center, right, two columns), **Size**, **Style** (bold, underline) and **[ ]** (only print the line when its values are filled in). **Add block** inserts a ready-made section such as a header, items table or footer.
 
-## Template Fields
+<Note>
+  The preview uses a sample ticket, not one of your real orders. Always print one real ticket on your own printer before going live, because printers differ in fonts and paper.
+</Note>
 
-| Field | Required | Description |
-|-------|----------|-------------|
-| **Name** | Yes | Internal label, e.g. `Standard Receipt`, `Dine-In Kitchen Ticket`, `Delivery Label` |
-| **Type** | Yes | Receipt, Kitchen, or Label — determines which printer device types can use this template |
-| **Header** | No | Text printed at the top (business name, address, tagline, logo). Use control codes for formatting. |
-| **Line Items** | Auto | Product name, quantity, price. Automatically formatted and populated from the ticket. |
-| **Footer** | No | Text printed at the bottom (thank you message, WiFi password, return policy, QR code). Use control codes and variables. |
-| **Default** | No | If toggled on, this template is the fallback when a routing rule doesn't specify a template override |
+## Template types
 
-## Control Codes
+| Type | Purpose | Printer device types |
+|------|---------|----------------------|
+| **Receipt** | Customer receipt printed after payment | POS, Kiosk |
+| **Kitchen** | Order ticket for the kitchen or bar | KDS |
+| **Pay at Counter** | Kiosk ticket with the order QR the cashier scans | Kiosk |
 
-Control codes are special directives that format the output. Insert them directly into your header or footer text:
+The type follows the **Device Type** you pick. Values that don't apply to a type (for example `{tendered}` on a kitchen ticket) are flagged in the editor.
 
-| Code | Effect | Notes |
-|------|--------|-------|
-| `<C>` | Center the following text | Remains in effect until next alignment code. Use sparingly on narrow (58mm) paper. |
-| `<L>` | Left-align the following text | Default alignment. Use to reset after `<C>` or `<R>`. |
-| `<R>` | Right-align the following text | Useful for prices and totals. |
-| `<F>` | Alternate font (if printer supports it) | Usually switches to a serif or alternative font. Check printer manual. |
-| `<EB>` | Emphasis / Bold | Makes text bold. Not all thermal printers support bold; test on your device. |
-| `<DB>` | Double-width / Expanded | Increases character width. Useful for large headings and prices. Reduces characters per line. |
-| `<LOGO>` | Print business logo | Must be uploaded via Manage → Settings. Printer must support image printing. |
-| `<ITEM_HEADER>` | Print column headers for line items | Prints something like "Item  Qty  Price". Exact format depends on template context. |
-| `<QR>` | Print a QR code | Used in kitchen tickets or customer receipts to link to order status or reorder page. Backend inserts the URL. |
-| `<BR>` or line break | Line break / Blank line | Press Enter to create space in the output. Multiple line breaks create multiple blank lines. |
+## Template settings
 
-### Control Code Example
+| Field | Description |
+|-------|-------------|
+| **Name** and **Code** | Required. The code must be unique. |
+| **Device Type** | Which app the template is for: POS, KDS or Kiosk. |
+| **Status** | Inactive templates are never used. |
+| **Default template** | Used when no routing rule picks a template. |
+| **Item Name Size** | Normal, large (about 1.6×) or extra large (about 2.1×) item names. The name prints bigger on its own line, with quantity, price and total on a normal line below. It is a setting rather than a tag because `{ITEMS}` must stay alone on its line. |
+| **User Confirmation** | Ask the cashier to confirm before this template prints. |
+| **Logo** | The image printed where `<LOGO>` appears (after the template is created). |
+
+## Formatting tags
+
+Write one tag at the start of a line. Wrap a whole line in `[ ]` to skip it when any value inside is empty.
+
+| Tag | Effect |
+|-----|--------|
+| `<L>` `<C>` `<R>` | Left, centered, right aligned line. `<C>-` prints a centered divider. |
+| `<J>left\|right` | Two columns: text on the left, value on the right. |
+| `<B>` `<UL>` `<INV>` | One bold, underlined or white-on-black line. |
+| `<EB>` `<DB>` | Bold (or heavy bold) from this line until `<F>` or `<EC>`. |
+| `<F>` / `<EC>` | Reset bold and size. `<F>-` prints a full-width divider, `<F>3` feeds three lines. |
+| `<BIG>` `<HUGE>` | Large centered headline drawn as an image, safe on every printer. `<BIG>Total\|{total}` makes a big two-column row. |
+| `<HR>` `<BR>` `<FEED>3` `<CUT>` | Divider, blank line, feed lines, cut the paper. |
+| `<LOGO>` | Print the template's logo at the standard width. Use `<LOGO:S>`, `<LOGO:L>` or `<LOGO:XL>` for a smaller or larger logo (on 80 mm paper about 26%, 62% and 88% of the width; the standard is 38%). Small images are scaled up for the larger sizes, so use a sharp logo. |
+| `<QR>text` `<BARCODE>text` | Print a QR code or Code 128 barcode. |
+| `<ITEM_HEADER>` | Header row for the items table. |
+| `<OPENDRAWER>` | Open the cash drawer. |
+
+The full, always-current list is in the **Values and tags** panel.
+
+### Sizes (syntax v2)
+
+Put two digits after the letter: the first is the **width**, the second the **height**. `0` is normal, `1` is double, `2` is triple.
+
+| Tag | Result |
+|-----|--------|
+| `<C11>{location_name}` | Centered, double width and double height |
+| `<J10>Total:\|{total}` | Two-column row at double width |
+| `<L01>Table {table_number}` | Left, normal width, double height |
+| `<C22>` | Centered, triple size |
+
+Larger characters leave fewer columns on the line: on 80 mm paper a double-width line holds 24 characters instead of 48, and the preview warns when a row won't fit. On printers where large native text is unreliable (iMin built-in printers) and for accented text, the POS draws the line as an image instead, so it looks the same.
+
+<Warning>
+  **Syntax versions.** Templates created before this designer use **syntax v1**, where `<L11>`, `<C22>`, `<J10>` and similar tags only print **bold**, not larger. They keep printing exactly as before. To use real sizes, click **Upgrade to v2** in the designer. The dialog tells you how many lines will get bigger; check the preview, then save. New templates start on v2.
+</Warning>
+
+## Values
+
+Values are written in single braces: `{ticket_number}`. They print the data of the ticket; an unknown value stays as typed, which the editor underlines.
+
+| Group | Examples |
+|-------|----------|
+| Ticket | `{location_name}` `{ticket_number}` `{queue_number}` `{order_mode}` `{table_number}` `{employee_name}` `{timestamp}` `{TICKETNOTE}` `{ticket_tag}` |
+| Customer | `{customer_name}` `{customer_phone}` |
+| Totals | `{subtotal}` `{total}` `{item_count}` `{total_qty}` `{total_in_words}` `{currency_symbol}` |
+| Payment | `{payment_method}` `{tendered}` `{change}` |
+| QR codes | `{einvoice_qr_url}` `{receipt_qr_url}` `{pay_at_counter_qr_data}` |
+| Labels | `{label_total}` `{label_thank_you}` … translated to the POS **Printer Language** |
+
+### Repeating blocks
+
+A block on a line of its own prints one row for every item, charge or payment:
+
+| Block | Prints |
+|-------|--------|
+| `{ITEMS}` | Every item (name, quantity, price, total) with its modifiers |
+| `{CHARGES}` | Every tax, service charge and discount |
+| `{PAYMENTS}` | Every payment with its reference |
+
+### Added automatically
+
+To keep tickets complete, the POS adds a few lines when your template leaves them out: the ticket note and tag, the item and quantity count above the subtotal, and the split-bill summary under the total. On a **Pay at Counter** ticket the order QR is always added. Use the value in your own layout to place it where you want it.
+
+## Example
 
 ```
-<C><EB><DB>PIZZA PLACE</DB></EB></C>
-<C>123 Main Street</C>
-<C>Order #{{ticket_number}}</C>
-<L>
-Date: {{date}}
-<BR>
+<LOGO>
+<C22>{location_name}
+<C>{timestamp}
+<F>-
+<J>{label_ticket}|{ticket_number}
+[<J>{label_table}|{table_number}]
+<F>-
 <ITEM_HEADER>
+<F>-
+{ITEMS}
+<F>-
+{CHARGES}
+<J11>{label_total}|{currency_symbol}{total}
+{PAYMENTS}
+<C>{label_thank_you}
 ```
 
-Output (on 58mm paper):
-```
-        PIZZA PLACE
-     123 Main Street
-      Order #12345
-
-Date: 2025-07-18
-
-Item              Qty  Price
-```
-
-<Tip>
-  **Test on your actual printer.** Template previews in the editor use screen fonts; thermal printers have different character sets and line widths. What looks centered on screen may not center on the printer. Create a test order and use **Test Print** to verify the layout before deploying to production.
-</Tip>
-
-## Variables
-
-Variables are placeholders that the system replaces with actual data when printing. Insert them in double braces: `{{variable_name}}`.
-
-### Common Variables (All Templates)
-
-| Variable | Value | Example |
-|----------|-------|---------|
-| `{{ticket_number}}` | Unique order/ticket ID | `12345` |
-| `{{date}}` | Print date (YYYY-MM-DD format) | `2025-07-18` |
-| `{{time}}` | Print time (HH:MM:SS) | `14:30:45` |
-| `{{business_name}}` | Your business/restaurant name | `Pizza Palace` |
-| `{{location_name}}` | Location branch name | `Downtown` |
-| `{{location_address}}` | Full location address | `123 Main St, City` |
-| `{{total}}` | Order total (currency format) | `$25.50` |
-| `{{subtotal}}` | Subtotal before tax | `$23.50` |
-| `{{tax}}` | Total tax amount | `$2.00` |
-| `{{discount}}` | Total discount applied | `$5.00` |
-| `{{cashier_name}}` or `{{user}}` | Staff member who processed the order | `John` |
-
-### Receipt-Specific Variables
-
-| Variable | Value |
-|----------|-------|
-| `{{order_mode}}` | Type of order: Dine-In, Delivery, Pickup, etc. |
-| `{{payment_method}}` | Payment type used: Cash, Card, etc. |
-| `{{customer_name}}` | Customer name (if provided) |
-| `{{order_notes}}` | Special instructions or notes on the order |
-| `{{tax_breakdown}}` | Itemized tax if multiple tax rates applied |
-
-### Kitchen Ticket Variables
-
-| Variable | Value |
-|----------|-------|
-| `{{order_mode}}` | Dine-In, Delivery, Pickup, etc. |
-| `{{table_number}}` | Table ID (for dine-in orders) |
-| `{{prepared_by}}` | (Optional) Staff assigned to prepare this ticket |
-| `{{order_time}}` | When the order was placed |
-| `{{special_instructions}}` | Customer notes and dietary requirements |
-
-### Label-Specific Variables
-
-| Variable | Value |
-|----------|-------|
-| `{{product_name}}` | Item name |
-| `{{product_code}}` | SKU or internal product ID |
-| `{{quantity}}` | Units on this label |
-| `{{expiry_date}}` | Product expiry (if applicable) |
-
-<Tip>
-  Not all variables apply to all template types. For example, `{{table_number}}` is only available in Kitchen templates. The template editor sidebar shows available variables for your selected template type. If a variable is empty (e.g., no customer name was entered), it prints as blank.
-</Tip>
-
-## Create a Template
+## Create a template
 
 <Steps>
-  <Step title="Go to Manage → Print Templates">
-    Click **Print Templates** in the left sidebar.
+  <Step title="Open Print Templates">
+    Go to **Setup & Config → Print Templates** and click **New**.
   </Step>
-  <Step title="Click New Template">
-    Select the template **Type** (Receipt, Kitchen, or Label) and give it a **Name**.
+  <Step title="Name it and choose the device">
+    Enter a **Name** and a unique **Code**, then pick the **Device Type**.
   </Step>
   <Step title="Design the layout">
-    Use the editor to write header text, configure line item display, and add footer content. Use control codes for formatting and variables for dynamic data. The right sidebar shows available variables and control codes for your template type.
-  </Step>
-  <Step title="Set as default (optional)">
-    Toggle **Default** to use this template as the fallback when no routing rule specifies an override.
+    Use **Add block** for a starting point, then edit. Watch the preview, fix anything the editor underlines, and check both paper widths if you use both.
   </Step>
   <Step title="Save">
-    Click **Create**.
+    Click **Create**. Upload a logo afterwards if the template uses `<LOGO>`.
   </Step>
 </Steps>
 
-## Assign to Printers via Routing Rules
+## Assign to printers
 
-Go to **Manage → Printers → Routing Rules** and assign a template to a routing rule. This controls which template prints on which printer, and for which items or order modes. For example:
-- Route all dine-in orders to a receipt printer with the "Dine-In Receipt" template.
-- Route all appetizers to the kitchen display with the "Appetizers Chit" template.
-- Route all beverages to a different display with the "Bar Ticket" template.
-
-Each rule can have a template override. If no override is set, the printer's default template (set when the printer was created) is used.
+Go to **Setup & Config → Printers** and set a template as the printer's default, or as the override of a routing rule. If a rule has no override, the printer's default is used; if that is empty too, the template marked **Default template** is used.
 
 <Warning>
-  If you delete a template that is currently assigned to a routing rule, that routing rule will fall back to the printer's default template for that type. Check your routing rules after deleting any template to verify the output is still correct.
+  Deleting a template that a printer or rule uses makes them fall back to the next default. Check your printers after deleting one.
 </Warning>
 
-## Test Print
-
-On the template list, hover over a template and click the **Test Print** icon to send a sample output to the printer assigned as your default for that template type. This is the best way to verify layout and formatting on your actual hardware before going live.
-
-## Frequently Asked Questions
+## Frequently asked questions
 
 <AccordionGroup>
-  <Accordion title="How do I add my business logo to the receipt?">
-    Upload your logo under **Manage → Settings → Logo**. Once uploaded, use the `<LOGO>` control code in the template header section to include it on printed receipts. Logo printing requires a printer that supports image printing (most modern thermal printers do). Test print to confirm your printer can render it.
+  <Accordion title="Why does my size tag print bold instead of larger?">
+    The template is still on syntax v1. Click **Upgrade to v2** in the designer (the badge above the editor), review the preview and save.
   </Accordion>
-  <Accordion title="Can I have a different receipt format for online orders vs dine-in?">
-    Yes. Create two receipt templates (e.g. `Online Order Receipt` and `Dine-In Receipt`) and set up separate routing rules in **Printers → Routing Rules** — one targeting Dine-In order mode and one targeting Delivery/Pickup. Assign the appropriate template to each rule. The same receipt printer device can use different templates based on the rule.
+  <Accordion title="Why are some preview lines marked with a blue bar?">
+    They print as an image: `<BIG>`/`<HUGE>` headlines, large sizes on printers that can't do native large text, and any line with accented characters (Vietnamese, for example). They look right on every printer, but cannot use the printer's own font.
   </Accordion>
-  <Accordion title="What's the difference between control codes and variables?">
-    **Control codes** (`<C>`, `<EB>`, `<DB>`, etc.) format the text itself — bold, centered, double-width, etc. **Variables** (`{{ticket_number}}`, `{{date}}`, etc.) are replaced with actual data at print time. You can use both together: `<C><EB>Order #{{ticket_number}}</EB></C>` creates a centered, bold order number.
+  <Accordion title="Why does my logo print as a black block?">
+    Colourful logos are converted to black-and-white dots. Dark marks on a coloured background print as a solid mark over a grey dot pattern. For the sharpest result, use a high-contrast logo (dark on white). Use `<LOGO:L>` for a bigger one, or put the business name in large text instead, for example `<C22>{location_name}`.
   </Accordion>
-  <Accordion title="My template looks fine in the editor but prints incorrectly — why?">
-    The editor preview uses your screen's fonts; thermal printers have different character sets and line widths. What looks good on screen may wrap differently on paper. For 58mm paper, assume ~32–40 characters per line; for 80mm, ~48–54 characters. Use **Test Print** on your actual device and adjust line breaks or text length as needed. Also check: printer supports the font/control codes, paper width matches the template design.
+  <Accordion title="A value prints as {something} on paper">
+    The name doesn't exist (check the spelling; the editor underlines it) or it isn't available for this template type. Pick it from the **Values** panel instead of typing it.
   </Accordion>
-  <Accordion title="Can I print a QR code in the template?">
-    Yes, use the `<QR>` control code. The system automatically generates a QR code (typically linking to order status or reorder URL) and prints it on the receipt or ticket. Your printer must support image printing. Test print to confirm the QR code scans correctly on your hardware.
+  <Accordion title="How do I hide a line when a value is empty?">
+    Wrap the whole line in square brackets, for example `[<L>Customer: {customer_name}]`, or click the **[ ]** button on the line toolbar.
+  </Accordion>
+  <Accordion title="Does the preview match my printer exactly?">
+    Line breaks, columns, sizes and what prints as an image match the POS. The font itself is your printer's, so spacing of individual letters can differ slightly. Print one real ticket to confirm.
   </Accordion>
 </AccordionGroup>
 
@@ -191,6 +182,6 @@ On the template list, hover over a template and click the **Test Print** icon to
 <CardGroup cols={2}>
   <Card title="Printers" icon="printer" href="/features/printers">Set up printer devices and routing rules that use these templates</Card>
   <Card title="Settings" icon="gear" href="/features/settings">Upload your business logo and configure global settings</Card>
-  <Card title="Locations" icon="map-pin" href="/features/locations">Configure address details and other location info that variables pull from</Card>
+  <Card title="Locations" icon="map-pin" href="/features/locations">Configure address details and other location info</Card>
   <Card title="Printer Not Printing" icon="life-buoy" href="/troubleshooting/printer-not-printing">Diagnose and troubleshoot printer issues</Card>
 </CardGroup>
