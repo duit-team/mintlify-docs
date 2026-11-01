@@ -163,6 +163,7 @@
             "pages": [
               "features/payment-types",
               "features/tax",
+              "features/calculation-types",
               "features/transaction-types",
               "features/reasons"
             ]

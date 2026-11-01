@@ -1,0 +1,148 @@
+---
+title: "Calculation Types"
+description: "Round bills automatically, and add fixed or percentage charges and discounts to every bill."
+---
+
+**Calculation Types** change the amount of every bill automatically. Use them for:
+
+- **Rounding** — for example, round every bill to the nearest 0.05, or always round up to the next 0.10.
+- **Charges** — for example, a delivery fee or a packaging charge.
+- **Discounts** — for example, a member discount applied to every bill.
+
+You set them up once in the admin. Every POS and Kiosk picks them up on the next sync, and the cashier does nothing — there are no buttons to press. If you have not created any calculation type, bills are exactly as before.
+
+<Note>
+  A calculation type is for automatic, bill-wide adjustments. A cashier still applies one-off discounts from the Discount button, and **service charge** stays under [Taxes](/features/tax).
+</Note>
+
+## How a bill is worked out
+
+Every bill goes through the same steps, in this order:
+
+<Steps>
+  <Step title="Ticket amount">
+    Item prices plus modifiers, minus any discount the cashier applied.
+  </Step>
+  <Step title="Before-tax types">
+    Charges and discounts set to **Ticket amount**. They are added to the amount that tax is worked out on.
+  </Step>
+  <Step title="Tax">
+    Your existing taxes, including service charge.
+  </Step>
+  <Step title="After-tax types">
+    Charges and discounts set to **Ticket total**. They are never taxed.
+  </Step>
+  <Step title="Rounding">
+    If a rounding type applies, the final total is rounded. This is the amount the customer pays, whatever the payment method.
+  </Step>
+</Steps>
+
+Every type in the same step works on the same amount — they do not stack on top of each other.
+
+**Example.** A 25.20 ticket with a 10% member discount (before tax), a 5.00 delivery fee (after tax) and rounding to 0.05:
+
+| Line | Amount |
+|------|-------:|
+| Subtotal | 25.20 |
+| Member discount 10% | −2.52 |
+| Tax | 3.63 |
+| Delivery fee | 5.00 |
+| **Total before rounding** | **31.31** |
+| Rounding | −0.01 |
+| **Total payable** | **31.30** |
+
+The receipt shows each line, and rounding is printed as its own line under the total.
+
+## Create a calculation type
+
+<Steps>
+  <Step title="Go to Operations → Calculation Types">
+    Click **Calculation Types** under Operations in the left sidebar.
+  </Step>
+  <Step title="Click New type">
+    Enter a **Name** (printed on the receipt) and a **Code** (a short unique key used in reports).
+  </Step>
+  <Step title="Choose the type">
+    Pick **Rounding**, **Charge** or **Discount** and fill in the fields below. The preview on the right shows what the type does to a sample bill.
+  </Step>
+  <Step title="Map it (optional)">
+    Choose where it applies. Leave a list empty for all.
+  </Step>
+  <Step title="Save">
+    Click **Create**. POS devices pick it up the next time they sync or you use **Resync Data**.
+  </Step>
+</Steps>
+
+## Fields
+
+### Charge and discount
+
+| Field | Description |
+|-------|-------------|
+| **Value type** | **Percentage** of the bill, or a **Fixed amount**. |
+| **Rate / Amount** | The percentage (up to 100) or the fixed amount. |
+| **Apply on** | **Ticket amount** — before tax, so it is part of the taxed amount. **Ticket total** — after tax, never taxed. |
+
+A fixed discount never takes a bill below zero.
+
+### Rounding
+
+| Field | Description |
+|-------|-------------|
+| **Round to** | The step the final total is rounded to, for example `0.05`, `0.10` or `0.50`. |
+| **Direction** | **Nearest** (the default) rounds up or down, whichever is closer. **Always up** never lowers the bill. **Always down** never raises it. |
+
+The step must be a whole multiple of the smallest unit of your currency, so it follows your number-of-decimals setting. With 2 decimals you can use `0.05`, `0.10` or `0.50`; `0.005` is only available if your currency uses 3 decimals. A whole-unit currency such as VND can use steps like `500`.
+
+| Bill total | Step | Nearest | Always up | Always down |
+|-----------:|-----:|--------:|----------:|------------:|
+| 10.12 | 0.05 | 10.10 | 10.15 | 10.10 |
+| 10.13 | 0.05 | 10.15 | 10.15 | 10.10 |
+| 10.15 | 0.10 | 10.20 | 10.20 | 10.10 |
+
+A refund is rounded the same way as the sale it reverses.
+
+## Where it applies
+
+A type can be mapped to **locations**, **order modes** and **channels** (POS, Kiosk, Online, App and so on).
+
+- **No mapping means all.** A type with nothing selected applies to every location, order mode and channel.
+- **Charges and discounts:** every type that matches the bill applies.
+- **Rounding:** a bill is rounded only once. If several rounding types match, the most specific one wins — a channel mapping beats a location mapping, which beats an order-mode mapping. A rounding with no mapping is the fallback for everything else.
+
+To treat one place differently, create another type and map it there. For example, keep a general rounding to 0.05 for everyone, and add a second rounding to 0.10 mapped only to your mall outlet.
+
+## Split bills
+
+When a bill is split by items, each guest's bill gets its own charges, discounts and rounding. When a bill is split equally or by amount, the guests pay shares of one bill that already includes its adjustments, so each guest's ticket records its share.
+
+## Reports
+
+Shift reports and business date reports show an **Adjustments & rounding** section when any bill in the period was adjusted:
+
+- Each charge or discount type, with the number of tickets and the total amount.
+- **Rounding gain** — bills rounded up, with the count.
+- **Rounding loss** — bills rounded down, with the count.
+- **Rounding net** — the difference. It is already included in your sales total.
+
+The POS shift summary and the printed shift report show the same section.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Can the cashier turn a charge or discount on or off?">
+    No. Calculation types always apply to the bills they match. Use the Discount button for one-off discounts.
+  </Accordion>
+  <Accordion title="I changed a type. When does it reach the POS?">
+    On the next sync, or when the cashier uses **Resync Data**. A bill that was already completed keeps the amounts it was charged.
+  </Accordion>
+  <Accordion title="Does it apply to bills made while the POS was offline?">
+    Yes. The POS uses the last synced types and records the exact amounts on the bill, so it uploads correctly when the connection returns.
+  </Accordion>
+  <Accordion title="Why was my rounding step rejected?">
+    The step must be a whole multiple of the smallest unit of your currency. Check the number of decimals in your settings.
+  </Accordion>
+  <Accordion title="What happens if I delete a type?">
+    It stops applying to new bills. Past bills keep their record of it.
+  </Accordion>
+</AccordionGroup>
