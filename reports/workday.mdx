@@ -48,7 +48,7 @@ Alongside the shift list, this level also shows two workday-wide breakdowns: **B
 
 **Level 3 — Per-shift detail.** Click into an individual shift to see its own **By User** breakdown — useful when a single till session was handled by more than one staff member (a handover mid-shift without formally closing the till, for example).
 
-**Adjustments & rounding.** When any bill in a shift or business date was changed by a [calculation type](/features/calculation-types), the report adds an **Adjustments & rounding** section: each charge or discount type with its ticket count and amount, then **Rounding gain**, **Rounding loss** and **Rounding net**. These amounts are already inside the Sales total. The exported PDF and CSV include the same section.
+**Adjustments & rounding.** When any bill in a shift or business date was changed by a whole-bill [tax or rounding](/features/tax#rounding), the report adds an **Adjustments & rounding** section: each charge or discount type with its ticket count and amount, then **Rounding gain**, **Rounding loss** and **Rounding net**. These amounts are already inside the Sales total. The exported PDF and CSV include the same section.
 
 <Tip>
   Because a Workday only closes once every Shift inside it closes, an open Shift left behind at the end of trading is the most common reason a Workday shows Status: Open the next morning. Check the **Open Now** tab below to catch this before it happens.
@@ -122,6 +122,6 @@ A scatter chart plotting Duration against Sales for every shift in range. This i
   <Card title="Reports Overview" icon="chart-bar" href="/reports/overview">The "which report do I want" decision table and shared filter/export behavior</Card>
   <Card title="Sales Reports" icon="bar-chart-3" href="/reports/sales-reports">Date-range aggregate sales totals</Card>
   <Card title="Tickets & Voids" icon="receipt" href="/reports/tickets-and-voids">Look up a specific order or investigate voids, comps, and gifts</Card>
-  <Card title="Calculation Types" icon="calculator" href="/features/calculation-types">Automatic rounding, charges and discounts that show up in this report</Card>
+  <Card title="Tax and Rounding" icon="calculator" href="/features/tax#rounding">Automatic rounding, charges and discounts that show up in this report</Card>
   <Card title="Employees" icon="users" href="/features/employees">Staff records referenced in Opened By / By User breakdowns</Card>
 </CardGroup>

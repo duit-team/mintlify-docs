@@ -1,9 +1,11 @@
 ---
 title: "Tax"
-description: "Configure tax rules, rates, and overrides for items and locations."
+description: "Configure taxes, whole-bill charges and discounts, and automatic rounding, with rules per location, order mode and channel."
 ---
 
 **Taxes** are calculated charges applied to items on a ticket — either as a fixed amount (e.g. 50¢ service fee) or a percentage of the sale (e.g. 10% GST). You can set a **global tax** that always applies, or a **scoped tax** that applies only to items in a specific category or product group. For advanced use, **tax rules** let you override the rate for a specific location or order mode (e.g. "6% GST in Region A, 10% in Region B"). **Associated taxes** let you stack taxes (e.g. a tax-on-service charge when service tax is applied).
+
+Taxes also cover the adjustments that apply to the **whole bill** instead of to items: a delivery fee, a member discount, and **rounding** (for example to the nearest 0.05). They are set up on the same page, with the same rules, and each one is posted under its [transaction type](/features/transaction-types), so reports can group them.
 
 <Frame>
   <img src="/images/taxes.png" alt="Tax list screen showing SST, Service Charge, and location-specific overrides" />
@@ -19,12 +21,14 @@ The General tab defines the core tax — its code, rate type, and how it applies
 |-------|----------|-------------|
 | **Code** | Yes | A short internal identifier, e.g. `SST` or `SVC`. Used in reports, exports, and tickets |
 | **Name** | Yes | Display name shown on receipts and reports, e.g. `Sales & Service Tax` |
-| **Type** | Yes | **Fixed Amount** (flat charge, e.g. 50¢) or **Percentage** (rate, e.g. 10%) |
-| **Value** | Yes | For Fixed: the amount (e.g. `0.50`). For Percentage: the rate without % (e.g. `10` for 10%). Supports up to 4 decimal places |
+| **Type** | Yes | **Fixed Amount** (flat charge, e.g. 50¢), **Percentage** (rate, e.g. 10%) or **Rounding** (see [Rounding](#rounding)) |
+| **Value** | Yes | For Fixed: the amount (e.g. `0.50`). For Percentage: the rate without % (e.g. `10` for 10%). For Rounding: the step (e.g. `0.05`). Supports up to 4 decimal places |
+| **Calculated on** | Fixed and Percentage | **Items** (an ordinary tax, worked out per item), **Whole bill, before tax** or **Whole bill, after tax**. See [Whole-bill charges and discounts](#whole-bill-charges-and-discounts) |
+| **Discount** | Whole-bill types | Takes the amount off the bill instead of adding it |
 | **Max Amount** | No | For Percentage type only. If set (e.g. `100`), the calculated tax never exceeds this cap. Useful for percentage taxes with a service-charge ceiling |
 | **Transaction Type** | Yes | Which transaction type ledger this tax posts to (e.g. Tax, Service Charge). Determines grouping on tickets and in reconciliation |
 | **Tax Inclusive** | No | If enabled, the displayed price to customers **already includes** this tax. POS calculates the tax-exclusive base internally. Used for restaurants where menu prices show the "all-in" total |
-| **Scope** | Yes | **Global** (always applied to matching items) or **Scoped** (applied only if the item is in a matching Mapping). See Mapping tab for scoped definition |
+| **Scope (Applies)** | Yes | **Everywhere** (global: the rules only change the value or switch it off) or **Only where a rule matches** (scoped). For items, a scoped tax also needs a Mapping. See the Rules and Mapping tabs |
 | **Active** | No | Inactive taxes are excluded from all future transactions. Historical data is unchanged |
 
 <Tip>
@@ -51,9 +55,101 @@ The General tab defines the core tax — its code, rate type, and how it applies
 
 ---
 
+## Whole-bill charges and discounts
+
+Set **Calculated on** to one of the whole-bill options and the tax stops working per item. It is worked out once on the bill, automatically, with no button for the cashier.
+
+| Calculated on | What it does |
+|---------------|--------------|
+| **Whole bill, before tax** | Joins the amount that tax is worked out on, like the order discount does. |
+| **Whole bill, after tax** | Added after tax and never taxed. |
+
+Turn on **Discount** to take the amount off instead of adding it. A fixed discount never takes a bill below zero.
+
+Every bill goes through the same steps, in this order:
+
+<Steps>
+  <Step title="Ticket amount">
+    Item prices plus modifiers, minus any discount the cashier applied.
+  </Step>
+  <Step title="Before-tax types">
+    Whole-bill charges and discounts set to **before tax**.
+  </Step>
+  <Step title="Tax">
+    The per-item taxes, including service charge.
+  </Step>
+  <Step title="After-tax types">
+    Whole-bill charges and discounts set to **after tax**.
+  </Step>
+  <Step title="Rounding">
+    If a rounding tax applies, the final total is rounded. This is the amount the customer pays, whatever the payment method.
+  </Step>
+</Steps>
+
+Every type in the same step works on the same amount. They do not stack on top of each other.
+
+**Example.** A 25.20 ticket with a 10% member discount (before tax), a 5.00 delivery fee (after tax) and rounding to 0.05:
+
+| Line | Amount |
+|------|-------:|
+| Subtotal | 25.20 |
+| Member discount 10% | −2.52 |
+| Tax | 3.63 |
+| Delivery fee | 5.00 |
+| **Total before rounding** | **31.31** |
+| Rounding | −0.01 |
+| **Total payable** | **31.30** |
+
+Each line prints on the receipt, and rounding has its own line under the total.
+
+---
+
+## Rounding
+
+Choose **Type: Rounding** to round every matching bill automatically.
+
+| Field | Description |
+|-------|-------------|
+| **Round to (step)** | The step the final total is rounded to, for example `0.05`, `0.10` or `0.50`. |
+| **Direction** | **Nearest** (the default) rounds up or down, whichever is closer. **Always up** never lowers the bill. **Always down** never raises it. |
+| **Transaction Type** | The rounding is recorded under this transaction type, so reports show it as its own line. |
+
+The step must be a whole multiple of the smallest unit of your currency, so it follows your number-of-decimals setting. With 2 decimals you can use `0.05`, `0.10` or `0.50`; `0.005` is only available if your currency uses 3 decimals. A whole-unit currency such as VND can use steps like `500`.
+
+| Bill total | Step | Nearest | Always up | Always down |
+|-----------:|-----:|--------:|----------:|------------:|
+| 10.12 | 0.05 | 10.10 | 10.15 | 10.10 |
+| 10.13 | 0.05 | 10.15 | 10.15 | 10.10 |
+| 10.15 | 0.10 | 10.20 | 10.20 | 10.10 |
+
+A refund is rounded the same way as the sale it reverses.
+
+### Where rounding applies
+
+Rounding with no rules applies to every location, order mode and channel. To treat one place differently, add another rounding tax and set **Applies** to **Only where a rule matches**, then add a rule for that place. A bill is rounded only once: when several rounding taxes match, the most specific one wins. A channel rule beats a location rule, which beats an order-mode rule.
+
+For example, keep a general rounding to 0.05 for everyone, and add a second rounding to 0.10 with a rule for your mall outlet.
+
+### Split bills
+
+When a bill is split by items, each guest's bill gets its own charges, discounts and rounding. When a bill is split equally or by amount, the guests pay shares of one bill that already includes its adjustments, so each guest's ticket records its share.
+
+### Reports
+
+Shift reports and business date reports show an **Adjustments & rounding** section when any bill in the period was adjusted:
+
+- Each whole-bill charge or discount, grouped by its transaction type, with the number of tickets and the total amount.
+- **Rounding gain**: bills rounded up, with the count.
+- **Rounding loss**: bills rounded down, with the count.
+- **Rounding net**: the difference. It is already included in your sales total.
+
+The POS shift summary and the printed shift report show the same section.
+
+---
+
 ## Rules Tab
 
-**Tax Rules** override the base tax value (or disable it entirely) for a specific **location** and/or **order mode**. This is how you implement regional rate differences or mode-specific charges.
+**Tax Rules** override the base tax value (or disable it entirely) for a specific **location**, **order mode** and/or **channel** (POS, Kiosk, Online, App and so on). This is how you implement regional rate differences or mode-specific charges. When a tax is set to **Only where a rule matches**, the rules are where it applies.
 
 ### Why Tax Rules Matter
 
@@ -63,35 +159,23 @@ Example: You operate in Singapore (10% GST) and Malaysia (6% SST). Create one "G
 
 Each location will charge the correct rate automatically.
 
-### Tax Rule Priority — **Inverted vs. Products**
+### Tax Rule Priority
 
-<Warning>
-  **CRITICAL: Tax Rules use the opposite priority order from Product Prices.** This is a common gotcha.
+When several rules match a bill, the most specific one wins, and the same order applies to products, categories, modifiers and payment types: **channel, then location, then order mode**.
 
-  **Products** (price overrides):
-  | Most specific | Least specific |
-  | --- | --- |
-  | Location + Order Mode | (most common case) |
-  | Location only | |
-  | Order Mode only | |
-  | Global | (fallback) |
+| Most specific | Least specific |
+| --- | --- |
+| Channel | (beats everything) |
+| Location | |
+| Order Mode | |
+| Global | (fallback) |
 
-  **Tax Rules** (rate overrides):
-  | Most specific | Least specific |
-  | --- | --- |
-  | Order Mode only | (most common case — beats location) |
-  | Location only | |
-  | Global | (fallback) |
+**Example**: You have:
+- Base 6% GST (Global)
+- Rule A: Location = "Branch 1" → 5%
+- Rule B: Order Mode = "Delivery" → 8%
 
-  **The difference**: For taxes, an **Order Mode override always wins over a Location override**. For products, **Location + Mode wins over either alone**.
-
-  **Example**: You have:
-  - Base 6% GST (Global)
-  - Rule A: Location = "Branch 1" → 5%
-  - Rule B: Order Mode = "Delivery" → 8%
-
-  A Delivery order at Branch 1 is taxed at **8% (Order Mode wins)**, not 5%. For products, the same situation would choose the Location value if no Location+Mode row existed.
-</Warning>
+A Delivery order at Branch 1 is taxed at **5% (Location wins)**. Add Rule C with Channel = "Kiosk" → 4%, and a Kiosk order is taxed at 4% wherever it is placed.
 
 ### Rules Fields
 
@@ -99,6 +183,7 @@ Each location will charge the correct rate automatically.
 |-------|----------|-------------|
 | **Location** | No | Leave blank to apply to all locations. Select a specific location to apply only there |
 | **Order Mode** | No | Leave blank to apply to all order modes. Select a specific mode to apply only there |
+| **Channel** | No | Leave blank to apply to all channels. Select a channel (POS, Kiosk, Online, App, Other) to apply only there |
 | **Override Value** | Yes | The new tax value (same format as General tab: amount for Fixed, percentage for Percentage) |
 | **Enabled** | No | If unchecked, this rule is ignored and the base tax is used |
 
@@ -109,7 +194,7 @@ Each location will charge the correct rate automatically.
     Click **Edit** on any tax, then go to the **Rules** tab.
   </Step>
   <Step title="Click Add Rule">
-    Optionally select a Location and/or Order Mode.
+    Select a Location, Order Mode and/or Channel. At least one is required.
   </Step>
   <Step title="Enter the Override Value">
     Provide the new tax rate or amount for this context.
@@ -140,6 +225,7 @@ Example: You want 10% tax on food items only, not beverages.
 - A **Product mapping** applies only to that specific product.
 - If a product is explicitly mapped, its category mapping is ignored (product is more specific).
 - **Scope must be "Scoped"** for mappings to have effect. Global scope bypasses this tab.
+- Whole-bill taxes and rounding have no Mapping tab, because they apply to the bill and not to items.
 
 ### Add a Mapping
 
@@ -196,7 +282,7 @@ Example: You want 10% tax on food items only, not beverages.
     Yes. If multiple taxes are global (or both match the item's mapping), all apply. They are stacked per line item and summed in the Tax Report. Use the Transaction Type field to group them clearly on the receipt.
   </Accordion>
   <Accordion title="Why is my override not working? I set a Location rule but it's not being used.">
-    Check: (1) The Rule is set to **Enabled**. (2) The Rule's Location matches where the sale occurred. (3) If an Order Mode rule also exists for that order, the **Order Mode rule wins** (even if you expect the Location rule). This is the inverted priority for taxes — see the Rules tab Warning for details.
+    Check: (1) The Rule is set to **Enabled**. (2) The Rule's Location matches where the sale occurred. (3) If a Channel rule also exists for that order, the **Channel rule wins**, then Location, then Order Mode. See Tax Rule Priority above.
   </Accordion>
   <Accordion title="How do I disable a tax without deleting it?">
     Uncheck the **Active** field on the General tab. Inactive taxes are excluded from all new transactions but historical data is preserved. To temporarily override a tax for one context, create a Rule with Override Value = 0 and enable it for that location/mode.
@@ -208,6 +294,18 @@ Example: You want 10% tax on food items only, not beverages.
   </Accordion>
   <Accordion title="Can I apply a percentage tax with a maximum cap?">
     Yes. Set Type = **Percentage**, enter the rate in Value (e.g. `10`), and optionally enter a Max Amount (e.g. `100`). If the calculated tax would exceed the max, it's capped at the max. Useful for service charges that are percentage-based but have a hard ceiling.
+  </Accordion>
+  <Accordion title="Can the cashier turn a whole-bill charge, discount or rounding on or off?">
+    No. They always apply to the bills they match. Use the Discount button for one-off discounts.
+  </Accordion>
+  <Accordion title="I changed a rounding or charge. When does it reach the POS?">
+    On the next sync, or when the cashier uses **Resync Data**. A bill that was already completed keeps the amounts it was charged.
+  </Accordion>
+  <Accordion title="Does it apply to bills made while the POS was offline?">
+    Yes. The POS uses the last synced taxes and records the exact amounts on the bill, so it uploads correctly when the connection returns.
+  </Accordion>
+  <Accordion title="Why was my rounding step rejected?">
+    The step must be a whole multiple of the smallest unit of your currency. Check the number of decimals in your settings.
   </Accordion>
 </AccordionGroup>
 
