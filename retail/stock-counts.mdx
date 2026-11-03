@@ -13,18 +13,18 @@ A **Stock Count** is a formal, structured process for physically counting what's
 
 ### 1. Generate
 
-Create a new count sheet for a location — the system snapshots the current "system quantity" for every product included, so it's locked in at the moment counting starts (not changing under you while you count).
+Create a new count sheet for a location. The sheet is stamped with a **cut-off time** — the moment you start counting. The system compares what you count with the quantity it held *at that moment*, so a sale made while you are counting is never mistaken for a loss or a gain. The sheet lists every stock-tracked item, including items that have never been received at this location.
 
 | Field | Required | Description |
 |-------|----------|-------------|
 | **Location** | Yes | Which branch/location is being counted |
 | **Count Type** | No | `Full` (every tracked product) or `Cycle` (a subset — useful for counting a section at a time) |
-| **Blind** | No | See "Blind counting" below |
+| **Blind** | No | On by default. See "Blind counting" below |
 | **Products** | No | For a Cycle count, which specific products to include. Leave blank for Full |
 
 ### 2. Fill
 
-Enter the actual counted quantity for each item, as you physically go through the shelf. You can save progress and come back — filling doesn't have to happen in one sitting.
+Enter the actual counted quantity for each item, as you physically go through the shelf. You can save progress and come back — filling doesn't have to happen in one sitting. For items bought in packs, enter **packs and loose units** (for example 2 cartons + 5 pieces) and the system does the sum.
 
 ### 3. Submit
 

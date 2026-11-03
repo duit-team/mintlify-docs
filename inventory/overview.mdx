@@ -1,0 +1,41 @@
+---
+title: "Inventory for restaurants and retail"
+description: "How stock, recipes, waste, production and transfers fit together, and what each one does to your cost."
+---
+
+Inventory keeps **one balance per item per location**, and moves it only through documents: receive, sell, transfer, waste, count. Every document posts at its real cost (first in, first out), so your stock value and your cost of sales always agree.
+
+## What kind of item is it?
+
+| Kind | What it is | Example |
+|------|------------|---------|
+| **Goods** | Bought and sold as-is | A bottle of water |
+| **Ingredient** | Bought and used in recipes | Coffee beans, milk |
+| **Prep** | Made in-house and kept in stock | A batch of sauce |
+| **Dish** | Sold but never stocked | A latte |
+
+A dish has no stock balance of its own. Selling one uses up its [recipe](/inventory/recipes) ingredients at the outlet.
+
+## How stock moves
+
+<Steps>
+  <Step title="Receive">Goods arrive from a supplier into a warehouse or kitchen.</Step>
+  <Step title="Transfer">Send stock to an outlet. It sits **in transit** until the outlet confirms what arrived. See [Transfers](/inventory/transfers).</Step>
+  <Step title="Produce">A kitchen turns raw items into a prep item. See [Production](/inventory/production).</Step>
+  <Step title="Sell, waste, count">Sales use up recipes, [waste](/inventory/waste) is written off with a reason, and a [stock count](/retail/stock-counts) corrects the rest.</Step>
+</Steps>
+
+<Note>
+  The POS never blocks a sale because of stock. If an item sells before its delivery is entered, the sale goes through, the item shows as negative on the [exceptions list](/inventory/usage-and-exceptions), and its cost is corrected when the delivery is entered.
+</Note>
+
+## Where to start
+
+<CardGroup cols={2}>
+  <Card title="Recipes & food cost" icon="utensils-crossed" href="/inventory/recipes">What each dish is made of and what it costs</Card>
+  <Card title="Waste" icon="ban" href="/inventory/waste">Spoiled, dropped, staff meals and free items</Card>
+  <Card title="Production" icon="boxes" href="/inventory/production">Make sauces and other prep items</Card>
+  <Card title="Transfers" icon="repeat" href="/inventory/transfers">Request, send and receive between locations</Card>
+  <Card title="Par & reorder" icon="triangle-alert" href="/inventory/par-levels">Each outlet's own minimum and target</Card>
+  <Card title="Usage & exceptions" icon="line-chart" href="/inventory/usage-and-exceptions">Where stock went that sales don't explain</Card>
+</CardGroup>

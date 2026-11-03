@@ -1,0 +1,42 @@
+---
+title: "Recipes & food cost"
+description: "Say what each dish is made of so a sale uses up its ingredients and you can see the food cost."
+---
+
+A **recipe** lists the ingredients of one portion of a dish, or of a batch of a prep item. When a dish is sold, those ingredients are taken out of the outlet's stock automatically.
+
+## Write a recipe
+
+<Steps>
+  <Step title="Go to Inventory → Recipes & Food Cost">Click **New recipe**.</Step>
+  <Step title="Choose the item and its kind">Pick the product, then **Dish** (sold, never stocked) or **Prep item** (made in-house, stocked).</Step>
+  <Step title="Add ingredients">For each one enter the quantity in the ingredient's own unit (grams, millilitres or pieces) and its **yield %**.</Step>
+  <Step title="Save">Saving creates a **new version**. Older versions stay on record, read-only.</Step>
+</Steps>
+
+<Tip>
+  **Yield %** is what survives trimming or cooking. If 1 kg of raw chicken gives 0.8 kg usable, enter 80: a portion that needs 200 g on the plate uses 250 g of stock.
+</Tip>
+
+## Food cost
+
+The recipe screen shows the **cost per portion** and the **food-cost %** of the selling price. This is an estimate from current stock cost, for pricing. The real cost of each sale is recorded at the moment of sale, so editing a recipe never changes the cost of past sales.
+
+An asterisk means an ingredient has no cost yet (nothing received), so the figure is an under-estimate.
+
+## Modifiers
+
+A modifier can change what a dish uses:
+
+| Effect | Example |
+|--------|---------|
+| **Add** | Extra shot adds 18 g of beans |
+| **Remove** | No milk removes the milk line |
+| **Swap** | Oat milk replaces milk, same quantity |
+
+## Rules
+
+- A recipe cannot contain itself, directly or through another prep item.
+- A dish cannot be an ingredient. Use its own ingredients.
+- Every ingredient must be a stock-tracked product.
+- A dish without a recipe uses up nothing and appears on the [exceptions list](/inventory/usage-and-exceptions).

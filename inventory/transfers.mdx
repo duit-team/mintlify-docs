@@ -1,0 +1,30 @@
+---
+title: "Transfers"
+description: "Request, send and receive stock between locations, so nothing appears at an outlet that did not arrive."
+---
+
+A transfer moves stock in two steps, each confirmed by the people who hold the stock.
+
+<Steps>
+  <Step title="Request (optional)">An outlet raises a request for what it needs. Nothing moves.</Step>
+  <Step title="Send">The supplying warehouse or kitchen sends it. The stock **leaves the source and is in transit**. The quantity may differ from the request.</Step>
+  <Step title="Receive">The outlet enters what actually arrived. Only then does the stock appear at the outlet.</Step>
+</Steps>
+
+## Short deliveries
+
+If less arrived than was sent, choose a reason: **damaged**, **lost**, **short shipped** or **other**. The missing quantity is written off as a transit loss at the cost it left at, so no value appears or disappears.
+
+You cannot receive more than was sent.
+
+## Who can do what
+
+- Only people at the **supplying** location can send.
+- Only people at the **receiving** location can confirm receipt.
+- Someone limited to specific locations sees a transfer if either end is theirs.
+
+A transfer still in transit after three days is flagged on the [exceptions list](/inventory/usage-and-exceptions).
+
+<Note>
+  The older single-step [Stock Transfers](/retail/stock-transfers) still exist and move stock instantly. Use this two-step flow when stock needs to be confirmed on arrival.
+</Note>

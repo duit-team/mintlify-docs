@@ -102,6 +102,19 @@
             ]
           },
           {
+            "group": "Inventory",
+            "icon": "package-check",
+            "pages": [
+              "inventory/overview",
+              "inventory/recipes",
+              "inventory/waste",
+              "inventory/production",
+              "inventory/transfers",
+              "inventory/par-levels",
+              "inventory/usage-and-exceptions"
+            ]
+          },
+          {
             "group": "Retail — Masters",
             "icon": "boxes",
             "pages": [
