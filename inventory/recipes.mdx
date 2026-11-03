@@ -18,6 +18,25 @@ A **recipe** lists the ingredients of one portion of a dish, or of a batch of a 
   **Yield %** is what survives trimming or cooking. If 1 kg of raw chicken gives 0.8 kg usable, enter 80: a portion that needs 200 g on the plate uses 250 g of stock.
 </Tip>
 
+## Import many recipes at once
+
+Go to **Inventory → Recipes & Food Cost → Import**. Download the template, fill in one row per ingredient, and choose the file.
+
+| Column | Required | Meaning |
+|--------|----------|---------|
+| **dish** | Yes | Product code or exact name of the dish or prep item |
+| **ingredient** | Yes | Product code or exact name of the ingredient |
+| **qty** | Yes | Quantity in the ingredient's own unit, per portion |
+| **kind** | First time | `dish` or `prep` |
+| **portions** | No | Portions made (a prep item: the batch size). Default 1 |
+| **yield_pct** | No | What survives trimming or cooking, 1–100. Default 100 |
+
+You see a **preview** of every recipe first: **New**, **New version**, **No change** or **Error** with the row number and reason. Nothing is saved until you click **Import**. A recipe with an error is skipped and the rest are saved. Importing the same file again changes nothing.
+
+<Note>
+  A product can only become a dish while nothing depends on its stock: it must not be an ingredient in another recipe, and it must hold no stock.
+</Note>
+
 ## Food cost
 
 The recipe screen shows the **cost per portion** and the **food-cost %** of the selling price. This is an estimate from current stock cost, for pricing. The real cost of each sale is recorded at the moment of sale, so editing a recipe never changes the cost of past sales.
