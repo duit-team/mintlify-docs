@@ -4,10 +4,10 @@
   "name": "DuitPOS Help Center",
   "description": "Setup guides and feature documentation for DuitPOS.",
   "colors": {
-  "primary": "#000000",
-  "light": "#FFFFFF",
-  "dark": "#000000"
-},
+    "primary": "#000000",
+    "light": "#FFFFFF",
+    "dark": "#000000"
+  },
   "favicon": "/favicon.ico",
   "icons": {
     "library": "lucide"
@@ -18,11 +18,11 @@
     "href": "/introduction"
   },
   "redirects": [
-  {
-    "source": "/",
-    "destination": "/introduction"
-  }
-],
+    {
+      "source": "/",
+      "destination": "/introduction"
+    }
+  ],
   "navbar": {
     "links": [],
     "primary": {
@@ -31,29 +31,24 @@
       "href": "https://app.duitpos.com"
     }
   },
-  
   "navigation": {
-     "global": {
-    "anchors": [
-      {
-        "anchor": "Home",
-        "icon": "house",
-        "href": "/introduction"
-      }
-    ]
-  },
-  
+    "global": {
+      "anchors": [
+        {
+          "anchor": "Home",
+          "icon": "house",
+          "href": "/introduction"
+        }
+      ]
+    },
     "tabs": [
       {
-        
         "tab": "Admin & Cloud",
         "groups": [
           {
             "group": "Getting Started",
             "icon": "rocket",
             "pages": [
-              
-              
               "getting-started/create-account",
               "getting-started/first-login",
               "getting-started/setup-checklist",
@@ -106,10 +101,18 @@
             "icon": "package-check",
             "pages": [
               "inventory/overview",
-              "inventory/recipes",
-              "inventory/waste",
-              "inventory/production",
+              "retail/stock-profile",
+              "retail/uom",
+              "retail/stock-balances",
+              "retail/stock-ledger",
+              "retail/low-stock",
+              "retail/stock-adjustments",
               "inventory/transfers",
+              "retail/stock-transfers",
+              "retail/stock-counts",
+              "inventory/waste",
+              "inventory/recipes",
+              "inventory/production",
               "inventory/par-levels",
               "inventory/usage-and-exceptions"
             ]
@@ -119,11 +122,10 @@
             "icon": "boxes",
             "pages": [
               "retail/overview",
-              "retail/uom",
               "retail/currency",
               "retail/exchange-rate",
               "retail/party",
-              "retail/stock-profile"
+              "retail/importing-data"
             ]
           },
           {
@@ -149,25 +151,6 @@
             "pages": [
               "retail/sales-invoices",
               "retail/payments"
-            ]
-          },
-          {
-            "group": "Retail — Stock Operations",
-            "icon": "repeat",
-            "pages": [
-              "retail/stock-adjustments",
-              "retail/stock-transfers",
-              "retail/stock-counts"
-            ]
-          },
-          {
-            "group": "Retail — Stock Visibility",
-            "icon": "scan-eye",
-            "pages": [
-              "retail/stock-balances",
-              "retail/stock-ledger",
-              "retail/low-stock",
-              "retail/importing-data"
             ]
           },
           {
@@ -244,14 +227,13 @@
           {
             "group": "Getting Started",
             "icon": "door-open",
-              "pages": [
-             
-    "pos-app/index",
-    "pos-app/getting-started/logging-in",
-    "pos-app/getting-started/app-layout",
-    "pos-app/getting-started/order-modes",
-    "pos-app/getting-started/barcode-scanning"
-  ]
+            "pages": [
+              "pos-app/index",
+              "pos-app/getting-started/logging-in",
+              "pos-app/getting-started/app-layout",
+              "pos-app/getting-started/order-modes",
+              "pos-app/getting-started/barcode-scanning"
+            ]
           },
           {
             "group": "Floor Plan & Tables",
@@ -274,15 +256,15 @@
             ]
           },
           {
-  "group": "Settings",
-  "icon": "settings",
-  "pages": [
-    "pos-app/settings/settings-overview",
-    "pos-app/settings/printers",
-    "pos-app/settings/card-terminal",
-    "pos-app/settings/customer-display"
-  ]
-},
+            "group": "Settings",
+            "icon": "settings",
+            "pages": [
+              "pos-app/settings/settings-overview",
+              "pos-app/settings/printers",
+              "pos-app/settings/card-terminal",
+              "pos-app/settings/customer-display"
+            ]
+          },
           {
             "group": "Payments",
             "icon": "credit-card",
