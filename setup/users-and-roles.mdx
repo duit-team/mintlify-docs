@@ -3,7 +3,7 @@ title: "Users & Roles"
 description: "Manage admin panel accounts and define permission templates for your team."
 ---
 
-**Users** are admin panel accounts that allow staff to log in and manage DuitPOS. **Roles** are permission templates — reusable sets of capabilities that you assign to users. Together, they control who can access what in your restaurant's management dashboard. Every user must have exactly one role to function; without a role, they cannot log in.
+**Users** are admin panel accounts that allow staff to log in and manage DuitPOS. **Roles** are permission templates — reusable sets of capabilities that you assign to users. Together, they control who can access what in your restaurant's management dashboard. Every user needs at least one role. A user with several roles gets every permission of every role.
 
 <Frame>
   <img src="/images/users.png" alt="Users and Roles management interface" />
@@ -11,16 +11,17 @@ description: "Manage admin panel accounts and define permission templates for yo
 
 ## Users
 
-**Users** are the people who can log in to the DuitPOS admin panel. A user is identified by their email address and password, and gets their permissions from the single role you assign them. Note: Users in DuitPOS are different from **Employees** (POS staff with PINs and terminals) — see the [Employees](/features/employees) page to manage point-of-sale workers.
+**Users** are the people who can log in to the DuitPOS admin panel. A user signs in to the back office with email and password, to the POS with a 4-digit PIN, or both. POS staff are users too — see [POS Staff](/features/employees). A user gets the combined permissions of all the roles you give them.
 
 ### User Fields
 
 | Field | Required | Description |
 |-------|----------|-------------|
 | **Name** | Yes | Display name shown in reports and audit logs. Can be changed anytime. |
-| **Email** | Yes | Login username — must be unique. Set once; cannot be changed later (delete and recreate if needed). |
-| **Password** | Yes (create only) | Initial password you set. User should change it on first login. Not editable after creation; user can reset via "Forgot Password" on the login page. |
-| **Role** | Yes | Exactly one role. Determines all permissions available to this user. Can be changed without affecting historical data. |
+| **Email** | For back-office sign-in | Login username — must be unique. Leave empty for someone who only works the POS. |
+| **Password** | With email | Initial password you set. The user can reset it via "Forgot Password" on the login page. |
+| **POS PIN** | For POS sign-in | 4 digits, unique at the person's outlets. Leave empty for someone who never works the POS. A person needs an email + password, a PIN, or both. |
+| **Roles** | Yes | One or more roles. The user gets every permission of every selected role. Can be changed anytime without affecting historical data. |
 | **Active** | Optional | Toggle on/off to enable/disable login without deleting the account. Historical sales and audit logs are preserved when a user is deactivated. |
 
 ### Create a User
@@ -38,7 +39,7 @@ Inviting a new user means creating an admin panel account and assigning them a r
     - **Name**: Enter the user's display name (e.g., "Ali Manager").
     - **Email**: Enter a unique email address. This is their login username.
     - **Password**: Set a temporary password (at least 6 characters). Share it securely — not via the same channel as the email.
-    - **Role**: Select one role from the dropdown (e.g., "Manager", "Cashier"). The user will get all permissions in that role.
+    - **Roles**: Select one or more roles (e.g., "Manager", "Cashier"). The user gets every permission of every selected role.
     - **Active**: Toggle on (default) so they can log in immediately.
   </Step>
   <Step title="Save">
@@ -52,7 +53,7 @@ Inviting a new user means creating an admin panel account and assigning them a r
 
 ### Edit a User
 
-After creation, you can change a user's name and active status — but not their email, password, or role without deleting and recreating them.
+After creation you can change a user's name, roles, locations, POS PIN, coach flag and active status. Their email cannot be changed.
 
 <Steps>
   <Step title="Find the user in the list">
@@ -84,7 +85,7 @@ The Users list shows all admin accounts in a table with columns for **Name + Ema
 
 ## Roles
 
-**Roles** are named templates of permissions. Instead of setting permissions one-by-one for each user, you create a role (e.g., "Supervisor"), choose which permissions it should have, and then assign that role to all users who need the same capabilities. A user gets exactly one role, so all their permissions come from that single role.
+**Roles** are named templates of permissions. Instead of setting permissions one-by-one for each user, you create a role (e.g., "Supervisor"), choose which permissions it should have, and then assign that role to all users who need the same capabilities. A user can hold several roles; their permissions are all the permissions of all their roles combined.
 
 ### Role Fields
 
@@ -153,7 +154,7 @@ Example: If you create a "Inventory Manager" role, you might enable all Permissi
 <Warning>
   **Changing a role's permissions affects all users with that role.** If you edit a "Cashier" role to remove POS List permission, all cashiers will lose that permission on their next login.
 
-  **If you delete a role that users have assigned, those users lose that role.** They will be unable to log in until reassigned to a different role. DuitPOS will show a "role deleted" error message if they try to access the dashboard. Always reassign users to a new role before deleting an old one.
+  **A role can't be deleted while anyone holds it.** Remove it from those users first (they keep their other roles).
 </Warning>
 
 ### Delete a Role
@@ -175,7 +176,7 @@ You can only delete a role if no users are currently assigned to it. The system 
 
 <AccordionGroup>
   <Accordion title="Can a user have multiple roles?">
-    No. In DuitPOS, each user is assigned exactly one role. The user gets all permissions defined in that single role. If you need different permission sets, create multiple roles and assign each user to the one that best matches their job.
+    Yes. Pick several roles on the user. They get every permission from every role — for example **Cashier** + **Inventory** lets someone run the till and count stock. Location access is set separately on the user (All locations or specific outlets) and applies to all their roles.
   </Accordion>
 
   <Accordion title="Can I change a user's email address?">
