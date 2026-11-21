@@ -1,0 +1,79 @@
+---
+title: "Workforce overview"
+description: "Clock in and out, timesheets with overtime and holiday pay, pay-period approval, leave, rosters and staff profiles."
+---
+
+## What Workforce does
+
+Your staff record when they start and stop work. Workforce turns those taps into hours: regular time, overtime, rest-day and public-holiday hours, and paid leave. At the end of the pay period a manager approves the hours and exports them for payroll.
+
+```
+Clock taps → saved as they happened → calculated with your rules → hours per day → approved → Excel for payroll
+```
+
+The taps themselves are the record. Hours, overtime and warnings are always worked out from them, so fixing one wrong tap fixes the whole day.
+
+<Note>
+  Workforce is an add-on. Ask Duit POS support to switch it on for your account. Until then the **Workforce** menu doesn't appear. Switching it off later hides the menu and stops the clock, but keeps every timesheet, leave request and roster.
+</Note>
+
+## Set it up
+
+<Steps>
+  <Step title="Check your attendance rules">
+    Open **Workforce → Attendance rules**. The rules are filled in from your account's country, for example Malaysia: overtime after 8 hours a day or 45 a week, overtime ×1.5, rest day ×2, public holiday ×2 and overtime on a public holiday ×3. Change any value to match your contracts.
+  </Step>
+  <Step title="Choose who has a timesheet">
+    Under **Who has a timesheet**, tick the roles whose people clock in, for example **Cashier** and **Manager**. Only people with a ticked role appear on timesheets, get reminders and can use the clock.
+  </Step>
+  <Step title="Add a work schedule">
+    Open **Workforce → Schedules** and add your usual hours, for example "Day shift, 9:00–18:00, Monday to Saturday, 1 hour unpaid lunch". The schedule decides what counts as overtime. See [Schedules and holidays](/workforce/schedules-and-holidays).
+  </Step>
+  <Step title="Import your public holidays">
+    Open **Workforce → Holidays**, click **New calendar** and import your country's list (for Malaysia, pick your state).
+  </Step>
+</Steps>
+
+<Tip>
+  The owner's full access doesn't include a timesheet, so owners don't get clock reminders. If you also work shifts and want to clock in, tick a role you hold under **Who has a timesheet**.
+</Tip>
+
+## Country rules
+
+| Country | What's filled in |
+|---------|------------------|
+| Malaysia | Employment Act: 8 h a day, 45 h a week, overtime ×1.5, rest day ×2, public holiday ×2 (×3 for overtime). Leave: annual 8 / 12 / 16 days and sick 14 / 18 / 22 days by years of service, hospitalisation, maternity, paternity. Holidays for every state. |
+| Singapore | Employment Act Part IV: 8 h a day, 44 h a week, overtime ×1.5. Statutory leave types. National holidays. |
+| Vietnam | Labour Code 2019: 8 h a day, 48 h a week, overtime ×1.5 (×2 rest day, ×3 public holiday). Annual leave 12 days plus 1 per 5 years, marriage and bereavement leave. National holidays including Tết. |
+| Other countries | Neutral defaults you can edit. Add holidays by hand. |
+
+<Warning>
+  Presets are starting points, not legal advice. Check them with your HR adviser before running payroll. Holiday lists say where to check the official announcement, for example moon-sighting dates and Tết days chosen by each employer.
+</Warning>
+
+## Who can do what
+
+Permissions come from roles (**Settings → Roles → Workforce**). A person can do everything any of their roles allows.
+
+| Permission | Lets someone |
+|------------|--------------|
+| Has a timesheet | Appear on timesheets and use the clock (set through **Who has a timesheet**) |
+| Clock in from the back office | Use the clock in the top bar and on **Today** |
+| Clock other people in and out | Clock in for someone from the back office |
+| Run the clock-in kiosk | Open the shared kiosk tablet and the POS clock |
+| See everyone's timesheets | See timesheets of people at their outlets |
+| Fix clock-ins and log hours | Add, change or remove entries (a reason is always required) |
+| Approve and reopen pay periods | Lock the month's hours for payroll |
+| Export timesheets | Download Excel or CSV |
+| Request own leave / Approve leave / Set up leave types | Leave |
+| Draw and publish rosters | Roster |
+| Change attendance settings | Rules, schedules and holidays |
+| See and change IC, bank and statutory numbers | Sensitive profile details |
+
+A manager limited to some outlets only sees the people who work at those outlets.
+
+## Every change is recorded
+
+- Each fix to clock times keeps who changed it, when, the reason, and the old and new times. It shows under **Change history** on the person's timesheet.
+- Changes to rules, schedules, holidays, leave types, rosters and profiles are in **Settings → Audit log**.
+- IC, bank and statutory numbers are encrypted. The audit log records that they changed, never the numbers.

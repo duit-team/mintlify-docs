@@ -1,0 +1,71 @@
+---
+title: "Schedules and holidays"
+description: "Tell Duit Cloud when people are expected to work and which days are public holidays, so hours are split into regular time, overtime and holiday pay."
+---
+
+Attendance rules give the country defaults. A **work schedule** says when a group of people normally work, and a **holiday calendar** says which dates are public holidays. Together they decide how each worked hour is paid.
+
+## Work schedules
+
+Open **Workforce → Schedules** and click **New schedule**.
+
+### Pick a work arrangement
+
+| Arrangement | Use it when | Overtime starts |
+|-------------|-------------|-----------------|
+| **Fixed** | Set start and end times, for example 9:00–18:00. Good for front of house. | After the day's set hours |
+| **Flexible** | A number of hours on each working day, at any time | After that day's hours |
+| **Weekly** | A number of hours a week, worked on any days | Only once the week's hours are used up |
+
+Days not ticked as working days are **rest days**. Work on a rest day is paid at the rest-day rate in Attendance rules.
+
+### Breaks
+
+Add the breaks people take, for example "Lunch, 60 minutes, unpaid, 13:00–14:00". When someone presses **Break** on the clock, they choose which break they are taking. Paid breaks count as worked time; unpaid breaks don't.
+
+### Auto deductions
+
+For people who don't clock their breaks. Example: "after 6 hours worked, take off 30 minutes". The time is taken off only once they've worked long enough, less any break they did record, so nobody loses the same break twice.
+
+### Overtime
+
+Each schedule can keep the overtime rules from Attendance rules or set its own, for example overtime after 9 hours instead of 8, or overtime only after a set clock time.
+
+### Who follows it
+
+Under **Who follows it**, add people or whole outlets. Duit Cloud picks a person's schedule in this order:
+
+1. A schedule given to the person
+2. Otherwise, the schedule of their outlet
+3. Otherwise, the schedule marked **Default**
+4. Otherwise, Attendance rules alone
+
+<Tip>
+  A schedule change applies from the date you choose. Days before it keep the old schedule, and days already approved never change.
+</Tip>
+
+**Example:** Kopi Corner sets "Day shift, Fixed, 9:00–18:00, Monday to Saturday, 1 hour unpaid lunch" and adds Main Outlet. Raj clocks 9:00–19:00 with his lunch. He gets 8 hours regular and 1 hour overtime. On Sunday (a rest day) every hour he works is rest-day pay.
+
+## Public holidays
+
+Open **Workforce → Holidays** and click **New calendar**.
+
+<Steps>
+  <Step title="Import your country's list">
+    Under **Holidays from**, pick your country and the year. In Malaysia, also pick the **State**: holidays differ by state, so make one calendar per state you have outlets in. Or choose **Custom list** and add dates yourself.
+  </Step>
+  <Step title="Check the dates">
+    Some dates depend on moon sighting or employer choice (for example Hari Raya, or which days of Tết you close). Each imported list says where to check the official announcement. Edit or remove any date.
+  </Step>
+  <Step title="Link your outlets">
+    Under **Outlets on this calendar**, add the outlets that follow it. One calendar can be marked **Default** for outlets without one.
+  </Step>
+</Steps>
+
+Work on a holiday is paid at the public-holiday rates in Attendance rules (in Malaysia, ×2, and ×3 for overtime on a holiday). Adding or removing a holiday recalculates days that aren't approved yet.
+
+A person can follow a different calendar from their outlet: open their profile and change **Holiday calendar**.
+
+<Note>
+  Until there's a calendar, work on a public holiday is paid as a normal day.
+</Note>

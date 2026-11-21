@@ -64,6 +64,16 @@
             ]
           },
           {
+            "group": "Workforce",
+            "icon": "clock",
+            "pages": [
+              "workforce/overview",
+              "workforce/clock-and-timesheets",
+              "workforce/schedules-and-holidays",
+              "workforce/leave-roster-people"
+            ]
+          },
+          {
             "group": "Setup & Config",
             "icon": "settings",
             "pages": [

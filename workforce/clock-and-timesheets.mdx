@@ -1,0 +1,93 @@
+---
+title: "Clock in and timesheets"
+description: "How staff clock in, how hours are worked out, and how managers fix, approve and export them."
+---
+
+## Ways to clock in
+
+| Where | Who uses it | How |
+|-------|-------------|-----|
+| **Top bar clock** | Staff signed in to the back office | Press **Clock in**, **Break**, **End break** or **Clock out**. A live timer shows how long they've worked. |
+| **Workforce → Today** | Staff on a phone or computer | The same buttons, big, with today's worked and break time. |
+| **Kiosk tablet** | Everyone at a shared tablet | Tap your name, type your POS PIN, press the button. |
+| **POS** | Cashiers at the till | Uses the same PIN. Taps made while the POS is offline are uploaded when it reconnects. |
+
+Only the buttons that make sense are shown: someone who is clocked out sees **Clock in**, someone working sees **Break** and **Clock out**. Pressing twice by accident records one tap.
+
+### Set up the kiosk
+
+<Steps>
+  <Step title="Sign in on the tablet">
+    Sign in as someone whose role has **Run the clock-in kiosk** (managers have it).
+  </Step>
+  <Step title="Open the kiosk">
+    Click the screen icon next to the clock in the top bar. The kiosk opens full screen in a new tab.
+  </Step>
+  <Step title="Leave it running">
+    Staff tap their name and type their PIN. The PIN is checked by Duit Cloud each time. After 5 wrong PINs, that person's PIN is locked for 15 minutes. The kiosk goes back to the names after 30 seconds without a tap, so nobody stays signed in.
+  </Step>
+</Steps>
+
+## How hours are worked out
+
+For each day Workforce adds up the time between clock-in and clock-out, takes off unpaid breaks, then splits the paid time:
+
+| Bucket | When |
+|--------|------|
+| Regular | Up to the normal hours for the day (from the schedule, else the rules) |
+| Overtime | After the daily or weekly limit |
+| Rest day | Work on the person's rest day |
+| Public holiday | Work on a public holiday in their outlet's calendar |
+| Paid leave | Approved paid leave, as the day's normal hours |
+
+**Example.** Raj's schedule is 9:00–18:00 with a 1-hour unpaid lunch. He clocks in at 9:00, takes a break at 13:00, comes back at 14:00 and clocks out at 19:00. He worked 9 hours: **8 h regular + 1 h overtime**.
+
+- **Work day split:** a new work day starts at 05:00 by default, so a shift from 18:00 to 02:00 counts on the day it started.
+- **Rounding** (optional, in **Attendance rules**) changes paid hours only. The real tap times are always kept.
+
+### Things that need a check
+
+| Warning | Meaning |
+|---------|---------|
+| Missing clock-out | Someone clocked in and never clocked out. The day counts 0 hours until fixed (or until the automatic clock-out, if you switched it on). |
+| Long shift | Longer than the longest normal shift in your rules. |
+| Offline clash | A tap uploaded late from an offline POS doesn't fit the other taps. |
+| Automatic clock-out | The system closed the shift. A manager should check the time. |
+
+## Automatic help
+
+Switch these on in **Attendance rules → Automatic help**:
+
+- **Automatic clock-out** at a time of day or after a number of hours. It only applies to shifts that start after you switch it on, so past hours never change.
+- **Reminders** to clock in after the shift start, to clock out after the shift end, and to end a long break. They appear as a message in the back office with a button that does what it asks.
+- **No-show alerts** tell the outlet's roster managers when someone hasn't clocked in for a published shift.
+
+## Fix a timesheet
+
+<Steps>
+  <Step title="Open the person's timesheet">
+    Open **Workforce → Timesheets** and click the person's name. Or, in the weekly view, hover over a day and click **+**.
+  </Step>
+  <Step title="Add, change or remove an entry">
+    For a missed clock-out, click **Add entry**, pick **Clock out**, set the time and pick a reason such as **Forgot to clock out**. To give hours without times (for example training off-site), click **Log hours**.
+  </Step>
+  <Step title="Check the result">
+    The day recalculates straight away and the warning disappears. The change, with the reason, shows under **Change history**.
+  </Step>
+</Steps>
+
+## Approve the month
+
+<Steps>
+  <Step title="Open Approvals">
+    Open **Workforce → Timesheets → Approvals** once the pay period has ended.
+  </Step>
+  <Step title="Approve">
+    Tick people or click **Approve all**. If anyone still has a warning, you're asked to confirm first.
+  </Step>
+  <Step title="Export for payroll">
+    Click **Export** and choose a report: **Summary** (one row per person with the pay split), **Daily** (one row per person per day) or **Clock entries** (every tap, including fixes and deleted ones). Excel or CSV.
+  </Step>
+</Steps>
+
+Approved hours are locked. Later changes to rules, schedules or holidays don't move them, and any fix inside the period is refused with "Reopen the pay period to edit". To change them, click **Reopen** next to the person and give a reason. The earlier approval stays in the history.
